@@ -1,46 +1,39 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch } from "@/app/store";
-import { loginUser, registerUser } from "@/entities/user/model/userThunk";
-import { UserLogin, UserRegister } from "@/entities/user/types/schema";
-import { 
-  Box, 
-  Button, 
-  Container, 
-  TextField, 
-  Typography, 
-  Paper, 
-  Tabs, 
-  Tab, 
+import { useAppDispatch } from '@/app/store';
+import { loginUser, registerUser } from '@/entities/user/model/userThunk';
+import type { UserLogin, UserRegister } from '@/entities/user/types/schema';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  Tabs,
+  Tab,
   InputAdornment,
-  IconButton
+  IconButton,
 } from '@mui/material';
-import { 
-  Visibility, 
-  VisibilityOff,
-  Person,
-  Email,
-  Lock
-} from '@mui/icons-material';
+import { Visibility, VisibilityOff, Person, Email, Lock } from '@mui/icons-material';
 
 function SignPage(): React.JSX.Element {
   const [activeTab, setActiveTab] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
 
-
-  const { 
-    register: loginRegister, 
+  const {
+    register: loginRegister,
     handleSubmit: handleLoginSubmit,
     formState: { errors: loginErrors },
-    reset: resetLogin
+    reset: resetLogin,
   } = useForm<UserLogin>();
 
-  const { 
-    register: registerRegister, 
+  const {
+    register: registerRegister,
     handleSubmit: handleRegisterSubmit,
     formState: { errors: registerErrors },
-    reset: resetRegister
+    reset: resetRegister,
   } = useForm<UserRegister>();
 
   const handleLogin = async (data: UserLogin): Promise<void> => {
@@ -58,20 +51,33 @@ function SignPage(): React.JSX.Element {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ 
-        mt: 8, 
-        p: 4, 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center' 
-      }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: '#f5f5f5',
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+          maxWidth: 500,
+        }}
+      >
         <Typography variant="h5" gutterBottom>
           Банк Времени
         </Typography>
-        
-        <Tabs 
-          value={activeTab} 
+
+        <Tabs
+          value={activeTab}
           onChange={(_, newValue) => setActiveTab(newValue)}
           variant="fullWidth"
           sx={{ mb: 3 }}
@@ -80,13 +86,8 @@ function SignPage(): React.JSX.Element {
           <Tab label="Регистрация" />
         </Tabs>
 
-
         {activeTab === 0 && (
-          <Box 
-            component="form" 
-            onSubmit={handleLoginSubmit(handleLogin)} 
-            sx={{ width: '100%' }}
-          >
+          <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} sx={{ width: '100%' }}>
             <TextField
               margin="normal"
               fullWidth
@@ -94,22 +95,22 @@ function SignPage(): React.JSX.Element {
               autoComplete="email"
               error={!!loginErrors.email}
               helperText={loginErrors.email?.message}
-              {...loginRegister('email', { 
+              {...loginRegister('email', {
                 required: 'Email обязателен',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Некорректный email'
-                }
+                  message: 'Некорректный email',
+                },
               })}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Email />
                   </InputAdornment>
-                )
+                ),
               }}
             />
-            
+
             <TextField
               margin="normal"
               fullWidth
@@ -117,12 +118,12 @@ function SignPage(): React.JSX.Element {
               type={showPassword ? 'text' : 'password'}
               error={!!loginErrors.password}
               helperText={loginErrors.password?.message}
-              {...loginRegister('password', { 
+              {...loginRegister('password', {
                 required: 'Пароль обязателен',
                 minLength: {
                   value: 6,
-                  message: 'Минимум 6 символов'
-                }
+                  message: 'Минимум 6 символов',
+                },
               })}
               InputProps={{
                 startAdornment: (
@@ -136,26 +137,20 @@ function SignPage(): React.JSX.Element {
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
-            
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Войти
             </Button>
           </Box>
         )}
 
-        
         {activeTab === 1 && (
-          <Box 
-            component="form" 
-            onSubmit={handleRegisterSubmit(handleRegister)} 
+          <Box
+            component="form"
+            onSubmit={handleRegisterSubmit(handleRegister)}
             sx={{ width: '100%' }}
           >
             <TextField
@@ -165,22 +160,22 @@ function SignPage(): React.JSX.Element {
               autoComplete="name"
               error={!!registerErrors.name}
               helperText={registerErrors.name?.message}
-              {...registerRegister('name', { 
+              {...registerRegister('name', {
                 required: 'Имя обязательно',
                 minLength: {
                   value: 2,
-                  message: 'Минимум 2 символа'
-                }
+                  message: 'Минимум 2 символа',
+                },
               })}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Person />
                   </InputAdornment>
-                )
+                ),
               }}
             />
-            
+
             <TextField
               margin="normal"
               fullWidth
@@ -188,22 +183,22 @@ function SignPage(): React.JSX.Element {
               autoComplete="email"
               error={!!registerErrors.email}
               helperText={registerErrors.email?.message}
-              {...registerRegister('email', { 
+              {...registerRegister('email', {
                 required: 'Email обязателен',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Некорректный email'
-                }
+                  message: 'Некорректный email',
+                },
               })}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Email />
                   </InputAdornment>
-                )
+                ),
               }}
             />
-            
+
             <TextField
               margin="normal"
               fullWidth
@@ -211,12 +206,12 @@ function SignPage(): React.JSX.Element {
               type={showPassword ? 'text' : 'password'}
               error={!!registerErrors.password}
               helperText={registerErrors.password?.message}
-              {...registerRegister('password', { 
+              {...registerRegister('password', {
                 required: 'Пароль обязателен',
                 minLength: {
                   value: 6,
-                  message: 'Минимум 6 символов'
-                }
+                  message: 'Минимум 6 символов',
+                },
               })}
               InputProps={{
                 startAdornment: (
@@ -230,10 +225,10 @@ function SignPage(): React.JSX.Element {
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
-            
+
             <Button
               type="submit"
               fullWidth
@@ -246,7 +241,7 @@ function SignPage(): React.JSX.Element {
           </Box>
         )}
       </Paper>
-    </Container>
+    </Box>
   );
 }
 

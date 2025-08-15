@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -41,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onLogin,
   onRegister,
 }) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -108,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               setDrawerOpen(false);
             }}
           >
-            Registration
+            Присоединиться
           </Button>
         </>
       )}
@@ -122,7 +124,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         <MenuItem value="en">EN</MenuItem>
         <MenuItem value="ru">RU</MenuItem>
-        <MenuItem value="de">DE</MenuItem>
       </Select>
     </>
   );
@@ -163,8 +164,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   backgroundColor: '#f5f5f5',
                   borderRadius: 2,
                   px: 1,
-                  maxWidth: 400,
+                  width: '100%',
                   flexGrow: 1,
+                  height:'100%',
+                
                 }}
               >
                 <SearchIcon style={{ marginRight: 8, color: '#888' }} size={20} />
@@ -188,14 +191,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               ) : (
                 <>
-                  <Button color="inherit" onClick={onHowItWorksClick}>
-                    How it works
+                  <Button color="inherit" onClick={() => navigate('/how-it-works')}>
+                    Как это работает
                   </Button>
-                  <Button color="inherit" onClick={onLogin}>
+                  <Button color="inherit" onClick={() => navigate('/login')}>
                     Log in
                   </Button>
-                  <Button variant="contained" onClick={onRegister}>
-                    Registration
+                  <Button variant="contained" onClick={() => navigate('/register')}>
+                    Присоединиться
                   </Button>
                 </>
               )}
@@ -209,14 +212,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <MenuItem value="en">EN</MenuItem>
                 <MenuItem value="ru">RU</MenuItem>
-                <MenuItem value="de">DE</MenuItem>
               </Select>
             </Box>
           )}
         </Toolbar>
       </AppBar>
 
-      {/* Мобильное меню */}
       <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         {menuContent}
       </Drawer>
