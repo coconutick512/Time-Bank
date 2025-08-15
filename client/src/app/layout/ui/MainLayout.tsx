@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '@/widgets/navbar/ui/Navbar';
+import { Footer } from '@/widgets/footer/ui/Footer';
 
 export const MainLayout = () => {
   const isAuth = false; 
@@ -23,6 +24,7 @@ export const MainLayout = () => {
         onLogout={() => console.log('Logout')}
       />
       <Outlet />
+      <Footer />
     </>
   );
 };
