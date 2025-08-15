@@ -5,7 +5,7 @@ import  userReducer  from "@/entities/user/model/userSlice";
 
 export const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
   },
 });
 
