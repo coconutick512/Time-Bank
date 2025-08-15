@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 // const postsRouter = require('./routes/posts.routes');
 const userRouter = require('./routes/user.router');
 // const chatRouter = require('./routes/chat.router');
-const authRouter = require('./routes/user.router');
+// const authRouter = require('./routes/user.router');
 
 const app = express();
 
