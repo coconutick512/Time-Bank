@@ -17,7 +17,7 @@ module.exports = {
       comment: {
         type: Sequelize.TEXT
       },
-      task_id: {
+      taskId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -27,7 +27,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      author_id: {
+      authorId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -37,7 +37,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      target_user_id: {
+      targetUserId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

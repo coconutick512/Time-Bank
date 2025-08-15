@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.ENUM('task_payment', 'transfer', 'bonus'),
         allowNull: false
       },
-      sender_id: {
+      senderId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
@@ -26,7 +26,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      receiver_id: {
+      receiverId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
@@ -35,7 +35,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      task_id: {
+      taskId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'tasks',

@@ -9,7 +9,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   
-  UserSkill.init({}, {
+  UserSkill.init({
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      
+    },
+    skillId: {
+      type: DataTypes.INTEGER,
+      allowNull: false, 
+    }
+  }, {
     sequelize,
     modelName: 'UserSkill',
     tableName: 'user_skills',
