@@ -1,4 +1,4 @@
-const { User, Skill } = require("../../db/models");
+const { User, Skill, UserSkill } = require("../../db/models");
 
 class UserSkillService {
   static async getUserWithSkills(id) {
@@ -28,9 +28,13 @@ class UserSkillService {
       const users = await User.findAll({
         include: [
           {
+            through: {
+            model: UserSkill,
+            attributes: [],
+          },
             model: Skill,
             as: "skills",
-            attributes: ["name"],
+            attributes: ["name" , "id"],
             required: true,
           },
         ],
