@@ -1,12 +1,12 @@
-const express = require('express');
-const morgan = require('morgan');
-require('dotenv').config();
-const cookieParser = require('cookie-parser');
+const express = require("express");
+const morgan = require("morgan");
+require("dotenv").config();
+const cookieParser = require("cookie-parser");
 // const postsRouter = require('./routes/posts.routes');
-const userRouter = require('./routes/user.router');
+const userRouter = require("./routes/user.router");
 // const chatRouter = require('./routes/chat.router');
 // const authRouter = require('./routes/user.router');
-const skillRouter = require('./routes/asda.router');
+const skillRouter = require("./routes/user.skills.router");
 
 const app = express();
 
@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use('/api/posts', postsRouter)
-app.use('/api/auth', userRouter);
-app.use('/api/skill', skillRouter);
+app.use("/api/auth", userRouter);
+app.use("/api/users", skillRouter);
 // app.use('/api/chat', chatRouter);
 
 module.exports = app;
