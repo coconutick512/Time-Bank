@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+// eslint-disable-next-line fsd-layers/no-import-from-top
 import { useAppDispatch } from '@/app/store';
 import { loginUser, registerUser } from '@/entities/user/model/userThunk';
 import type { UserLogin, UserRegister } from '@/entities/user/types/schema';
 import {
   Box,
   Button,
-  Container,
   TextField,
   Typography,
   Paper,
@@ -18,7 +18,7 @@ import {
 import { Visibility, VisibilityOff, Person, Email, Lock } from '@mui/icons-material';
 
 function SignPage(): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState<boolean>(true);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -46,7 +46,7 @@ function SignPage(): React.JSX.Element {
     resetRegister();
   };
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (): void => {
     setShowPassword(!showPassword);
   };
 
@@ -78,7 +78,7 @@ function SignPage(): React.JSX.Element {
 
         <Tabs
           value={activeTab}
-          onChange={(_, newValue) => setActiveTab(newValue)}
+          onChange={() => setActiveTab(!activeTab)}
           variant="fullWidth"
           sx={{ mb: 3 }}
         >
@@ -86,7 +86,7 @@ function SignPage(): React.JSX.Element {
           <Tab label="Регистрация" />
         </Tabs>
 
-        {activeTab === 0 && (
+        {activeTab  && (
           <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} sx={{ width: '100%' }}>
             <TextField
               margin="normal"
@@ -102,13 +102,14 @@ function SignPage(): React.JSX.Element {
                   message: 'Некорректный email',
                 },
               })}
-              InputProps={{
+              slotProps={{
+                input:{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Email />
                   </InputAdornment>
                 ),
-              }}
+              }}}
             />
 
             <TextField
@@ -125,7 +126,9 @@ function SignPage(): React.JSX.Element {
                   message: 'Минимум 6 символов',
                 },
               })}
-              InputProps={{
+              slotProps={{
+                input:{
+           
                 startAdornment: (
                   <InputAdornment position="start">
                     <Lock />
@@ -138,7 +141,8 @@ function SignPage(): React.JSX.Element {
                     </IconButton>
                   </InputAdornment>
                 ),
-              }}
+                
+              }}}
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -147,7 +151,7 @@ function SignPage(): React.JSX.Element {
           </Box>
         )}
 
-        {activeTab === 1 && (
+        {!activeTab  && (
           <Box
             component="form"
             onSubmit={handleRegisterSubmit(handleRegister)}
@@ -167,13 +171,14 @@ function SignPage(): React.JSX.Element {
                   message: 'Минимум 2 символа',
                 },
               })}
-              InputProps={{
+              slotProps={{
+                input:{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Person />
                   </InputAdornment>
                 ),
-              }}
+              }}}
             />
 
             <TextField
@@ -190,13 +195,14 @@ function SignPage(): React.JSX.Element {
                   message: 'Некорректный email',
                 },
               })}
-              InputProps={{
+              slotProps={{
+                input:{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Email />
                   </InputAdornment>
                 ),
-              }}
+              }}}
             />
 
             <TextField
@@ -213,7 +219,8 @@ function SignPage(): React.JSX.Element {
                   message: 'Минимум 6 символов',
                 },
               })}
-              InputProps={{
+              slotProps={{
+                input:{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Lock />
@@ -226,7 +233,7 @@ function SignPage(): React.JSX.Element {
                     </IconButton>
                   </InputAdornment>
                 ),
-              }}
+              }}}
             />
 
             <Button
