@@ -34,7 +34,7 @@ class UserSkillService {
           },
             model: Skill,
             as: "skills",
-            attributes: ["name"], 
+            attributes: ["name" , "id"],
             required: true,
           },
         ],
