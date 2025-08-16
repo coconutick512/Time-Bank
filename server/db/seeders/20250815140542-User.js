@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('users', [{
       name: 'Иван Петров',
       email: 'ivan@example.com',
-      hashpass: '$2a$10$examplehash123', // Замените на реальный хеш пароля
+      hashpass: '$2a$10$examplehash123',
       balance: 1000.00,
       created_at: new Date(),
       updated_at: new Date()

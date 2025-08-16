@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Task extends Model {
-    static associate({ User, Transaction, Review, Category }) {
+    static associate({ User, Transaction, Review, Category ,TaskCategory}) {
       this.belongsTo(User, { 
         foreignKey: 'creatorId',
         as: 'creator'
@@ -17,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(Transaction, { foreignKey: 'taskId' });
       this.hasOne(Review, { foreignKey: 'taskId' });
       this.belongsToMany(Category, {
-        through: 'TaskCategories',
-        foreignKey: 'taskId'
+        through: TaskCategory,
+        foreignKey: 'taskId',
+        as: 'categories'
       });
     }
   }
