@@ -13,7 +13,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use("/api/auth", userRouter);
 app.use("/api/users", skillRouter);
 app.use("/api/tasks", taskRouter);
