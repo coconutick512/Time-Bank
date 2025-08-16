@@ -16,6 +16,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Search as SearchIcon, LogOut as LogoutIcon, Menu as MenuIcon } from 'lucide-react';
+
 type NavbarProps = {
   isAuth: boolean;
   userBalance?: number;
@@ -29,6 +30,7 @@ type NavbarProps = {
   onLogin: () => void;
   onRegister: () => void;
 };
+
 export const Navbar: React.FC<NavbarProps> = ({
   isAuth,
   userBalance,
@@ -36,16 +38,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   searchQuery,
   onSearch,
   onLanguageChange,
-  onLogoClick,
   onHowItWorksClick,
   onLogout,
   onLogin,
-  onRegister,
 }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+
   const menuContent = (
     <>
       <Box sx={{ width: 250, p: 2 }} />
@@ -72,6 +73,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Typography variant="body1" sx={{ mb: 1 }}>
             Balance: {userBalance}
           </Typography>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate('/orders');
+              setDrawerOpen(false);
+            }}
+            sx={{ mb: 1 }}
+          >
+            Заказы
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate('/executors');
+              setDrawerOpen(false);
+            }}
+            sx={{ mb: 1 }}
+          >
+            Исполнители
+          </Button>
           <Button
             color="inherit"
             startIcon={<LogoutIcon />}
@@ -106,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Button
             variant="contained"
             onClick={() => {
-              onRegister();
+              navigate('/login');
               setDrawerOpen(false);
             }}
           >
@@ -143,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Typography
             variant="h6"
             sx={{ cursor: 'pointer', fontWeight: 'bold' }}
-            onClick={onLogoClick}
+            onClick={() => navigate('/')}
           >
             MyLogo
           </Typography>
@@ -166,8 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   px: 1,
                   width: '100%',
                   flexGrow: 1,
-                  height:'100%',
-                
+                  height: '100%',
                 }}
               >
                 <SearchIcon style={{ marginRight: 8, color: '#888' }} size={20} />
@@ -181,6 +201,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {isAuth ? (
                 <>
+                  <Button
+                    color="inherit"
+                    onClick={() => navigate('/orders')}
+                  >
+                    Заказы
+                  </Button>
+                  <Button
+                    color="inherit"
+                    onClick={() => navigate('/executors')}
+                  >
+                    Исполнители
+                  </Button>
                   <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
                     Balance: {userBalance}
                   </Typography>
@@ -191,13 +223,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               ) : (
                 <>
+                {/* Надо будет убрать */}
+                <Button
+                    color="inherit"
+                    onClick={() => navigate('/orders')}
+                    >
+                    Заказы
+                  </Button>
+                  <Button
+                    color="inherit"
+                    onClick={() => navigate('/executors')}
+                    >
+                    Исполнители
+                  </Button>
+                    {/* Надо будет убрать */}
                   <Button color="inherit" onClick={() => navigate('/how-it-works')}>
                     Как это работает
                   </Button>
                   <Button color="inherit" onClick={() => navigate('/login')}>
                     Log in
                   </Button>
-                  <Button variant="contained" onClick={() => navigate('/register')}>
+                  <Button variant="contained" onClick={() => navigate('/login')}>
                     Присоединиться
                   </Button>
                 </>

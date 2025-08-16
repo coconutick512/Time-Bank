@@ -23,5 +23,4 @@ class SadaService{
       }
     };
 }
-
 module.exports = SadaService;
