@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 import axiosInstance from "@/shared/api/axiosinstance";
-import { AllTasksResponseSchema, TaskSchema } from "../types/schema";
+import { AllTasksResponseSchema,type Task, TaskSchema } from "../types/schema";
 
 export class TasksService {
-    static async getTask(id: number) {
+    static async getTask(id: number): Promise<Task> {
         try {
-            const response = await axiosInstance.get(`/tasks/${id}`);
+            const response = await axiosInstance.get(`/tasks/${id.toString()}`);
             const validData = TaskSchema.parse(response.data);
             return validData;
         } catch (error) {
@@ -15,7 +16,7 @@ export class TasksService {
         }
     }
 
-    static async getAllTasks() {
+    static async getAllTasks(): Promise<Task[]> {
         try {
             const response = await axiosInstance.get("/tasks");
             const validData = AllTasksResponseSchema.parse(response.data);

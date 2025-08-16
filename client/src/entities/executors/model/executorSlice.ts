@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { AllExecutorsState } from '../types/schema';
-import { fetchExecutor, fetchAllExecutors } from './executorThunk';
+import type { ExecutorsState } from '../types/schema';
+import {  fetchAllExecutors } from './executorThunk';
 
-const initialState: AllExecutorsState = {
+const initialState: ExecutorsState = {
   status: 'loading',
   executors: [],
   error: null,

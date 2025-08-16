@@ -10,16 +10,16 @@ type RootState = {
 
 export default function OrdersPage(): React.JSX.Element {
 
-    const {tasks} = useAppSelector((state:RootState ) => state.tasks);
+    const {status,tasks} = useAppSelector((state:RootState ) => state.tasks);
     const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     void dispatch(fetchAllTasks());
   }, [dispatch]);
 
-//   if (status === 'loading') {
-//     return <div>Loading...</div>;
-//   }
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
