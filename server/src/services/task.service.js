@@ -57,7 +57,7 @@ class TaskService {
           {
             model: Category,
             as: "categories",   
-            attributes: ["name"],
+            attributes: ["name" , "id"],
             required: true,
           },
         ]

@@ -11,7 +11,7 @@ type Executor = {
   id: number;
   name: string;
   email: string;
-  balance: number;
+  balance: string;
   skills: Skill[];
 };
 

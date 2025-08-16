@@ -8,6 +8,5 @@ export const fetchExecutor = createAsyncThunk("executor/fetchExecutor", async (i
 
 export const fetchAllExecutors = createAsyncThunk("executor/fetchAllExecutors", async () => {
   const executors = await ExecutorService.getAllExecutors();
-  console.log(executors,'---------');
   return executors;
 });
