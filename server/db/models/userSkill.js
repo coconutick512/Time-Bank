@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
 
   UserSkill.init(
     {
-      // user_id: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      // },
-      // skill_id: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      // },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      skillId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,

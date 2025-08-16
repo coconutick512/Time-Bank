@@ -1,12 +1,14 @@
+// models/skill.js
 'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Skill extends Model {
-    static associate({ User }) {
+    static associate({ User, UserSkill }) {
       this.belongsToMany(User, {
-        through: 'UserSkills',
-        foreignKey: 'skillId'
+        through: UserSkill,
+        foreignKey: 'skillId',
+        as: 'users'
       });
     }
   }

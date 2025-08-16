@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/user.router');
 // const chatRouter = require('./routes/chat.router');
 // const authRouter = require('./routes/user.router');
+const skillRouter = require('./routes/asda.router');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // app.use('/api/posts', postsRouter)
 app.use('/api/auth', userRouter);
+app.use('/api/skill', skillRouter);
 // app.use('/api/chat', chatRouter);
 
 module.exports = app;

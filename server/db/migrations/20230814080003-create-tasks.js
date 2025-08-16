@@ -27,7 +27,7 @@ module.exports = {
       deadline: {
         type: Sequelize.DATE
       },
-      creator_id: {
+      creatorId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -37,7 +37,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      executor_id: {
+      executorId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
