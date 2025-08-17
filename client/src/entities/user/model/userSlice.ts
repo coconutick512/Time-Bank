@@ -7,6 +7,8 @@ const initialState: UserState = {
   user: null,
   error: null,
   score: null,
+  profileCompleted:false,
+  profileData:null
 };
 
 const userSlice = createSlice({
