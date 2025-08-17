@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { AncetaResponse, UserLogin } from '../types/schema';
 import {
   UserAncetaResponseSchema,
@@ -62,7 +64,7 @@ export class UserService {
 
   static async findOne(id: number) {
     try {
-      const response = await axiosInstance.get<UserResponse>(`/auth/${id}`);
+      const response = await axiosInstance.get<UserResponse>(`/auth/${id.toString()}`);
       const validData = UserResponseSchema.parse(response.data);
       return validData;
     } catch (error) {
