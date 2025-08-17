@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserService } from "../api/userService";
-import type { UserAnceta, UserLogin, UserRegister, UserScore } from "../types/schema";
+import type { UserLogin, UserRegister } from "../types/schema";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   const user = await UserService.refresh();

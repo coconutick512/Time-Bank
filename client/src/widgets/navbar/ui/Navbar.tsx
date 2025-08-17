@@ -1,9 +1,10 @@
+/* eslint-disable fsd-layers/no-import-from-top */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
-  Typography,
   Box,
   InputBase,
   MenuItem,
@@ -14,11 +15,19 @@ import {
   Drawer,
   useTheme,
   useMediaQuery,
+  Typography,
 } from '@mui/material';
-import { Search as SearchIcon, LogOut as LogoutIcon, Menu as MenuIcon } from 'lucide-react';
+import {
+  Search as SearchIcon,
+  LogOut as LogoutIcon,
+  Menu as MenuIcon,
+  User,
+  Clock,
+} from 'lucide-react';
+import {  useAppSelector } from '@/shared/hooks/hooks';
+import { RootState } from '@/app/store';
 
 type NavbarProps = {
-  isAuth: boolean;
   userBalance?: number;
   currentLanguage: string;
   searchQuery: string;
@@ -32,8 +41,8 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  isAuth,
-  userBalance,
+  
+  userBalance = 0,
   currentLanguage,
   searchQuery,
   onSearch,
@@ -41,140 +50,227 @@ export const Navbar: React.FC<NavbarProps> = ({
   onHowItWorksClick,
   onLogout,
   onLogin,
-}) => {
+}) => { 
   const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
+
+  const { status, user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+
+
   const menuContent = (
-    <>
-      <Box sx={{ width: 250, p: 2 }} />
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#f5f5f5',
-          borderRadius: 2,
-          px: 1,
-          mb: 2,
-        }}
-      >
-        <SearchIcon style={{ marginRight: 8, color: '#888' }} size={20} />
-        <InputBase
-          placeholder="Поиск"
-          value={searchQuery}
-          onChange={(e) => onSearch(e.target.value)}
-          sx={{ width: '100%' }}
-        />
-      </Box>
-      {isAuth ? (
+    <Box sx={{ width: 280, p: 3 }}>
+      {user ? (
         <>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            Balance: {userBalance}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#e0f2fe',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 2,
+              }}
+            >
+              <User size={20} color="#0369a1" />
+            </Box>
+            <Box>
+              <Typography variant="subtitle1" fontWeight="bold">
+                Мой профиль
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Clock size={16} color="#10b981" style={{ marginRight: 4 }} />
+                <Typography variant="body2" color="text.secondary">
+                  {userBalance} TD
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+
           <Button
-            color="inherit"
+            fullWidth
+            variant="contained"
+            sx={{ mb: 2, bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
+            onClick={() => {
+              navigate('/create-task');
+              setDrawerOpen(false);
+            }}
+          >
+            Создать задание
+          </Button>
+
+          <Divider sx={{ my: 2 }} />
+
+          <MenuItem
             onClick={() => {
               navigate('/orders');
               setDrawerOpen(false);
             }}
-            sx={{ mb: 1 }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Заказы
-          </Button>
-          <Button
-            color="inherit"
+          </MenuItem>
+
+          <MenuItem
             onClick={() => {
               navigate('/executors');
               setDrawerOpen(false);
             }}
-            sx={{ mb: 1 }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Исполнители
-          </Button>
-          <Button
-            color="inherit"
-            startIcon={<LogoutIcon />}
+          </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              navigate('/profile');
+              setDrawerOpen(false);
+            }}
+            sx={{ py: 1.5, borderRadius: 1 }}
+          >
+            Настройки профиля
+          </MenuItem>
+
+          <Divider sx={{ my: 2 }} />
+
+          <MenuItem
             onClick={() => {
               onLogout();
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1, color: '#ef4444' }}
           >
-            Log out
-          </Button>
+            <LogoutIcon size={18} style={{ marginRight: 8 }} />
+            Выйти
+          </MenuItem>
         </>
       ) : (
         <>
+          <Typography variant="h6" fontWeight="bold" mb={3}>
+            Банк Времени
+          </Typography>
+
           <Button
-            color="inherit"
-            onClick={() => {
-              onHowItWorksClick();
-              setDrawerOpen(false);
-            }}
-          >
-            How it works
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => {
-              onLogin();
-              setDrawerOpen(false);
-            }}
-          >
-            Log in
-          </Button>
-          <Button
+            fullWidth
             variant="contained"
+            sx={{
+              mb: 2,
+              bgcolor: '#3b82f6',
+              '&:hover': { bgcolor: '#2563eb' },
+            }}
             onClick={() => {
-              navigate('/login');
+              navigate('/register');
               setDrawerOpen(false);
             }}
           >
             Присоединиться
           </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{ mb: 2 }}
+            onClick={() => {
+              onLogin();
+              setDrawerOpen(false);
+            }}
+          >
+            Войти
+          </Button>
+
+          <Divider sx={{ my: 2 }} />
+
+          <MenuItem
+            onClick={() => {
+              onHowItWorksClick();
+              setDrawerOpen(false);
+            }}
+            sx={{ py: 1.5, borderRadius: 1 }}
+          >
+            Как это работает
+          </MenuItem>
         </>
       )}
 
-      {/* Язык */}
-      <Select
-        value={currentLanguage}
-        onChange={(e) => onLanguageChange(e.target.value)}
-        size="small"
-        sx={{ mt: 2, minWidth: 100 }}
-      >
-        <MenuItem value="en">EN</MenuItem>
-        <MenuItem value="ru">RU</MenuItem>
-      </Select>
-    </>
+      <Box sx={{ mt: 3 }}>
+        <Select
+          fullWidth
+          size="small"
+          value={currentLanguage}
+          onChange={(e) => onLanguageChange(e.target.value)}
+        >
+          <MenuItem value="ru">Русский</MenuItem>
+          <MenuItem value="en">English</MenuItem>
+        </Select>
+      </Box>
+    </Box>
   );
 
+  if (status === 'loading') {
+    return <div>Loading...</div>
+
+  }
   return (
     <>
       <AppBar
         position="sticky"
+        elevation={0}
         sx={{
-          backgroundColor: '#fff',
-          color: '#000',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+          backgroundColor: '#ffffff',
+          color: '#111827',
+          borderBottom: '1px solid #e5e7eb',
+          py: 1,
         }}
       >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          {/* Лого */}
-          <Typography
-            variant="h6"
-            sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            maxWidth: 'lg',
+            width: '100%',
+            mx: 'auto',
+            px: { xs: 2, sm: 4 },
+          }}
+        >
+          {/* Логотип */}
+          <Box
             onClick={() => navigate('/')}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              '&:hover': { opacity: 0.8 },
+            }}
           >
-            MyLogo
-          </Typography>
+            <Box
+              sx={{
+                width: 36,
+                height: 36,
+                bgcolor: '#3b82f6',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 1.5,
+              }}
+            >
+              <Clock color="#ffffff" size={20} />
+            </Box>
+            <Typography variant="h6" fontWeight="bold" noWrap>
+              Банк Времени
+            </Typography>
+          </Box>
 
           {isMobile ? (
-            <>
-              <IconButton onClick={() => setDrawerOpen(true)}>
-                <MenuIcon />
-              </IconButton>
-            </>
+            <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#374151' }}>
+              <MenuIcon />
+            </IconButton>
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               {/* Поиск */}
@@ -182,89 +278,174 @@ export const Navbar: React.FC<NavbarProps> = ({
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: '#f3f4f6',
                   borderRadius: 2,
-                  px: 1,
-                  width: '100%',
-                  flexGrow: 1,
-                  height: '100%',
+                  px: 2,
+                  py: 0.5,
+                  width: 300,
+                  '&:focus-within': {
+                    boxShadow: '0 0 0 2px #bfdbfe',
+                  },
                 }}
               >
-                <SearchIcon style={{ marginRight: 8, color: '#888' }} size={20} />
+                <SearchIcon size={18} color="#6b7280" style={{ marginRight: 8 }} />
                 <InputBase
-                  placeholder="Search skills..."
+                  placeholder="Поиск услуг..."
                   value={searchQuery}
                   onChange={(e) => onSearch(e.target.value)}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      py: 1,
+                    },
+                  }}
                 />
               </Box>
 
-              {isAuth ? (
+              {user ? (
                 <>
                   <Button
-                    color="inherit"
-                    onClick={() => navigate('/orders')}
-                  >
-                    Заказы
-                  </Button>
-                  <Button
-                    color="inherit"
+                    variant="text"
                     onClick={() => navigate('/executors')}
+                    sx={{
+                      color: '#111827',
+                      '&:hover': { backgroundColor: '#f3f4f6' },
+                    }}
                   >
                     Исполнители
                   </Button>
-                  <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
-                    Balance: {userBalance}
-                  </Typography>
-                  <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
-                  <Button color="inherit" startIcon={<LogoutIcon />} onClick={onLogout}>
-                    Log out
+
+                  <Button
+                    variant="text"
+                    onClick={() => navigate('/orders')}
+                    sx={{
+                      color: '#111827',
+                      '&:hover': { backgroundColor: '#f3f4f6' },
+                    }}
+                  >
+                    Заказы
                   </Button>
+
+                  <Box
+                    onClick={() => navigate('/profile')}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      px: 2,
+                      py: 1,
+                      borderRadius: 2,
+                      '&:hover': { backgroundColor: '#f3f4f6' },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        bgcolor: '#e0f2fe',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mr: 1.5,
+                      }}
+                    >
+                      <User size={16} color="#0369a1" />
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />
+                      <Typography variant="body2" fontWeight="medium">
+                        {userBalance} TD
+                      </Typography>
+                    </Box>
+                  </Box>
                 </>
               ) : (
                 <>
-                {/* Надо будет убрать */}
-                <Button
-                    color="inherit"
-                    onClick={() => navigate('/orders')}
-                    >
-                    Заказы
-                  </Button>
                   <Button
-                    color="inherit"
-                    onClick={() => navigate('/executors')}
-                    >
-                    Исполнители
-                  </Button>
-                    {/* Надо будет убрать */}
-                  <Button color="inherit" onClick={() => navigate('/how-it-works')}>
+                    variant="text"
+                    onClick={onHowItWorksClick}
+                    sx={{
+                      color: '#111827',
+                      '&:hover': { backgroundColor: '#f3f4f6' },
+                    }}
+                  >
                     Как это работает
                   </Button>
-                  <Button color="inherit" onClick={() => navigate('/login')}>
-                    Log in
+
+                  <Button
+                    variant="outlined"
+                    onClick={onLogin}
+                    sx={{
+                      color: '#111827',
+                      borderColor: '#d1d5db',
+                      '&:hover': { borderColor: '#9ca3af' },
+                    }}
+                  >
+                    Войти
                   </Button>
-                  <Button variant="contained" onClick={() => navigate('/login')}>
+
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate('/login')}
+                    sx={{
+                      bgcolor: '#3b82f6',
+                      '&:hover': { bgcolor: '#2563eb' },
+                    }}
+                  >
                     Присоединиться
                   </Button>
                 </>
               )}
 
-              {/* Выбор языка */}
+              {/* Язык */}
               <Select
                 value={currentLanguage}
                 onChange={(e) => onLanguageChange(e.target.value)}
                 size="small"
-                sx={{ minWidth: 80 }}
+                sx={{
+                  minWidth: 80,
+                  '& .MuiSelect-select': {
+                    py: 0.75,
+                  },
+                }}
               >
-                <MenuItem value="en">EN</MenuItem>
                 <MenuItem value="ru">RU</MenuItem>
+                <MenuItem value="en">EN</MenuItem>
               </Select>
             </Box>
           )}
         </Toolbar>
       </AppBar>
 
-      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        slotProps={{
+          paper: {
+          sx: {
+            width: 320,
+            backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
+            boxShadow: 'xl',
+            borderLeft: '1px solid #e2e8f0',
+            '& .MuiMenuItem-root': {
+              borderRadius: '8px',
+              marginBottom: '4px',
+              '&:hover': {
+                backgroundColor: '#f1f5f9',
+              },
+            },
+          },
+        }}}
+        ModalProps={{
+          sx: {
+            '& .MuiBackdrop-root': {
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            },
+          },
+        }}
+      >
         {menuContent}
       </Drawer>
     </>

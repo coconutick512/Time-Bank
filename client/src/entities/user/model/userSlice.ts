@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { UserState } from "../types/schema";
-import { fetchUser, loginUser, logoutUser, registerUser, scoreUser, submitAnceta } from "./userThunk";
+import { fetchUser, logoutUser, registerUser } from "./userThunk";
 
 const initialState: UserState = {
   status: "loading",
@@ -14,7 +14,10 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => void action.payload
+    
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -63,36 +66,7 @@ const userSlice = createSlice({
         state.error = action.error.message ?? "Ошибка при обновлении токена";
       });
 
-      builder
-        .addCase(scoreUser.pending, (state) => {
-          state.status = "loading";
-          state.error = null; 
-        })
-        .addCase(scoreUser.fulfilled, (state, action) => {
-          state.status = "logged";
-          state.score = action.payload.user;
-          state.error = null;
-        })
-        .addCase(scoreUser.rejected, (state, action) => {
-          state.status = "guest";
-          state.score = null;
-          state.error = action.error.message ?? "Ошибка при обновлении токена";
-        });
-        builder
-        .addCase(submitAnceta.pending, (state) => {
-          state.status = "loading";
-          state.error = null;
-        })
-        .addCase(submitAnceta.fulfilled, (state, action) => {
-          state.status = "logged";
-          state.profileData = action.payload.user;
-          state.error = null;
-        })
-        .addCase(submitAnceta.rejected, (state, action) => {
-          state.status = "guest";
-          state.profileData = null;
-          state.error = action.error.message ?? "Ошибка при обновлении токена";
-        });
+      
   },
 });
 
