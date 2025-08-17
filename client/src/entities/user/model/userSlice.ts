@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { UserState } from "../types/schema";
-import { fetchUser, loginUser, logoutUser, registerUser, scoreUser } from "./userThunk";
+import { fetchUser, loginUser, logoutUser, registerUser, scoreUser, submitAnceta } from "./userThunk";
 
 const initialState: UserState = {
   status: "loading",
   user: null,
   error: null,
   score: null,
+  profileCompleted:false,
+  profileData:null
 };
 
 const userSlice = createSlice({
@@ -64,7 +66,7 @@ const userSlice = createSlice({
       builder
         .addCase(scoreUser.pending, (state) => {
           state.status = "loading";
-          state.error = null;
+          state.error = null; 
         })
         .addCase(scoreUser.fulfilled, (state, action) => {
           state.status = "logged";
@@ -74,6 +76,21 @@ const userSlice = createSlice({
         .addCase(scoreUser.rejected, (state, action) => {
           state.status = "guest";
           state.score = null;
+          state.error = action.error.message ?? "Ошибка при обновлении токена";
+        });
+        builder
+        .addCase(submitAnceta.pending, (state) => {
+          state.status = "loading";
+          state.error = null;
+        })
+        .addCase(submitAnceta.fulfilled, (state, action) => {
+          state.status = "logged";
+          state.profileData = action.payload.user;
+          state.error = null;
+        })
+        .addCase(submitAnceta.rejected, (state, action) => {
+          state.status = "guest";
+          state.profileData = null;
           state.error = action.error.message ?? "Ошибка при обновлении токена";
         });
   },

@@ -1,18 +1,17 @@
-import type { UserLogin } from "../types/schema";
+import type { AncetaResponse, UserLogin } from '../types/schema';
 import {
+  UserAncetaResponseSchema,
   UserResponseSchema,
   type UserRegister,
   type UserResponse,
-} from "../types/schema";
-import axiosInstance from "@/shared/api/axiosinstance";
+  type UserAnceta,
+} from '../types/schema';
+import axiosInstance from '@/shared/api/axiosinstance';
 
 export class UserService {
   static async signUp(formData: UserRegister) {
     try {
-      const response = await axiosInstance.post<UserResponse>(
-        "/auth/signup",
-        formData
-      );
+      const response = await axiosInstance.post<UserResponse>('/auth/signup', formData);
       const validData = UserResponseSchema.parse(response.data);
       return validData;
     } catch (error) {
@@ -25,12 +24,9 @@ export class UserService {
 
   static async login(formData: UserLogin) {
     try {
-      const response = await axiosInstance.post<UserResponse>(
-        "/auth/signin",
-        formData
-      );
+      const response = await axiosInstance.post<UserResponse>('/auth/signin', formData);
       const validData = UserResponseSchema.parse(response.data);
-      console.log(validData)
+      console.log(validData);
       return validData;
     } catch (error) {
       if (error instanceof Error) {
@@ -42,7 +38,7 @@ export class UserService {
 
   static async logout() {
     try {
-      await axiosInstance.get("/auth/logout");
+      await axiosInstance.get('/auth/logout');
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -53,7 +49,7 @@ export class UserService {
 
   static async refresh() {
     try {
-      const response = await axiosInstance.get<UserResponse>("auth/refresh");
+      const response = await axiosInstance.get<UserResponse>('auth/refresh');
       const validData = UserResponseSchema.parse(response.data);
       return validData;
     } catch (error) {
@@ -68,6 +64,19 @@ export class UserService {
     try {
       const response = await axiosInstance.get<UserResponse>(`/auth/${id}`);
       const validData = UserResponseSchema.parse(response.data);
+      return validData;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+      throw error;
+    }
+  }
+
+  static async submitAnceta(formData: UserAnceta) {
+    try {
+      const response = await axiosInstance.post<AncetaResponse>('/auth/anceta', formData);
+      const validData = UserAncetaResponseSchema.parse(response.data);
       return validData;
     } catch (error) {
       if (error instanceof Error) {
