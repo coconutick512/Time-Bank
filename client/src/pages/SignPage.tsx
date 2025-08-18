@@ -86,7 +86,7 @@ function SignPage(): React.JSX.Element {
           <Tab label="Регистрация" />
         </Tabs>
 
-        {activeTab  && (
+        {activeTab && (
           <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} sx={{ width: '100%' }}>
             <TextField
               margin="normal"
@@ -103,13 +103,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -127,22 +128,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-           
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -151,7 +151,7 @@ function SignPage(): React.JSX.Element {
           </Box>
         )}
 
-        {!activeTab  && (
+        {!activeTab && (
           <Box
             component="form"
             onSubmit={handleRegisterSubmit(handleRegister)}
@@ -172,13 +172,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Person />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -196,13 +197,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -220,20 +222,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <Button
