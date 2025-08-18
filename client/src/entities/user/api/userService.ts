@@ -1,4 +1,3 @@
-
 import type { AncetaResponse, UserLogin } from '../types/schema';
 import {
   UserAncetaResponseSchema,
