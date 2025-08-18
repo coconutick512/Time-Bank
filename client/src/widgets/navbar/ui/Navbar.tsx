@@ -24,7 +24,7 @@ import {
   User,
   Clock,
 } from 'lucide-react';
-import {  useAppSelector } from '@/shared/hooks/hooks';
+import { useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
 
 type NavbarProps = {
@@ -41,7 +41,6 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  
   userBalance = 0,
   currentLanguage,
   searchQuery,
@@ -50,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onHowItWorksClick,
   onLogout,
   onLogin,
-}) => { 
+}) => {
   const navigate = useNavigate();
   // const dispatch = useAppDispatch();
 
@@ -58,8 +57,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-
 
   const menuContent = (
     <Box sx={{ width: 280, p: 3 }}>
@@ -213,8 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   );
 
   if (status === 'loading') {
-    return <div>Loading...</div>
-
+    return <div>Loading...</div>;
   }
   return (
     <>
@@ -424,20 +420,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         onClose={() => setDrawerOpen(false)}
         slotProps={{
           paper: {
-          sx: {
-            width: 320,
-            backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
-            boxShadow: 'xl',
-            borderLeft: '1px solid #e2e8f0',
-            '& .MuiMenuItem-root': {
-              borderRadius: '8px',
-              marginBottom: '4px',
-              '&:hover': {
-                backgroundColor: '#f1f5f9',
+            sx: {
+              width: 320,
+              backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
+              boxShadow: 'xl',
+              borderLeft: '1px solid #e2e8f0',
+              '& .MuiMenuItem-root': {
+                borderRadius: '8px',
+                marginBottom: '4px',
+                '&:hover': {
+                  backgroundColor: '#f1f5f9',
+                },
               },
             },
           },
-        }}}
+        }}
         ModalProps={{
           sx: {
             '& .MuiBackdrop-root': {
