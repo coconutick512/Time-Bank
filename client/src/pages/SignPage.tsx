@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line fsd-layers/no-import-from-top
 import { useAppDispatch } from '@/app/store';
 import { loginUser, registerUser } from '@/entities/user/model/userThunk';
 import type { UserLogin, UserRegister } from '@/entities/user/types/schema';
+import { UserProfileForm } from '@/widgets/UserProfileForm/ui/UserProfileForm';
 import {
   Box,
   Button,
@@ -18,9 +20,11 @@ import {
 import { Visibility, VisibilityOff, Person, Email, Lock } from '@mui/icons-material';
 
 function SignPage(): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState<boolean>(true);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const [showPassword, setShowPassword] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register: loginRegister,
@@ -42,12 +46,22 @@ function SignPage(): React.JSX.Element {
   };
 
   const handleRegister = async (data: UserRegister): Promise<void> => {
-    await dispatch(registerUser(data));
-    resetRegister();
+    try {
+      await dispatch(registerUser(data)).unwrap();
+      resetRegister();
+      setShowProfileModal(true);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
   const togglePasswordVisibility = (): void => {
     setShowPassword(!showPassword);
+  };
+
+  const handleCloseProfileModal = (): void => {
+    setShowProfileModal(false);
+    navigate('/');
   };
 
   return (
@@ -78,7 +92,7 @@ function SignPage(): React.JSX.Element {
 
         <Tabs
           value={activeTab}
-          onChange={() => setActiveTab(!activeTab)}
+          onChange={(_, newValue: number) => setActiveTab(newValue)}
           variant="fullWidth"
           sx={{ mb: 3 }}
         >
@@ -86,7 +100,7 @@ function SignPage(): React.JSX.Element {
           <Tab label="Регистрация" />
         </Tabs>
 
-        {activeTab  && (
+        {activeTab === 0 && (
           <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} sx={{ width: '100%' }}>
             <TextField
               margin="normal"
@@ -103,13 +117,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -127,22 +142,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-           
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -151,7 +165,7 @@ function SignPage(): React.JSX.Element {
           </Box>
         )}
 
-        {!activeTab  && (
+        {activeTab === 1 && (
           <Box
             component="form"
             onSubmit={handleRegisterSubmit(handleRegister)}
@@ -172,13 +186,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Person />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -196,13 +211,14 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -220,20 +236,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
-                input:{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <Button
@@ -248,6 +265,9 @@ function SignPage(): React.JSX.Element {
           </Box>
         )}
       </Paper>
+
+      {/* Profile Form Modal */}
+      {showProfileModal && <UserProfileForm onClose={handleCloseProfileModal} />}
     </Box>
   );
 }

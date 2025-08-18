@@ -4,7 +4,12 @@ export const UserSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.string().email(),
-  balance: z.number(),
+  balance: z
+    .string()
+    .transform((val) => Number(val))
+    .refine((val) => !Number.isNaN(val), { message: 'Balance must be a valid number' })
+    .optional()
+    .or(z.number().optional()),
 });
 
 export type User = z.infer<typeof UserSchema>;
@@ -45,11 +50,10 @@ export type UserState = {
 };
 export const UserAncetaSchema = z.object({
   avatar: z.string().optional(),
-  skilltoshares: z.array(z.string()).optional(),
-  skillstolearn: z.array(z.string()).optional(),
-  competency: z.string().optional(),
   time: z.any().optional(),
   about: z.string().optional(),
+  city: z.string().optional(),
+  skills: z.array(z.object({ id: z.number(), name: z.string() })).optional(),
 });
 
 export const UserAncetaResponseSchema = z.object({

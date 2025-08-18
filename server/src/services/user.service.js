@@ -1,14 +1,14 @@
-const { User,Score } = require('../../db/models/');
+const { User, UserSkill } = require('../../db/models/');
 const bcrypt = require('bcrypt');
 
 class AuthService {
-  static async createUser({ email, password, name ,nickname}) {
-      if (!email || !password || !name ) {
-          throw new Error('Не все поля');
-        }
-        
-        const hashpass = await bcrypt.hash(password, 10);
-        
+  static async createUser({ email, password, name }) {
+    if (!email || !password || !name) {
+      throw new Error('Не все поля');
+    }
+
+    const hashpass = await bcrypt.hash(password, 10);
+
     const user = await User.create({ email, name, hashpass });
     if (!user) {
       throw new Error('Не смог создать user');
@@ -20,11 +20,11 @@ class AuthService {
     return plainUser;
   }
 
-//   static async findUserByEmail(email) {
-//     if (!email) return null;
-//     const artist = await User.findOne({ where: { email } });
-//     return artist ? artist.get() : null;
-//   }
+  //   static async findUserByEmail(email) {
+  //     if (!email) return null;
+  //     const artist = await User.findOne({ where: { email } });
+  //     return artist ? artist.get() : null;
+  //   }
 
   static async checkPassword(password, hashpass) {
     return bcrypt.compare(password, hashpass);
@@ -47,8 +47,42 @@ class AuthService {
     return { user: plainUser };
   }
 
-  static findOne (id){
-    return Score.findAll({where:{userId: id}})
+  static async findOne(id) {
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+    const plainUser = user.get();
+    delete plainUser.hashpass;
+    return { user: plainUser };
+  }
+
+  static async submitForm(userId, data) {
+    const user = await User.update(
+      {
+        avatar: data.avatar,
+        city: data.city,
+        timezone: data.time,
+        about: data.about,
+      },
+      { where: { id: userId } },
+    );
+    return user;
+  }
+
+  static async addSkillToUser(userId, skills) {
+    console.log(skills);
+    const skillIds = JSON.parse(skills)
+    console.log(skillIds,'------');
+    
+    const logskills = skillIds.map((el) =>
+       UserSkill.create({
+        userId,
+        skillId: parseInt(el,10),
+      }),
+    );
+    await Promise.all(logskills);
+    
   }
 }
 
