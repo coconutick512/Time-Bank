@@ -1,4 +1,4 @@
-const { User,Score } = require('../../db/models/');
+const { User } = require('../../db/models/');
 const bcrypt = require('bcrypt');
 
 class AuthService {
@@ -45,10 +45,6 @@ class AuthService {
     const plainUser = user.get();
     delete plainUser.hashpass;
     return { user: plainUser };
-  }
-
-  static findOne (id){
-    return Score.findAll({where:{userId: id}})
   }
 }
 

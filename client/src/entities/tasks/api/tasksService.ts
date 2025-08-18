@@ -3,9 +3,9 @@ import axiosInstance from "@/shared/api/axiosinstance";
 import { AllTasksResponseSchema,type Task, TaskSchema } from "../types/schema";
 
 export class TasksService {
-    static async getTask(id: number): Promise<Task> {
+    static async getTask(id: string): Promise<Task> {
         try {
-            const response = await axiosInstance.get(`/tasks/${id.toString()}`);
+            const response = await axiosInstance.get(`/tasks/${id}`);
             const validData = TaskSchema.parse(response.data);
             return validData;
         } catch (error) {
@@ -28,4 +28,6 @@ export class TasksService {
             throw error;
         }
     }
+
+
 }   

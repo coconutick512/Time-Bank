@@ -6,6 +6,6 @@ authRouter.post('/signup', UserController.signup);
 authRouter.delete('/logout', UserController.logout);
 authRouter.get('/refresh', UserController.refresh);
 authRouter.post('/signin', UserController.signin);
-authRouter.get('/:id', UserController.findOne);
+// authRouter.get('/:id', UserController.findOne);
 
 module.exports = authRouter

@@ -3,20 +3,16 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css';
 import { fetchUser } from '@/entities/user/model/userThunk';
-import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import type { RootState } from '@/app/store';
+import { useAppDispatch } from '@/shared/hooks/hooks';
 
 export default function MainPage(): React.JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state: RootState) => state.user);
   useEffect(() => {
     void dispatch(fetchUser());
   }, [dispatch]);
-  console.log(user)
   return (
     <div className="main-root">
-      {/* Header */}
       <section className="main-header">
         <div className="main-header-left">
           <h1 style={{ color: 'black' }}>

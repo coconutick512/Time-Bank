@@ -24,7 +24,8 @@ import {
   User,
   Clock,
 } from 'lucide-react';
-import { useAppSelector } from '@/shared/hooks/hooks';
+import { logoutUser } from '@/entities/user/model/userThunk';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
 
 type NavbarProps = {
@@ -51,9 +52,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onLogin,
 }) => {
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const { status, user } = useAppSelector((state: RootState) => state.user);
+
+  const { user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -355,6 +357,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </Typography>
                     </Box>
                   </Box>
+
+                  <Button
+                    variant="text"
+                    onClick={()=>dispatch(logoutUser())}
+                    sx={{
+                      color: '#ef4444',
+                      ml: 2,
+                      '&:hover': {
+                        backgroundColor: '#fee2e2',
+                      },
+                    }}
+                    startIcon={<LogoutIcon size={18} />}
+                  >
+                    Выйти
+                  </Button>
                 </>
               ) : (
                 <>

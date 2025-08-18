@@ -40,7 +40,7 @@ export class UserService {
 
   static async logout() {
     try {
-      await axiosInstance.get('/auth/logout');
+      await axiosInstance.delete('/auth/logout');
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
