@@ -40,7 +40,7 @@ class AuthController {
         oldRefreshToken,
         process.env.REFRESH_TOKEN_SECRET
       );
-      console.log(user,{refreshToken: oldRefreshToken})
+      // console.log(user,{refreshToken: oldRefreshToken})
 
       const { accessToken, refreshToken } = generateTokens({ user });
 
@@ -59,7 +59,8 @@ class AuthController {
       const { accessToken, refreshToken } = generateTokens({ user });
       res
         .cookie("refreshToken", refreshToken, cookieConfig.refresh)
-        .json({ user, accessToken },console.log({ user, accessToken }));
+        .json({ user, accessToken })
+          // console.log({ user, accessToken }));
     } catch (err) {
       if (err.message === "Не все поля") {
         return res.status(400).json({ message: err.message });

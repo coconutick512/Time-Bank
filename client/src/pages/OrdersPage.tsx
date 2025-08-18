@@ -1,13 +1,14 @@
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable no-nested-ternary */
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
 import { fetchAllTasks } from '@/entities/tasks/model/tasksThunk';
 import type { TasksState } from '@/entities/tasks/types/schema';
-import { Skeleton, Box, Typography, Chip } from '@mui/material';
+import {  Box, Typography, Chip, Skeleton } from '@mui/material';
 import { Schedule, Person, Category } from '@mui/icons-material';
 import { fetchUser } from '@/entities/user/model/userThunk';
+import { useNavigate } from 'react-router-dom';  
 
 type RootState = {
   tasks: TasksState;
@@ -16,6 +17,7 @@ type RootState = {
 export default function OrdersPage(): React.JSX.Element {
   const { status, tasks } = useAppSelector((state: RootState) => state.tasks);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate(); 
 
   React.useEffect(() => {
     void dispatch(fetchAllTasks());
@@ -53,6 +55,7 @@ export default function OrdersPage(): React.JSX.Element {
           {tasks.map((task) => (
             <Box
               key={task.id}
+              onClick={() => { navigate(`/orders/one/${(task.id).toString()}`)}} // добавляем onClick
               sx={{
                 p: 3,
                 border: '1px solid',
@@ -60,10 +63,18 @@ export default function OrdersPage(): React.JSX.Element {
                 borderRadius: 2,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 transition: 'all 0.2s',
+                cursor: 'pointer', // курсор pointer
                 '&:hover': {
                   boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                   transform: 'translateY(-2px)',
                 },
+              }}
+              role="button" // для доступности
+              tabIndex={0} // чтобы можно было фокусироваться с клавиатуры
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  navigate(`/orders/one/${(task.id).toString()}`);
+                }
               }}
             >
               <Box
@@ -81,7 +92,7 @@ export default function OrdersPage(): React.JSX.Element {
                   label={task.status}
                   color={
                     task.status === 'completed' ? 'success' :
-                    task.status === 'assigned' ? 'warning' : 'primary'
+                      task.status === 'assigned' ? 'warning' : 'primary'
                   }
                   size="small"
                 />

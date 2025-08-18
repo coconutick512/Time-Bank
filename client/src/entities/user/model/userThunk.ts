@@ -4,7 +4,7 @@ import type { UserAnceta, UserLogin, UserRegister } from "../types/schema";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   const user = await UserService.refresh();
-  console.log(user)
+  // console.log(user)
   return user;
 });
 
