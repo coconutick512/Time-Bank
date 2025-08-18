@@ -54,8 +54,8 @@ class AuthController {
       console.log(user, { refreshToken: oldRefreshToken });
 
       const { accessToken, refreshToken } = generateTokens({ user });
-      
-      console.log(user,'+=+==+=+=++=+=');
+
+      console.log(user, '+=+==+=+=++=+=');
       res
         .cookie('refreshToken', refreshToken, cookieConfig.refresh)
         .json({ user, accessToken });
@@ -96,8 +96,11 @@ class AuthController {
 
   static async submitForm(req, res) {
     try {
-      console.log(req.body);
-      const user = await UserService.submitForm(res.locals.user.id, req.body);
+      const avatar = req.file ? req.file.filename : null;
+      const user = await UserService.submitForm(res.locals.user.id, {
+        ...req.body,
+        avatar,
+      });
       const skill = await UserService.addSkillToUser(res.locals.user.id, req.body.skills);
       res.status(200).json({ user, skill });
     } catch (error) {

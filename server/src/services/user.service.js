@@ -67,7 +67,10 @@ class AuthService {
       },
       { where: { id: userId } },
     );
-    return user;
+    const updatedUser = await User.findByPk(userId);
+    const plainUser = updatedUser.get();
+    delete plainUser.hashpass;
+    return plainUser;
   }
 
   static async addSkillToUser(userId, skills) {

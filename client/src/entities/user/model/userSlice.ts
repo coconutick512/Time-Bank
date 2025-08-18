@@ -62,10 +62,10 @@ const userSlice = createSlice({
       });
 
     builder
-      .addCase(logoutUser.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
+      // .addCase(logoutUser.pending, (state) => {
+      //   state.status = 'loading';
+      //   state.error = null;
+      // })
       .addCase(logoutUser.fulfilled, (state) => {
         state.status = 'guest';
         state.user = null;
