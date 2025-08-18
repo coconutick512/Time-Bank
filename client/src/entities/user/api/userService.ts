@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { AncetaResponse, UserLogin } from '../types/schema';
 import {
   UserAncetaResponseSchema,

@@ -14,7 +14,7 @@ class UserSkillService {
         ],
       });
 
-      console.log(`User with skills: ${user.skills}`);
+      // console.log(`User with skills: ${user.skills}`);
 
       return user;
     } catch (error) {
@@ -39,7 +39,7 @@ class UserSkillService {
           },
         ],
       });
-      console.log(users);
+      // console.log(users);
       return users;
     } catch (error) {
       console.error("Error fetching user with skills:", error);

@@ -125,6 +125,14 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -142,6 +150,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
@@ -194,6 +217,14 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Person />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -219,6 +250,14 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
 
             <TextField
@@ -236,6 +275,21 @@ function SignPage(): React.JSX.Element {
                 },
               })}
               slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">

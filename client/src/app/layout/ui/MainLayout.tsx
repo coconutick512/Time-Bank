@@ -66,8 +66,6 @@ export const MainLayout = (): React.JSX.Element => {
   return (
     <>
       <Navbar
-        isAuth={isAuth}
-        userBalance={balance}
         currentLanguage={language}
         searchQuery=""
         onSearch={(q) => console.log('Search:', q)}

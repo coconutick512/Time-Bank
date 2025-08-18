@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux';
 import userReducer from '@/entities/user/model/userSlice';
 import executorReducer from '@/entities/executors/model/executorSlice';
 import tasksReducer from '@/entities/tasks/model/tasksSlice';
-import skillsReducer from '@/entities/skills/model/skillsSlice';
+import languageReducer from '@/entities/language/model/languageSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     executors: executorReducer,
     tasks: tasksReducer,
-    skills: skillsReducer,
+    language: languageReducer,
   },
 });
 
