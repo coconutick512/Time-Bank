@@ -1,14 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import  userReducer  from "@/entities/user/model/userSlice";
-import  executorReducer  from "@/entities/executors/model/executorSlice";
-import  tasksReducer  from "@/entities/tasks/model/tasksSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import userReducer from '@/entities/user/model/userSlice';
+import executorReducer from '@/entities/executors/model/executorSlice';
+import tasksReducer from '@/entities/tasks/model/tasksSlice';
+import languageReducer from '@/entities/language/model/languageSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     executors: executorReducer,
     tasks: tasksReducer,
+    language: languageReducer,
   },
 });
 

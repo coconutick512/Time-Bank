@@ -211,6 +211,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     </Box>
   );
 
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <AppBar
