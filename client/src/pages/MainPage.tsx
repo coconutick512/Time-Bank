@@ -1,16 +1,25 @@
-import React from 'react';
+/* eslint-disable fsd-layers/no-import-from-top */
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css';
+import { fetchUser } from '@/entities/user/model/userThunk';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
+import type { RootState } from '@/app/store';
 
 export default function MainPage(): React.JSX.Element {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state: RootState) => state.user);
+  useEffect(() => {
+    void dispatch(fetchUser());
+  }, [dispatch]);
+  console.log(user)
   return (
     <div className="main-root">
       {/* Header */}
       <section className="main-header">
         <div className="main-header-left">
-          <h1>
+          <h1 style={{ color: 'black' }}>
             Первый в России <span className="blue">Банк</span>{' '}
             <span className="greenblue">Времени</span>
           </h1>
@@ -36,14 +45,14 @@ export default function MainPage(): React.JSX.Element {
             </span>
           </div>
         </div>
-        <div className="main-header-right">
+        {/* <div className="main-header-right">
           <img src="/clock-handshake.png" alt="clock" className="main-image" />
-        </div>
+        </div> */}
       </section>
 
       {/* Cards */}
       <section className="main-how">
-        <h2>Как работает банк времени?</h2>
+        <h2 style={{ color: 'black' }}>Как работает банк времени?</h2>
         <p className="main-how-desc">Простая система обмена услугами на основе времени</p>
         <div className="main-cards">
           <div className="main-card">
@@ -79,7 +88,7 @@ export default function MainPage(): React.JSX.Element {
       {/* Почему банк времени */}
       <section className="main-why">
         <div className="main-why-left">
-          <h2>Почему банк времени?</h2>
+          <h2 style={{ color: 'black' }}>Почему банк времени?</h2>
           <div className="why-desc">
             Справедливая система обмена, где ценится время, а не статус услуги
           </div>

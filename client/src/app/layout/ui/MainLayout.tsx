@@ -4,15 +4,11 @@ import { Navbar } from '@/widgets/navbar/ui/Navbar';
 import { Footer } from '@/widgets/footer/ui/Footer';
 
 export const MainLayout = (): React.JSX.Element => {
-  const isAuth = false; 
-  const balance = 250;
   const language = 'en';
 
   return (
     <>
       <Navbar
-        isAuth={isAuth}
-        userBalance={balance}
         currentLanguage={language}
         searchQuery=""
         onSearch={(q) => console.log('Search:', q)}
