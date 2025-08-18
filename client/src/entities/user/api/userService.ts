@@ -6,7 +6,7 @@ import {
   UserResponseSchema,
   type UserRegister,
   type UserResponse,
-  type UserAnceta,
+
 } from '../types/schema';
 import axiosInstance from '@/shared/api/axiosinstance';
 

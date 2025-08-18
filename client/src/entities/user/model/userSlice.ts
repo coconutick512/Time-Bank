@@ -16,13 +16,12 @@ const initialState: UserState = {
   score: null,
   profileCompleted: false,
   profileData: null,
-  profileCompleted: false,
-  profileData: null,
+
 };
 
 const userSlice = createSlice({
   name: 'user',
-  name: 'user',
+
   initialState,
   reducers: {
     setUser: (state, action) => void action.payload,

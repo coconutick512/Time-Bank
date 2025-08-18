@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const dispatch = useAppDispatch();
 
 
-  const { user } = useAppSelector((state: RootState) => state.user);
+  const {status, user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);

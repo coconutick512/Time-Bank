@@ -125,14 +125,7 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email />
-                    </InputAdornment>
-                  ),
-                },
-              }}
+              
             />
 
             <TextField
@@ -165,21 +158,7 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={togglePasswordVisibility}>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
+                
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -217,14 +196,7 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Person />
-                    </InputAdornment>
-                  ),
-                },
-              }}
+                
             />
 
             <TextField
@@ -250,14 +222,7 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email />
-                    </InputAdornment>
-                  ),
-                },
-              }}
+                
             />
 
             <TextField
@@ -290,21 +255,7 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={togglePasswordVisibility}>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
+                
             />
 
             <Button
