@@ -48,7 +48,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSearch,
   onLanguageChange,
   onHowItWorksClick,
-  onLogout,
   onLogin,
 }) => {
   const navigate = useNavigate();
@@ -140,7 +139,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <MenuItem
             onClick={() => {
-              onLogout();
               setDrawerOpen(false);
             }}
             sx={{ py: 1.5, borderRadius: 1, color: '#ef4444' }}

@@ -54,7 +54,8 @@ class AuthController {
       console.log(user, { refreshToken: oldRefreshToken });
 
       const { accessToken, refreshToken } = generateTokens({ user });
-
+      
+      console.log(user,'+=+==+=+=++=+=');
       res
         .cookie('refreshToken', refreshToken, cookieConfig.refresh)
         .json({ user, accessToken });
