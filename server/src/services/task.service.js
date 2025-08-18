@@ -11,28 +11,28 @@ class TaskService {
             attributes: ["name"],
             required: true,
           },
-          {
-            model: User,
-            as: "executor",
-            attributes: ["name"],
-            required: true,
-          },
-          {
-            model: Transaction,
-            as: "transaction",
-            attributes: ["amount"],
-            required: true,
-          },
-          {
-            model: Review,
-            as: "review",
-            attributes: ["rating"],
-            required: true,
-          },
+          // {
+          //   model: User,
+          //   as: "executor",
+          //   attributes: ["name"],
+          //   required: true,
+          // },
+          // {
+          //   model: Transaction,
+          //   as: "transaction",
+          //   attributes: ["amount"],
+          //   required: true,
+          // },
+          // {
+          //   model: Review,
+          //   as: "review",
+          //   attributes: ["rating"],
+          //   required: true,
+          // },
           {
             model: Category,
             as: "categories",
-            attributes: ["name"],
+            attributes: ["name","id"],
             required: true,
           },
         ],
@@ -62,10 +62,32 @@ class TaskService {
           },
         ]
       });
-      console.log(tasks,'---------------');   
+      // console.log(tasks,'---------------');   
       return tasks;
     } catch (error) {
       console.error("Error fetching tasks:", error);
+      throw error;
+    }
+  }
+
+  static async updateTask(id, title, description, hours, status, deadline, categories) {
+    try {
+      const task = await Task.update(
+        {
+          title,
+          description,
+          hours,
+          status,
+          deadline,
+          categories,
+        },
+        {
+          where: { id },
+        }
+      );
+      return task;
+    } catch (error) {
+      console.error("Error updating task:", error);
       throw error;
     }
   }

@@ -24,7 +24,8 @@ import {
   User,
   Clock,
 } from 'lucide-react';
-import {  useAppSelector } from '@/shared/hooks/hooks';
+import { logoutUser } from '@/entities/user/model/userThunk';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
 
 type NavbarProps = {
@@ -41,7 +42,6 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  
   userBalance = 0,
   currentLanguage,
   searchQuery,
@@ -50,16 +50,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   onHowItWorksClick,
   onLogout,
   onLogin,
-}) => { 
+}) => {
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const { status, user } = useAppSelector((state: RootState) => state.user);
+
+  const { user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-
 
   const menuContent = (
     <Box sx={{ width: 280, p: 3 }}>
@@ -212,10 +211,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     </Box>
   );
 
-  if (status === 'loading') {
-    return <div>Loading...</div>
-
-  }
   return (
     <>
       <AppBar
@@ -359,6 +354,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </Typography>
                     </Box>
                   </Box>
+
+                  <Button
+                    variant="text"
+                    onClick={()=>dispatch(logoutUser())}
+                    sx={{
+                      color: '#ef4444',
+                      ml: 2,
+                      '&:hover': {
+                        backgroundColor: '#fee2e2',
+                      },
+                    }}
+                    startIcon={<LogoutIcon size={18} />}
+                  >
+                    Выйти
+                  </Button>
                 </>
               ) : (
                 <>
@@ -424,20 +434,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         onClose={() => setDrawerOpen(false)}
         slotProps={{
           paper: {
-          sx: {
-            width: 320,
-            backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
-            boxShadow: 'xl',
-            borderLeft: '1px solid #e2e8f0',
-            '& .MuiMenuItem-root': {
-              borderRadius: '8px',
-              marginBottom: '4px',
-              '&:hover': {
-                backgroundColor: '#f1f5f9',
+            sx: {
+              width: 320,
+              backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
+              boxShadow: 'xl',
+              borderLeft: '1px solid #e2e8f0',
+              '& .MuiMenuItem-root': {
+                borderRadius: '8px',
+                marginBottom: '4px',
+                '&:hover': {
+                  backgroundColor: '#f1f5f9',
+                },
               },
             },
           },
-        }}}
+        }}
         ModalProps={{
           sx: {
             '& .MuiBackdrop-root': {

@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
-import {  fetchAllTasks } from './tasksThunk';
+import {  fetchAllTasks, fetchTask } from './tasksThunk';
 
 const initialState: TasksState = {
     status: 'loading',
     tasks: [],
     error: null,
+    personalTask: null,
 };
 
 const tasksSlice = createSlice({
@@ -26,6 +27,21 @@ const tasksSlice = createSlice({
             .addCase(fetchAllTasks.rejected, (state, action) => {
                 state.status = 'reject';
                 state.tasks = [];
+                state.error = action.error.message ?? 'Ошибка при получении задач';
+            });
+        builder
+            .addCase(fetchTask.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(fetchTask.fulfilled, (state, action) => {
+                state.status = 'done';
+                state.personalTask = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchTask.rejected, (state, action) => {
+                state.status = 'reject';
+                state.personalTask = null;
                 state.error = action.error.message ?? 'Ошибка при получении задач';
             });
     },
