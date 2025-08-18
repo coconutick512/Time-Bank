@@ -22,8 +22,13 @@ class AuthController {
   }
 
   static async logout(req, res) {
-    res.clearCookie("refreshToken");
-    res.sendStatus(204);
+    try {
+      res.clearCookie("refreshToken");
+      res.sendStatus(204);
+    } catch (error) {
+      comsole.log(error);
+      res.status(500).json({ message: error.message });
+    }
   }
 
   static async refresh(req, res) {
@@ -69,16 +74,7 @@ class AuthController {
     }
   }
 
-   static async findOne(req, res){
-    try {
-      const {id} = req.params;
-      const user = await UserService.findOne(id)
-      res.send(user)
-    } catch (error) {
-      console.log(err);
-      res.status(500).json({ message: err.message });
-    }
-   }
+   
    
 }
 

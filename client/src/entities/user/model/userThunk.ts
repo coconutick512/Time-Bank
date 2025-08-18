@@ -30,13 +30,7 @@ export const registerUser = createAsyncThunk(
 
   
 );
-export const scoreUser = createAsyncThunk(
-  "user/scoreUser",
-  async (id: number) => {
-    const user = await UserService.findOne(id);
-    return user;
-  }
-);
+
 export const submitAnceta = createAsyncThunk(
   "user/submitAnceta",
   async (formData: UserAnceta) => {
