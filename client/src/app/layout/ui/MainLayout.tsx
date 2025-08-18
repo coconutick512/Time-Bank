@@ -20,21 +20,17 @@ export const MainLayout = (): React.JSX.Element => {
   useEffect(() => {
     if (userStatus === 'loading' && !justLoggedOut.current) {
       console.log('🔄 Attempting to fetch user session...');
-      // Try to refresh/fetch user session
       dispatch(fetchUser()).catch(() => {
-        // If fetchUser fails, user is not authenticated
-        // The slice will handle setting status to 'guest'
         console.log('🚫 Failed to fetch user - staying as guest');
       });
     }
 
-    // Reset the logout flag when we're no longer in guest state
+
     if (userStatus !== 'guest') {
       justLoggedOut.current = false;
     }
-  }, [dispatch, userStatus]);
+  }, [dispatch]);
 
-  // Debug logging
   console.log('MainLayout Debug:', {
     userStatus,
     user,

@@ -5,10 +5,10 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
 import { fetchAllTasks } from '@/entities/tasks/model/tasksThunk';
 import type { TasksState } from '@/entities/tasks/types/schema';
-import {  Box, Typography, Chip, Skeleton } from '@mui/material';
+import { Box, Typography, Chip, Skeleton } from '@mui/material';
 import { Schedule, Person, Category } from '@mui/icons-material';
 import { fetchUser } from '@/entities/user/model/userThunk';
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 
 type RootState = {
   tasks: TasksState;
@@ -17,7 +17,7 @@ type RootState = {
 export default function OrdersPage(): React.JSX.Element {
   const { status, tasks } = useAppSelector((state: RootState) => state.tasks);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     void dispatch(fetchAllTasks());
@@ -42,11 +42,7 @@ export default function OrdersPage(): React.JSX.Element {
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 1200, mx: 'auto' }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        sx={{ mb: 3, fontWeight: 600, color: '#000000' }}
-      >
+      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600, color: '#000000' }}>
         Доступные задания
       </Typography>
 
@@ -55,7 +51,9 @@ export default function OrdersPage(): React.JSX.Element {
           {tasks.map((task) => (
             <Box
               key={task.id}
-              onClick={() => { navigate(`/orders/one/${(task.id).toString()}`)}} // добавляем onClick
+              onClick={() => {
+                navigate(`/orders/${task.id.toString()}`);
+              }} // добавляем onClick
               sx={{
                 p: 3,
                 border: '1px solid',
@@ -73,7 +71,7 @@ export default function OrdersPage(): React.JSX.Element {
               tabIndex={0} // чтобы можно было фокусироваться с клавиатуры
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  navigate(`/orders/one/${(task.id).toString()}`);
+                  navigate(`/orders/${task.id.toString()}`)
                 }
               }}
             >
@@ -91,16 +89,17 @@ export default function OrdersPage(): React.JSX.Element {
                 <Chip
                   label={task.status}
                   color={
-                    task.status === 'completed' ? 'success' :
-                      task.status === 'assigned' ? 'warning' : 'primary'
+                    task.status === 'completed'
+                      ? 'success'
+                      : task.status === 'assigned'
+                      ? 'warning'
+                      : 'primary'
                   }
                   size="small"
                 />
               </Box>
 
-              <Typography sx={{ mb: 3, color: '#000000' }}>
-                {task.description}
-              </Typography>
+              <Typography sx={{ mb: 3, color: '#000000' }}>{task.description}</Typography>
 
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3, color: '#000000' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
