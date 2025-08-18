@@ -4,6 +4,7 @@ import userReducer from '@/entities/user/model/userSlice';
 import executorReducer from '@/entities/executors/model/executorSlice';
 import tasksReducer from '@/entities/tasks/model/tasksSlice';
 import languageReducer from '@/entities/language/model/languageSlice';
+import skillsReducer from '@/entities/skills/model/skillsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     executors: executorReducer,
     tasks: tasksReducer,
     language: languageReducer,
+    skills: skillsReducer,
   },
 });
 

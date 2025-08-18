@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserService } from '../api/userService';
 import type {
-  UserAnceta,
+
   UserLogin,
   UserRegister,
   UserResponse,
