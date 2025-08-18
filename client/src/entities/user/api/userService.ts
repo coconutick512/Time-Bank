@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import type { AncetaResponse, UserLogin } from '../types/schema';
 import {
   UserAncetaResponseSchema,
   UserResponseSchema,
   type UserRegister,
   type UserResponse,
-  type UserAnceta,
 } from '../types/schema';
 import axiosInstance from '@/shared/api/axiosinstance';
 
