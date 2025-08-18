@@ -16,10 +16,12 @@ const initialState: UserState = {
   score: null,
   profileCompleted: false,
   profileData: null,
+
 };
 
 const userSlice = createSlice({
   name: 'user',
+
   initialState,
   reducers: {
     setUser: (state, action) => void action.payload,
@@ -62,36 +64,27 @@ const userSlice = createSlice({
     builder
       .addCase(logoutUser.pending, (state) => {
         state.status = 'loading';
-
         state.error = null;
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.status = 'guest';
         state.user = null;
         state.error = null;
-        state.score = null;
         state.profileData = null;
       })
-      .addCase(logoutUser.rejected, (state, action) => {
-        state.status = 'logged';
-        state.error = action.error.message ?? 'Ошибка при выходе из аккаунта';
-      });
 
     builder
       .addCase(fetchUser.pending, (state) => {
         state.status = 'loading';
-
         state.error = null;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = 'logged';
-
         state.user = action.payload.user;
         state.error = null;
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = 'guest';
-
         state.user = null;
         state.error = action.error.message ?? 'Ошибка при обновлении токена';
       });
@@ -103,7 +96,6 @@ const userSlice = createSlice({
       })
       .addCase(scoreUser.fulfilled, (state) => {
         state.status = 'logged';
-
         state.score = null;
       })
       .addCase(scoreUser.rejected, (state, action) => {

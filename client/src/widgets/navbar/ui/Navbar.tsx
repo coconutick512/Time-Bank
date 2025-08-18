@@ -48,13 +48,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSearch,
   onLanguageChange,
   onHowItWorksClick,
-  onLogout,
   onLogin,
 }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { user } = useAppSelector((state: RootState) => state.user);
+  const { status, user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -139,7 +138,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <MenuItem
             onClick={() => {
-              onLogout();
               setDrawerOpen(false);
             }}
             sx={{ py: 1.5, borderRadius: 1, color: '#ef4444' }}
