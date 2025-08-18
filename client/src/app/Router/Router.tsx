@@ -16,7 +16,7 @@ export default function Router(): React.JSX.Element {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/login" element={<SignPage />} />
         <Route path="/executors" element={<ExecutorsPage />} />
-        <Route path="/orders/one/:id" element={<PersonalOrder />} />
+        <Route path="/orders/:id" element={<PersonalOrder />} />
       </Route>
     </Routes>
     

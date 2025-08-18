@@ -358,7 +358,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <Button
                     variant="text"
-                    onClick={()=>dispatch(logoutUser())}
+                    onClick={() => dispatch(logoutUser())}
                     sx={{
                       color: '#ef4444',
                       ml: 2,
