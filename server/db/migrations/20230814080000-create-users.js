@@ -26,6 +26,22 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         defaultValue: 0.00
       },
+      city:{
+        type:Sequelize.STRING,
+        allowNull:true
+      },
+      avatar:{
+        type:Sequelize.STRING,
+        allowNull:true
+      },
+      timezone:{
+        type:Sequelize.STRING,
+        allowNull:true
+      },
+      about:{
+        type:Sequelize.TEXT,
+        allowNull:true
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
