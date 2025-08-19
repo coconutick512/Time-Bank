@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import axiosInstance from '@/shared/api/axiosinstance';
 import type { TaskUpdate } from '../types/schema';
-import { AllTasksResponseSchema, type Task, TaskSchema, TaskUpdateSchema } from '../types/schema';
+import { AllTasksResponseSchema, type Task, TaskSchema } from '../types/schema';
 
 export class TasksService {
   static async getTask(id: string): Promise<Task> {

@@ -24,11 +24,15 @@ type Skill = {
 };
 
 type Executor = {
+  avatar?: string ;
   id: number;
   name: string;
   email: string;
   balance: string;
   skills: Skill[];
+  about?: string ;
+  city?: string ;
+  timezone?: string ;
 };
 
 type ExecutorsState = {
@@ -99,14 +103,16 @@ export default function ExecutorsPage(): React.JSX.Element {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ 
+                <Avatar
+                 src={`/api/uploads/avatars/${executor.avatar}`}
+                sx={{ 
                   width: 56, 
                   height: 56, 
                   bgcolor: theme.palette.primary.main,
                   mr: 2,
                   fontSize: 24
                 }}>
-                  {executor.name.charAt(0)}
+                 
                 </Avatar>
                 <Box>
                   <Typography variant="h5" component="h3" sx={{ fontWeight: 600, color: 'black' }}>
