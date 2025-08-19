@@ -4,19 +4,8 @@ import { fetchAllExecutors } from '@/entities/executors/model/executorThunk';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Avatar,
-  Chip,
-  Skeleton,
-  Divider,
-  useTheme,
-} from '@mui/material';
-import {
-  Schedule as TimeIcon,
-  Work as SkillsIcon,
-} from '@mui/icons-material';
+import { Box, Typography, Avatar, Chip, Skeleton, Divider, useTheme } from '@mui/material';
+import { Schedule as TimeIcon, Work as SkillsIcon } from '@mui/icons-material';
 
 type Skill = {
   id: number;
@@ -30,9 +19,7 @@ type Executor = {
   email: string;
   balance: string;
   skills: Skill[];
-  about?: string ;
-  city?: string ;
-  timezone?: string ;
+  avatar: string | null;
 };
 
 type ExecutorsState = {
@@ -98,8 +85,8 @@ export default function ExecutorsPage(): React.JSX.Element {
                 color: 'black',
                 '&:hover': {
                   boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  transform: 'translateY(-2px)'
-                }
+                  transform: 'translateY(-2px)',
+                },
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -137,13 +124,16 @@ export default function ExecutorsPage(): React.JSX.Element {
 
               {executor.skills.length > 0 && (
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle2" sx={{ 
-                    mb: 1, 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: 1,
-                    color: 'black'
-                  }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      color: 'black',
+                    }}
+                  >
                     <SkillsIcon fontSize="small" /> Навыки:
                   </Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -152,10 +142,10 @@ export default function ExecutorsPage(): React.JSX.Element {
                         key={skill.id}
                         label={skill.name}
                         size="small"
-                        sx={{ 
+                        sx={{
                           backgroundColor: '#f0fdf4',
                           color: 'black',
-                          border: '1px solid #bbf7d0'
+                          border: '1px solid #bbf7d0',
                         }}
                       />
                     ))}
@@ -166,14 +156,16 @@ export default function ExecutorsPage(): React.JSX.Element {
           ))}
         </Box>
       ) : (
-        <Box sx={{ 
-          p: 4, 
-          textAlign: 'center', 
-          border: '1px dashed', 
-          borderColor: 'divider', 
-          borderRadius: 2,
-          color: 'black'
-        }}>
+        <Box
+          sx={{
+            p: 4,
+            textAlign: 'center',
+            border: '1px dashed',
+            borderColor: 'divider',
+            borderRadius: 2,
+            color: 'black',
+          }}
+        >
           <Typography variant="h6" sx={{ color: 'black' }}>
             Исполнители не найдены
           </Typography>
