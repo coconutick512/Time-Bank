@@ -2,11 +2,38 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-nested-ternary */
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { fetchAllTasks } from '@/entities/tasks/model/tasksThunk';
 import type { TasksState } from '@/entities/tasks/types/schema';
-import { Box, Typography, Chip, Skeleton } from '@mui/material';
-import { Schedule, Person, Category } from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+  Chip,
+  Skeleton,
+  TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Button,
+  Pagination,
+  Alert,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import {
+  Schedule,
+  Person,
+  Category,
+  Search,
+  FilterList,
+  Add,
+  Refresh,
+  Assignment,
+  CheckCircle,
+  Pending,
+  Work,
+} from '@mui/icons-material';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,17 +41,92 @@ type RootState = {
   tasks: TasksState;
 };
 
+// Типы для фильтров
+type TaskStatus = 'all' | 'open' | 'assigned' | 'completed';
+type SortOption = 'newest' | 'oldest' | 'deadline' | 'title';
+
 export default function OrdersPage(): React.JSX.Element {
-  const { status, tasks } = useAppSelector((state: RootState) => state.tasks);
+  const { status, tasks, error } = useAppSelector((state: RootState) => state.tasks);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  // Состояния для фильтрации и поиска
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<TaskStatus>('all');
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 8;
 
   React.useEffect(() => {
     void dispatch(fetchAllTasks());
     void dispatch(fetchUser());
   }, [dispatch]);
 
-  if (status === 'loading') {
+  // Фильтрация и сортировка задач
+  const filteredAndSortedTasks = useMemo(() => {
+    const filtered = tasks.filter((task) => {
+      const matchesSearch =
+        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+
+    // Сортировка
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'deadline':
+          return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+        case 'title':
+          return a.title.localeCompare(b.title);
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [tasks, searchTerm, statusFilter, sortBy]);
+
+  // Пагинация
+  const paginatedTasks = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredAndSortedTasks, page]);
+
+  const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
+
+  const handleRefresh = (): void => {
+    void dispatch(fetchAllTasks());
+  };
+
+  const getStatusIcon = (statuss: string): React.ReactElement => {
+    switch (statuss) {
+      case 'completed':
+        return <CheckCircle fontSize="small" />;
+      case 'assigned':
+        return <Assignment fontSize="small" />;
+      default:
+        return <Pending fontSize="small" />;
+    }
+  };
+
+  const getStatusColor = (statuss: string): string => {
+    switch (statuss) {
+      case 'completed':
+        return 'success';
+      case 'assigned':
+        return 'warning';
+      case 'default':
+        return 'default';
+      default:
+        return 'primary';
+    }
+  };
+  if (status === 'loading' && tasks.length === 0) {
     return (
       <Box sx={{ p: 3 }}>
         {[...Array(5)].map((_, index) => (
@@ -42,107 +144,249 @@ export default function OrdersPage(): React.JSX.Element {
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 1200, mx: 'auto' }}>
-      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600, color: '#000000' }}>
-        Доступные задания
-      </Typography>
+      {/* Заголовок и действия */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3,
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: '#000000' }}>
+          Доступные задания
+        </Typography>
 
-      {tasks.length > 0 ? (
-        <Box sx={{ display: 'grid', gap: 3 }}>
-          {tasks.map((task) => (
-            <Box
-              key={task.id}
-              onClick={() => {
-                navigate(`/orders/${task.id.toString()}`);
-              }} // добавляем onClick
-              sx={{
-                p: 3,
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 2,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                transition: 'all 0.2s',
-                cursor: 'pointer', // курсор pointer
-                '&:hover': {
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  transform: 'translateY(-2px)',
-                },
-              }}
-              role="button" // для доступности
-              tabIndex={0} // чтобы можно было фокусироваться с клавиатуры
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  navigate(`/orders/${task.id.toString()}`)
-                }
-              }}
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Tooltip title="Обновить список">
+            <IconButton onClick={handleRefresh} color="primary">
+              <Refresh />
+            </IconButton>
+          </Tooltip>
+
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => navigate('/create-task')}
+            sx={{
+              bgcolor: '#3b82f6',
+              '&:hover': { bgcolor: '#2563eb' },
+            }}
+          >
+            Создать задание
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Фильтры и поиск */}
+      <Box sx={{ mb: 3, p: 3, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+          <TextField
+            placeholder="Поиск заданий..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            slotProps={{
+              input: {
+                startAdornment: <Search sx={{ color: 'text.secondary', mr: 1 }} />,
+              },
+            }}
+            sx={{ minWidth: 200, flexGrow: 1 }}
+            size="small"
+          />
+
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel>Статус</InputLabel>
+            <Select
+              value={statusFilter}
+              label="Статус"
+              onChange={(e) => setStatusFilter(e.target.value as TaskStatus)}
             >
+              <MenuItem value="all">Все</MenuItem>
+              <MenuItem value="open">Открытые</MenuItem>
+              <MenuItem value="assigned">Назначенные</MenuItem>
+              <MenuItem value="completed">Завершенные</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel>Сортировка</InputLabel>
+            <Select
+              value={sortBy}
+              label="Сортировка"
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+            >
+              <MenuItem value="newest">Сначала новые</MenuItem>
+              <MenuItem value="oldest">Сначала старые</MenuItem>
+              <MenuItem value="deadline">По сроку</MenuItem>
+              <MenuItem value="title">По названию</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
+
+      {/* Информация о результатах */}
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="body2" color="text.secondary">
+          Найдено заданий: {filteredAndSortedTasks.length}
+        </Typography>
+        {searchTerm || statusFilter !== 'all' ? (
+          <Button
+            size="small"
+            onClick={() => {
+              setSearchTerm('');
+              setStatusFilter('all');
+            }}
+          >
+            Сбросить фильтры
+          </Button>
+        ) : null}
+      </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          Ошибка при загрузке заданий: {error}
+        </Alert>
+      )}
+
+      {/* Список заданий */}
+      {paginatedTasks.length > 0 ? (
+        <>
+          <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
+            {paginatedTasks.map((task) => (
               <Box
+                key={task.id}
+                onClick={() => navigate(`/orders/${task.id.toString()}`)}
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  mb: 2,
-                  color: '#000000',
+                  p: 3,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  transition: 'all 0.2s',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    transform: 'translateY(-2px)',
+                    borderColor: 'primary.main',
+                  },
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    navigate(`/orders/${task.id.toString()}`);
+                  }
                 }}
               >
-                <Typography variant="h5" component="h3" sx={{ fontWeight: 600, color: '#000000' }}>
-                  {task.title}
-                </Typography>
-                <Chip
-                  label={task.status}
-                  color={
-                    task.status === 'completed'
-                      ? 'success'
-                      : task.status === 'assigned'
-                      ? 'warning'
-                      : 'primary'
-                  }
-                  size="small"
-                />
-              </Box>
-
-              <Typography sx={{ mb: 3, color: '#000000' }}>{task.description}</Typography>
-
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3, color: '#000000' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Schedule fontSize="small" sx={{ color: '#000000' }} />
-                  <Typography variant="body2" sx={{ color: '#000000' }}>
-                    {new Date(task.deadline).toLocaleDateString()}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Person fontSize="small" sx={{ color: '#000000' }} />
-                  <Typography variant="body2" sx={{ color: '#000000' }}>
-                    {task.creator.name}
-                  </Typography>
-                </Box>
-              </Box>
-
-              {task.categories.length > 0 && (
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                   <Typography
-                    variant="subtitle2"
-                    sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: '#000000' }}
+                    variant="h5"
+                    component="h3"
+                    sx={{ fontWeight: 600, color: '#000000' }}
                   >
-                    <Category fontSize="small" sx={{ color: '#000000' }} /> Категории:
+                    {task.title}
                   </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    {task.categories.map((category) => (
-                      <Chip
-                        key={category.id}
-                        label={category.name}
-                        size="small"
-                        sx={{
-                          backgroundColor: '#f0fdf4',
-                          color: '#166534',
-                          border: '1px solid #bbf7d0',
-                        }}
-                      />
-                    ))}
+                  <Chip
+                    icon={getStatusIcon(task.status)}
+                    label={
+                      task.status === 'open'
+                        ? 'Открыто'
+                        : task.status === 'assigned'
+                        ? 'Назначено'
+                        : 'Завершено'
+                    }
+                    color={getStatusColor(
+                      typeof task.status === 'string' ? task.status : 'default',
+                    )}
+                    size="small"
+                  />
+                </Box>
+
+                <Typography sx={{ mb: 3, color: '#000000', lineHeight: 1.6 }}>
+                  {task.description.length > 150
+                    ? `${task.description.substring(0, 150)}...`
+                    : task.description}
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Schedule fontSize="small" sx={{ color: 'text.secondary' }} />
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Срок: {new Date(task.deadline).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Person fontSize="small" sx={{ color: 'text.secondary' }} />
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Автор: {task.creator.name}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Work fontSize="small" sx={{ color: 'text.secondary' }} />
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary', fontWeight: 'bold' }}
+                    >
+                      {task.hours} TD
+                    </Typography>
                   </Box>
                 </Box>
-              )}
+
+                {task.categories.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        mb: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        color: 'text.secondary',
+                      }}
+                    >
+                      <Category fontSize="small" /> Категории:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {task.categories.map((category) => (
+                        <Chip
+                          key={category.id}
+                          label={category.name}
+                          size="small"
+                          variant="outlined"
+                          sx={{
+                            borderColor: '#bbf7d0',
+                            color: '#166534',
+                            '&:hover': {
+                              backgroundColor: '#f0fdf4',
+                            },
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            ))}
+          </Box>
+
+          {/* Пагинация */}
+          {totalPages > 1 && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="primary"
+                showFirstButton
+                showLastButton
+              />
             </Box>
-          ))}
-        </Box>
+          )}
+        </>
       ) : (
         <Box
           sx={{
@@ -151,15 +395,21 @@ export default function OrdersPage(): React.JSX.Element {
             border: '1px dashed',
             borderColor: 'divider',
             borderRadius: 2,
-            color: '#000000',
+            bgcolor: 'background.default',
           }}
         >
-          <Typography variant="h6" color="inherit">
+          <FilterList sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+          <Typography variant="h6" color="text.secondary" gutterBottom>
             Задания не найдены
           </Typography>
-          <Typography variant="body1" sx={{ mt: 1, color: '#000000' }}>
-            Создайте первое задание или попробуйте изменить параметры поиска
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            {searchTerm || statusFilter !== 'all'
+              ? 'Попробуйте изменить параметры поиска'
+              : 'Создайте первое задание'}
           </Typography>
+          <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/create-task')}>
+            Создать задание
+          </Button>
         </Box>
       )}
     </Box>

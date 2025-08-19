@@ -27,6 +27,8 @@ import {
 import { logoutUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
+import { AnimatedLogoutButton } from './AnimatedLogoutButton';
+;
 
 type NavbarProps = {
   userBalance?: number;
