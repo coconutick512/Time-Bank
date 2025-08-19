@@ -1,9 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { submitAnceta } from '@/entities/user/model/userThunk';
 import { fetchAllSkills } from '@/entities/skills/model/skillsThunk';
+import './UserProfileForm.css';
 
-// Sample time zones
 const timeZones = [
   'UTC',
   'Europe/Moscow',
@@ -35,7 +36,7 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
     void dispatch(fetchAllSkills());
   }, [dispatch]);
 
-  const handleChange = (field: string, value: string | string[]): void => {
+  const handleChange = (field: string, value: string | string[] | number[]): void => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -43,6 +44,23 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
     if (e.target.files?.[0]) {
       setFormData((prev) => ({ ...prev, avatarFile: e.target.files![0] }));
     }
+  };
+
+  const handleSkillToggle = (skillId: number): void => {
+    setFormData((prev) => {
+      const currentSkills = prev.teachingCategories;
+      if (currentSkills.includes(skillId)) {
+        return {
+          ...prev,
+          teachingCategories: currentSkills.filter((id) => id !== skillId),
+        };
+      } 
+        return {
+          ...prev,
+          teachingCategories: [...currentSkills, skillId],
+        };
+      
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
@@ -73,176 +91,111 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
   const hasSkillsError = skillsStatus === 'reject';
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={onClose}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-      }}
-    >
-      <div
-        className="modal-content"
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          backgroundColor: 'white',
-          padding: '2rem',
-          borderRadius: '8px',
-          maxWidth: '600px',
-          width: '90%',
-          maxHeight: '90vh',
-          overflow: 'auto',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem',
-          }}
-        >
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
           <h2>Заполните профиль</h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              fontSize: '1.5rem',
-              cursor: 'pointer',
-              padding: '0.5rem',
-            }}
-          >
+          <button className="modal-close" onClick={onClose}>
             ×
           </button>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
-          <input
-            type="text"
-            placeholder="Город"
-            value={formData.city}
-            onChange={(e) => handleChange('city', e.target.value)}
-            style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
-          />
-
-          <select
-            value={formData.timezone}
-            onChange={(e) => handleChange('timezone', e.target.value)}
-            style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
-          >
-            <option value="" disabled>
-              Выберите часовой пояс
-            </option>
-            {timeZones.map((tz) => (
-              <option key={tz} value={tz}>
-                {tz}
-              </option>
-            ))}
-          </select>
-
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Загрузить аватар:
-            </label>
+        <form onSubmit={handleSubmit} className="profile-form">
+          <div className="form-group">
+            <label htmlFor="city">Город</label>
             <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={uploading}
-              style={{
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                width: '100%',
-              }}
+              id="city"
+              type="text"
+              placeholder="Введите ваш город"
+              value={formData.city}
+              onChange={(e) => handleChange('city', e.target.value)}
+              className="form-input"
             />
-            {uploading && <span style={{ color: '#666', fontSize: '0.9rem' }}>Загружается...</span>}
-            {formData.avatarFile && (
-              <span style={{ color: '#28a745', fontSize: '0.9rem' }}>
-                ✓ Файл выбран: {formData.avatarFile.name}
-              </span>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="timezone">Часовой пояс</label>
+            <select
+              id="timezone"
+              value={formData.timezone}
+              onChange={(e) => handleChange('timezone', e.target.value)}
+              className="form-select"
+            >
+              <option value="" disabled>
+                Выберите часовой пояс
+              </option>
+              {timeZones.map((tz) => (
+                <option key={tz} value={tz}>
+                  {tz}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="avatar" className="file-label">
+              <span className="file-label-text">Загрузить аватар</span>
+              <input
+                id="avatar"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={uploading}
+                className="file-input"
+              />
+              <div className="file-preview">
+                {uploading ? (
+                  <span className="file-status">Загружается...</span>
+                ) : formData.avatarFile ? (
+                  <span className="file-status success">
+                    ✓ Файл выбран: {formData.avatarFile.name}
+                  </span>
+                ) : (
+                  <span className="file-placeholder">Выберите файл</span>
+                )}
+              </div>
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label className="skills-label">Навыки, которые могу преподать:</label>
+            {skillsLoading ? (
+              <div className="skills-loading">Загрузка навыков...</div>
+            ) : hasSkillsError ? (
+              <div className="skills-error">Ошибка: {skillsError}</div>
+            ) : (
+              <div className="skills-grid">
+                {skills.map((skill) => (
+                  <label key={skill.id} className="skill-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.teachingCategories.includes(skill.id)}
+                      onChange={() => handleSkillToggle(skill.id)}
+                      className="skill-input"
+                    />
+                    <span className="skill-text">{skill.name}</span>
+                  </label>
+                ))}
+              </div>
             )}
           </div>
 
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Навыки, которые могу преподать:
-            </label>
-            <select
-              multiple
-              value={formData.teachingCategories}
-              onChange={(e) =>
-                handleChange(
-                  'teachingCategories',
-                  Array.from(e.target.selectedOptions, (option) => option.value),
-                )
-              }
-              disabled={skillsLoading}
-              style={{
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                minHeight: '120px',
-                width: '100%',
-              }}
-            >
-              {(() => {
-                if (skillsLoading) {
-                  return <option disabled>Загрузка навыков...</option>;
-                }
-                if (hasSkillsError) {
-                  return <option disabled>Ошибка: {skillsError}</option>;
-                }
-                return skills.map((skill) => (
-                  <option key={skill.id} value={skill.id}>
-                    {skill.name}
-                  </option>
-                ));
-              })()}
-            </select>
-            <small style={{ color: '#666', fontSize: '0.8rem' }}>
-              Удерживайте Ctrl (Cmd на Mac) для выбора нескольких навыков
-            </small>
+          <div className="form-group">
+            <label htmlFor="bio">О себе</label>
+            <textarea
+              id="bio"
+              placeholder="Расскажите о себе, своих компетенциях и опыте..."
+              value={formData.bio}
+              onChange={(e) => handleChange('bio', e.target.value)}
+              className="form-textarea"
+              rows={4}
+            />
           </div>
-
-          <textarea
-            placeholder="Расскажите о себе, своих компетенциях"
-            value={formData.bio}
-            onChange={(e) => handleChange('bio', e.target.value)}
-            style={{
-              padding: '0.5rem',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              minHeight: '100px',
-              resize: 'vertical',
-            }}
-          />
 
           <button
             type="submit"
             disabled={uploading}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: uploading ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: uploading ? 'not-allowed' : 'pointer',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-            }}
+            className="submit-button"
           >
             {uploading ? 'Загрузка...' : 'Сохранить анкету'}
           </button>
