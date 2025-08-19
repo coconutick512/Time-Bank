@@ -7,6 +7,7 @@ const skillRouter = require('./routes/user.skills.router');
 const skillsRouter = require('./routes/skills.router');
 const taskRouter = require('./routes/task.router');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api/uploads/avatars', express.static('uploads/avatars'));
+app.use('/api/uploads/avatars', express.static(path.join(__dirname, '../uploads/avatars')));
 app.use('/api/auth', userRouter);
 app.use('/api/users', skillRouter);
 app.use('/api/skills', skillsRouter);
