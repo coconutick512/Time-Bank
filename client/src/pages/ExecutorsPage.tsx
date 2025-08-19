@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { fetchAllExecutors } from '@/entities/executors/model/executorThunk';
