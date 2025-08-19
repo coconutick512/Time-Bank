@@ -13,6 +13,7 @@ type Skill = {
 };
 
 type Executor = {
+  avatar?: string ;
   id: number;
   name: string;
   email: string;
@@ -90,20 +91,15 @@ export default function ExecutorsPage(): React.JSX.Element {
             >
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Avatar
-                  src={
-                    executor.avatar
-                      ? `http://localhost:3000/api/uploads/avatars/${executor.avatar}`
-                      : undefined
-                  }
-                  sx={{
-                    width: 56,
-                    height: 56,
-                    bgcolor: theme.palette.primary.main,
-                    mr: 2,
-                    fontSize: 24,
-                  }}
-                >
-                  {!executor.avatar ? executor.name.charAt(0) : undefined}
+                 src={`/api/uploads/avatars/${executor.avatar}`}
+                sx={{ 
+                  width: 56, 
+                  height: 56, 
+                  bgcolor: theme.palette.primary.main,
+                  mr: 2,
+                  fontSize: 24
+                }}>
+                 
                 </Avatar>
                 <Box>
                   <Typography variant="h5" component="h3" sx={{ fontWeight: 600, color: 'black' }}>
