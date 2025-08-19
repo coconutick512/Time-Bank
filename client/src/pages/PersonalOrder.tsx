@@ -37,6 +37,11 @@ export default function PersonalOrder(): React.JSX.Element {
     setIsEditOpen(false);
   };
 
+  const handleExecutorSave = (data: TaskUpdate): void => {
+    void dispatch(editTask(data));
+    window.location.reload();
+  };
+
   if (status === 'loading' || !personalTask) {
     return (
       <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
@@ -125,6 +130,18 @@ export default function PersonalOrder(): React.JSX.Element {
         {personalTask.creatorId === user?.id && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
+          </Box>
+        )}
+
+        {personalTask.status === 'open' && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+            <Button
+              onClick={() =>
+                handleExecutorSave({ ...personalTask, status: 'assigned', executorId: user?.id })
+              }
+            >
+              Взять в работу
+            </Button>
           </Box>
         )}
       </Box>

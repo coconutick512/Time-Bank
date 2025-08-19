@@ -8,6 +8,7 @@ export const TaskSchema = z.object({
   status: z.enum(['open', 'assigned', 'completed', 'canceled']),
   deadline: z.string(),
   creatorId: z.number(),
+  executorId: z.number().nullish(),
   creator: z.object({
     name: z.string(),
   }),
@@ -23,6 +24,8 @@ export const TaskUpdateSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),
+  status: z.enum(['open', 'assigned', 'completed', 'canceled']),
+  executorId: z.number().optional(),
 });
 
 export type TaskUpdate = z.infer<typeof TaskUpdateSchema>;
@@ -46,6 +49,7 @@ export const TasksStateSchema = z.object({
       status: z.enum(['open', 'assigned', 'completed', 'canceled']),
       deadline: z.string(),
       creatorId: z.number(),
+      executorId: z.number().optional(),
       creator: z.object({
         name: z.string(),
       }),
