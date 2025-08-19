@@ -6,6 +6,7 @@ import MainPage from '@/pages/MainPage';
 import ExecutorsPage from '@/pages/ExecutorsPage';
 import OrdersPage from '@/pages/OrdersPage';
 import PersonalOrder from '@/pages/PersonalOrder';
+import ErrorPage from '@/pages/ErrorPage';
 
 export default function Router(): React.JSX.Element {
   return (
@@ -18,6 +19,7 @@ export default function Router(): React.JSX.Element {
         <Route path="/executors" element={<ExecutorsPage />} />
         <Route path="/orders/:id" element={<PersonalOrder />} />
       </Route>
+        <Route path="*" element={<ErrorPage />} />
     </Routes>
     
   );
