@@ -1,0 +1,9 @@
+.booked-date {
+    background-color: #ef4444; /* red for booked dates */
+    color: white;
+  }
+  
+  .booked {
+    background-color: #34d399; /* green for available dates */
+    color: white;
+  }

@@ -2,6 +2,8 @@
 import axiosInstance from '@/shared/api/axiosinstance';
 import type { Category, CreateTaskData, TaskUpdate } from '../types/schema';
 import { AllTasksResponseSchema, type Task, TaskSchema } from '../types/schema';
+import type { TaskUpdate, TaskCreate, Task } from '../types/schema';
+import { AllTasksResponseSchema, TaskSchema } from '../types/schema';
 
 export class TasksService {
   static async getTask(id: string): Promise<Task> {
@@ -46,6 +48,11 @@ export class TasksService {
       const res = await axiosInstance.post('/tasks/newTask', data);
       const validData = TaskSchema.parse(res.data);
       return validData
+  static async getUserTasks(userId: number): Promise<Task[]> {
+    try {
+      const response = await axiosInstance.get(`/tasks/user/${userId.toString()}`);
+      const validData = AllTasksResponseSchema.parse(response.data);
+      return validData;
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -58,6 +65,11 @@ export class TasksService {
     try {
       const {data} = await axiosInstance.get<Category>('/tasks/categories');
       return data;
+  static async getUserExecutedTasks(userId: number): Promise<Task[]> {
+    try {
+      const response = await axiosInstance.get(`/tasks/executed/${userId.toString()}`);
+      const validData = AllTasksResponseSchema.parse(response.data);
+      return validData;
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -69,6 +81,11 @@ export class TasksService {
   static async deleteTask(id: number): Promise<void> {
     try {
       await axiosInstance.delete(`/tasks/${id.toString()}`);
+  static async createSpecialTask(data: TaskCreate): Promise<Task> {
+    try {
+      const response = await axiosInstance.post('/tasks/create', data);
+      const validData = TaskSchema.parse(response.data);
+      return validData;
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);

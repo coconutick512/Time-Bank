@@ -26,5 +26,11 @@ authRouter.post(
   upload.single('avatar'),
   UserController.submitForm,
 );
+authRouter.put(
+  '/updateProfile',
+  verifyAccessToken,
+  upload.single('avatar'),
+  UserController.updateProfile,
+);
 
 module.exports = authRouter;

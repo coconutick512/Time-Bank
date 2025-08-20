@@ -3,6 +3,7 @@ import { TasksService } from '../api/tasksService';
 import type { CreateTaskData,  TaskUpdate } from '../types/schema';
 
 
+import type { TaskUpdate, TaskCreate, Task } from '../types/schema';
 
 export const fetchTask = createAsyncThunk('tasks/fetchTask', async (id: string) => {
   const task = await TasksService.getTask(id);
@@ -33,3 +34,23 @@ export const deleteTask = createAsyncThunk('tasks/deleteTask', async (id: number
   await TasksService.deleteTask(id);
   return id
 });
+export const fetchUserTasks = createAsyncThunk('tasks/fetchUserTasks', async (userId: number) => {
+  const tasks = await TasksService.getUserTasks(userId);
+  return tasks;
+});
+
+export const fetchUserExecutedTasks = createAsyncThunk(
+  'tasks/fetchUserExecutedTasks',
+  async (userId: number) => {
+    const tasks = await TasksService.getUserExecutedTasks(userId);
+    return tasks;
+  },
+);
+
+export const createSpecialTask = createAsyncThunk(
+  'tasks/createSpecialTask',
+  async (data: TaskCreate): Promise<Task> => {
+    const task = await TasksService.createSpecialTask(data);
+    return task;
+  },
+);

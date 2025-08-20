@@ -1,4 +1,4 @@
-const { User, Skill, UserSkill } = require("../../db/models");
+const { User, Skill, UserSkill } = require('../../db/models');
 
 class UserSkillService {
   static async getUserWithSkills(id) {
@@ -7,8 +7,8 @@ class UserSkillService {
         include: [
           {
             model: Skill,
-            as: "skills",
-            attributes: ["name"],
+            as: 'skills',
+            attributes: ['name', 'id'],
             required: true,
           },
         ],
@@ -17,7 +17,7 @@ class UserSkillService {
 
       return user;
     } catch (error) {
-      console.error("Error fetching user with skills:", error);
+      console.error('Error fetching user with skills:', error);
       throw error;
     }
   }
@@ -28,19 +28,19 @@ class UserSkillService {
         include: [
           {
             through: {
-            model: UserSkill,
-            attributes: [],
-          },
+              model: UserSkill,
+              attributes: [],
+            },
             model: Skill,
-            as: "skills",
-            attributes: ["name" , "id"],
+            as: 'skills',
+            attributes: ['name', 'id'],
             required: true,
           },
         ],
       });
       return users;
     } catch (error) {
-      console.error("Error fetching user with skills:", error);
+      console.error('Error fetching user with skills:', error);
       throw error;
     }
   }
