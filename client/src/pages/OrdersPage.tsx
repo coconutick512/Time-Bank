@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-nested-ternary */
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React, { useState, useMemo } from 'react';
-import { fetchAllTasks } from '@/entities/tasks/model/tasksThunk';
+import { createTask, fetchAllTasks, fetchCategories } from '@/entities/tasks/model/tasksThunk';
 import type { TasksState } from '@/entities/tasks/types/schema';
 import {
   Box,
@@ -20,6 +21,11 @@ import {
   Alert,
   IconButton,
   Tooltip,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Dialog,
+  Checkbox,
 } from '@mui/material';
 import {
   Schedule,
@@ -41,16 +47,21 @@ type RootState = {
   tasks: TasksState;
 };
 
-// Типы для фильтров
+
 type TaskStatus = 'all' | 'open' | 'assigned' | 'completed';
 type SortOption = 'newest' | 'oldest' | 'deadline' | 'title';
 
 export default function OrdersPage(): React.JSX.Element {
-  const { status, tasks, error } = useAppSelector((state: RootState) => state.tasks);
+  const { status, tasks, error, categories } = useAppSelector((state: RootState) => state.tasks);
+  const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
-  // Состояния для фильтрации и поиска
+
+  const handleOpenCreateModal = (): void => {setCreateModalOpen(true);void dispatch(fetchCategories())};
+  const handleCloseCreateModal = (): void => setCreateModalOpen(false);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
@@ -60,10 +71,47 @@ export default function OrdersPage(): React.JSX.Element {
   React.useEffect(() => {
     void dispatch(fetchAllTasks());
     void dispatch(fetchUser());
+    
   }, [dispatch]);
 
-  // Фильтрация и сортировка задач
+  const [newTask, setNewTask] = useState({
+    title: '',
+    description: '',
+    hours: '',
+    status: 'open' as TaskStatus,
+    deadline: '',
+    categories: [] as number[],
+  });
+
+  const handleNewTaskChange = (field: string, value: unknown):void => {
+    setNewTask((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCreateTask = async (): Promise<void> => {
+    if (!user?.id) {
+    console.error('User ID is not available');
+    return;
+  }
+
+  const taskWithCreator = {
+    ...newTask,
+    creatorId: user.id,
+  };
+    await dispatch(createTask(taskWithCreator));
+    setCreateModalOpen(false);
+
+    setNewTask({
+      title: '',
+      description: '',
+      hours: '',
+      status: 'open',
+      deadline: '',
+      categories: [],
+    });
+  };
+
   const filteredAndSortedTasks = useMemo(() => {
+   
     const filtered = tasks.filter((task) => {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,7 +120,6 @@ export default function OrdersPage(): React.JSX.Element {
       return matchesSearch && matchesStatus;
     });
 
-    // Сортировка
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -91,7 +138,6 @@ export default function OrdersPage(): React.JSX.Element {
     return filtered;
   }, [tasks, searchTerm, statusFilter, sortBy]);
 
-  // Пагинация
   const paginatedTasks = useMemo(() => {
     const startIndex = (page - 1) * itemsPerPage;
     return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
@@ -126,6 +172,7 @@ export default function OrdersPage(): React.JSX.Element {
         return 'primary';
     }
   };
+
   if (status === 'loading' && tasks.length === 0) {
     return (
       <Box sx={{ p: 3 }}>
@@ -169,7 +216,7 @@ export default function OrdersPage(): React.JSX.Element {
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => navigate('/create-task')}
+            onClick={handleOpenCreateModal}
             sx={{
               bgcolor: '#3b82f6',
               '&:hover': { bgcolor: '#2563eb' },
@@ -226,7 +273,7 @@ export default function OrdersPage(): React.JSX.Element {
         </Box>
       </Box>
 
-      {/* Информация о результатах */}
+
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="body2" color="text.secondary">
           Найдено заданий: {filteredAndSortedTasks.length}
@@ -250,7 +297,7 @@ export default function OrdersPage(): React.JSX.Element {
         </Alert>
       )}
 
-      {/* Список заданий */}
+ 
       {paginatedTasks.length > 0 ? (
         <>
           <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
@@ -297,9 +344,7 @@ export default function OrdersPage(): React.JSX.Element {
                         ? 'Назначено'
                         : 'Завершено'
                     }
-                    color={getStatusColor(
-                      typeof task.status === 'string' ? task.status : 'default',
-                    )}
+                    color={getStatusColor(typeof task.status === 'string' ? task.status : 'default')}
                     size="small"
                   />
                 </Box>
@@ -327,10 +372,7 @@ export default function OrdersPage(): React.JSX.Element {
 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Work fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'text.secondary', fontWeight: 'bold' }}
-                    >
+                    <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
                       {task.hours} TD
                     </Typography>
                   </Box>
@@ -373,7 +415,6 @@ export default function OrdersPage(): React.JSX.Element {
             ))}
           </Box>
 
-          {/* Пагинация */}
           {totalPages > 1 && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
               <Pagination
@@ -407,11 +448,95 @@ export default function OrdersPage(): React.JSX.Element {
               ? 'Попробуйте изменить параметры поиска'
               : 'Создайте первое задание'}
           </Typography>
-          <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/create-task')}>
+          <Button variant="contained" startIcon={<Add />} onClick={handleOpenCreateModal}>
             Создать задание
           </Button>
         </Box>
       )}
+
+      {/* Модальное окно создания задания */}
+      <Dialog open={createModalOpen} onClose={handleCloseCreateModal} maxWidth="sm" fullWidth>
+        <DialogTitle>Создать новое задание</DialogTitle>
+        <DialogContent dividers>
+          <TextField
+            label="Название"
+            value={newTask.title}
+            onChange={(e) => handleNewTaskChange('title', e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Описание"
+            value={newTask.description}
+            onChange={(e) => handleNewTaskChange('description', e.target.value)}
+            fullWidth
+            multiline
+            rows={4}
+            margin="normal"
+          />
+          <TextField
+            label="Часы (TD)"
+            type="number"
+            value={newTask.hours}
+            onChange={(e) => handleNewTaskChange('hours', e.target.value)}
+            fullWidth
+            margin="normal"
+            inputProps={{ min: 0 }}
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Категории</InputLabel>
+            <Select
+              multiple
+              value={newTask.categories}
+              label="Категории"
+              onChange={(e) => handleNewTaskChange('categories', e.target.value)}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {(selected).map((id) => {
+                    const category = categories.find((cat) => cat.id === id);
+                    return (
+                      <Chip
+                        key={id}
+                        label={category?.name ?? id}
+                        size="small"
+                        sx={{ bgcolor: '#f0fdf4', color: '#166534' }}
+                      />
+                    );
+                  })}
+                </Box>
+              )}
+              size="small"
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  <Checkbox checked={newTask.categories.includes(category.id)} />
+                  <Typography>{category.name}</Typography>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Срок"
+            type="date"
+            value={newTask.deadline}
+            onChange={(e) => handleNewTaskChange('deadline', e.target.value)}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCreateModal}>Отмена</Button>
+          <Button
+            onClick={handleCreateTask}
+            variant="contained"
+            color="primary"
+            disabled={!newTask.title || !newTask.deadline}
+          >
+            Создать
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

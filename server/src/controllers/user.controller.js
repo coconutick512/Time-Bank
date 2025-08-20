@@ -7,7 +7,6 @@ require('dotenv').config();
 class AuthController {
   static async signup(req, res) {
     try {
-      // console.log(req.body,'---------------------------')
       const user = await UserService.createUser(req.body);
 
       const { accessToken, refreshToken } = generateTokens({ user });
@@ -18,7 +17,6 @@ class AuthController {
     } catch (err) {
       console.error('❌ Signup error:', err);
 
-      // Handle Sequelize validation errors specifically
       if (err.name === 'SequelizeValidationError') {
         const validationErrors = err.errors.map((e) => `${e.path}: ${e.message}`);
         console.error('🚫 Validation errors:', validationErrors);
@@ -28,7 +26,6 @@ class AuthController {
         });
       }
 
-      // Handle unique constraint errors
       if (err.name === 'SequelizeUniqueConstraintError') {
         console.error('🚫 Unique constraint error:', err.fields);
         return res.status(409).json({
@@ -47,7 +44,6 @@ class AuthController {
 
   static async refresh(req, res) {
     try {
-      // console.log(req)
 
       const { refreshToken: oldRefreshToken } = req.cookies;
       const { user } = jwt.verify(oldRefreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -55,7 +51,6 @@ class AuthController {
 
       const { accessToken, refreshToken } = generateTokens({ user });
 
-      console.log(user, '+=+==+=+=++=+=');
       res
         .cookie('refreshToken', refreshToken, cookieConfig.refresh)
         .json({ user, accessToken });

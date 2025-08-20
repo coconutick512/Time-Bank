@@ -1,4 +1,4 @@
-const { Task, User, Transaction, Review, Category } = require("../../db/models");
+const { Task, User, Transaction, Review, Category ,TaskCategory} = require("../../db/models");
 
 class TaskService {
   static async getTask(id) {
@@ -62,7 +62,6 @@ class TaskService {
           },
         ]
       });
-      // console.log(tasks,'---------------');   
       return tasks;
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -85,9 +84,82 @@ class TaskService {
           where: { id },
         }
       );
+      
       return task;
     } catch (error) {
       console.error("Error updating task:", error);
+      throw error;
+    }
+  }
+
+
+  static async createTask(title, description, hours, deadline, categories, creatorId) {
+    try {
+      const task = await Task.create({
+        title,
+        description,
+        hours,
+        status: "open",
+        deadline,
+        creatorId
+      });
+
+
+
+       for (const category of categories) {
+        await TaskCategory.create({
+          taskId: task.id,
+          categoryId: category,
+        });
+      }
+      
+
+      const res = await Task.findByPk(task.id,{
+        include: [
+          {
+            model: User,
+            as: "creator",
+            attributes: ["name"],
+            required: true,
+          },
+          {
+            model: Category,
+            as: "categories",
+            attributes: ["name","id"],
+            required: true,
+          },
+        ],
+      });
+
+      return res;
+    } catch (error) {
+      console.error("Error creating task:", error);
+      throw error;
+    }
+  }
+
+
+  static async allCategories() {
+    try {
+      const categories = await Category.findAll({
+        attributes: ["name","id"],
+      }
+      );
+      return categories;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      throw error;
+    }
+  }
+
+  static async deleteTask(id) {
+    try {
+      const task = await Task.destroy({
+        where: { id },
+      });
+      return task;
+    } catch (error) {
+      console.error("Error deleting task:", error);
       throw error;
     }
   }

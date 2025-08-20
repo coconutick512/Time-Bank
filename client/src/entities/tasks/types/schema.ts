@@ -18,13 +18,35 @@ export const TaskSchema = z.object({
       name: z.string(),
     }),
   ),
+
 });
+
+export type CreateTaskData = {
+  title: string;
+  description: string;
+  hours: string;
+  status: string;
+  deadline: string;
+  categories: number[];
+  creatorId: number;
+};
 
 export const TaskUpdateSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),
 });
+
+
+
+export const TaskCategoriesResponseSchema = z.array(
+  z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
+);
+
+export type Category = z.infer<typeof TaskCategoriesResponseSchema>;
 
 export type TaskUpdate = z.infer<typeof TaskUpdateSchema>;
 
@@ -59,6 +81,12 @@ export const TasksStateSchema = z.object({
       ),
     })
     .nullable(),
+  categories: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+  ),
 });
 
 export type TasksState = z.infer<typeof TasksStateSchema>;

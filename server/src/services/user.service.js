@@ -74,9 +74,7 @@ class AuthService {
   }
 
   static async addSkillToUser(userId, skills) {
-    console.log(skills);
     const skillIds = JSON.parse(skills)
-    console.log(skillIds,'------');
     
     const logskills = skillIds.map((el) =>
        UserSkill.create({
