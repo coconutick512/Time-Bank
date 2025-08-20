@@ -9,10 +9,14 @@ import { useParams } from 'react-router-dom';
 import type { UserState } from '@/entities/user/types/schema';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { EditTaskModal } from '@/features/taskCreate/ui/EditTaskModal';
+import { createChat, fetchChat } from '@/entities/chat/model/chatThunk';
+import { ChatWindow } from '@/widgets/chat/taskChat';
+import type { ChatState } from '@/entities/chat/types/schema';
 
 type RootState = {
   tasks: TasksState;
   user: UserState;
+  chat: ChatState;
 };
 
 export default function PersonalOrder(): React.JSX.Element {
@@ -20,10 +24,31 @@ export default function PersonalOrder(): React.JSX.Element {
 
   const { status, personalTask } = useAppSelector((state: RootState) => state.tasks);
   const { user } = useAppSelector((state: RootState) => state.user);
+  const chat = useAppSelector((state: RootState) => state.chat);
+  console.log('_________________________', chat);
 
   const { id } = useParams();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const [chatId, setChatId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (personalTask?.status !== 'open' && personalTask?.id) {
+      void dispatch(fetchChat(personalTask.id)).then((action) => {
+        if (fetchChat.fulfilled.match(action)) {
+          setChatId(action.payload.id);
+        } else {
+          // создать чат, если не нашли
+          void dispatch(createChat(personalTask.id)).then((newChatAction) => {
+            if (createChat.fulfilled.match(newChatAction)) {
+              setChatId(newChatAction.payload.id);
+            }
+          });
+        }
+      });
+    }
+  }, [personalTask, dispatch]);
 
   useEffect(() => {
     if (id) {
@@ -145,6 +170,9 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         )}
       </Box>
+      {personalTask.status !== 'open' && chatId && (
+        <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
+      )}
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}
