@@ -43,6 +43,7 @@ function SignPage(): React.JSX.Element {
   const handleLogin = async (data: UserLogin): Promise<void> => {
     await dispatch(loginUser(data));
     resetLogin();
+    navigate('/orders');
   };
 
   const handleRegister = async (data: UserRegister): Promise<void> => {
@@ -125,7 +126,6 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-              
             />
 
             <TextField
@@ -158,7 +158,6 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -196,7 +195,6 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                
             />
 
             <TextField
@@ -222,7 +220,6 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                
             />
 
             <TextField
@@ -255,7 +252,6 @@ function SignPage(): React.JSX.Element {
                   ),
                 },
               }}
-                
             />
 
             <Button
