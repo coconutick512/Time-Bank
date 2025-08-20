@@ -10,7 +10,7 @@ export const TaskSchema = z.object({
   deadline: z.string(),
   creatorId: z.number(),
   executorId: z.number().nullish(),
-       created_at: z.string(),
+  created_at: z.string(),
   creator: z.object({
     name: z.string(),
   }),
@@ -35,7 +35,6 @@ export const TaskSchema = z.object({
       name: z.string(),
     }),
   ),
-
 });
 
 export type CreateTaskData = {
@@ -55,8 +54,6 @@ export const TaskUpdateSchema = z.object({
   status: z.enum(['open', 'assigned', 'completed', 'canceled']),
   executorId: z.number().optional(),
 });
-
-
 
 export const TaskCategoriesResponseSchema = z.array(
   z.object({
@@ -78,7 +75,7 @@ export const AllTasksResponseSchema = z.array(TaskSchema);
 export const TasksStateSchema = z.object({
   status: z.enum(['loading', 'done', 'reject']),
   tasks: z.array(TaskSchema),
-  executedTasks: z.array(TaskSchema), 
+  executedTasks: z.array(TaskSchema),
   error: z.string().nullable(),
   personalTask: z
     .object({
@@ -113,11 +110,24 @@ export const TasksStateSchema = z.object({
 export type TasksState = z.infer<typeof TasksStateSchema>;
 
 export const TaskCreateSchema = z.object({
+  id: z.number(),
   title: z.string(),
   description: z.string(),
   deadline: z.string(),
-  bookedDate: z.string(),
-  executorId: z.number(),
+  created_at: z.string(),
+  status: z.enum(['open', 'assigned', 'completed', 'canceled']),
+  creator: z.object({
+    name: z.string(),
+  }),
+  categories: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+  ),
+  hours: z.string(),
+  bookedDate: z.string().optional().nullable(),
+  executorId: z.number().optional().nullable(),
   creatorId: z.number(), // Add this
 });
 

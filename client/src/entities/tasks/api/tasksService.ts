@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 import axiosInstance from '@/shared/api/axiosinstance';
 import type { Category, CreateTaskData, TaskUpdate } from '../types/schema';
-import { AllTasksResponseSchema, type Task, TaskSchema } from '../types/schema';
+import { AllTasksResponseSchema, type Task, TaskCreateSchema, TaskSchema } from '../types/schema';
 import type {  TaskCreate } from '../types/schema';
 
 export class TasksService {
@@ -34,6 +34,7 @@ export class TasksService {
   static async editTask(data: TaskUpdate): Promise<void> {
     try {
       await axiosInstance.put(`/tasks/${data.id.toString()}`, data);
+      return data
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -45,7 +46,7 @@ export class TasksService {
   static async createTask(data: CreateTaskData): Promise<Task> {
     try {
       const res = await axiosInstance.post('/tasks/newTask', data);
-      const validData = TaskSchema.parse(res.data);
+      const validData = TaskCreateSchema.parse(res.data);
       return validData
     } catch (error) {
       if (error instanceof Error) {
@@ -96,7 +97,9 @@ export class TasksService {
 
   static async deleteTask(id: number): Promise<void> {
     try {
+      console.log(id,'OROROOROROR')
       await axiosInstance.delete(`/tasks/${id.toString()}`);
+      return id
     }
     catch (error) {
       if (error instanceof Error) {

@@ -15,6 +15,7 @@ module.exports = {
           key: "id",
         },
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
