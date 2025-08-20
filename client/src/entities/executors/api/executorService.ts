@@ -5,7 +5,7 @@ import axiosInstance from "@/shared/api/axiosinstance";
 export class ExecutorService {
   static async getExecutor(id: number): Promise<Executor> {
     try {
-      const response = await axiosInstance.get(`/executors/${id.toString()}`);
+      const response = await axiosInstance.get(`/users/${id.toString()}`);
       const validData = ExecutorSchema.parse(response.data);
       return validData;
     } catch (error) {

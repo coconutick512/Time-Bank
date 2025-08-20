@@ -9,6 +9,7 @@ export const TaskSchema = z.object({
   deadline: z.string(),
   creatorId: z.number(),
   executorId: z.number().nullable(),
+  created_at: z.string(),
   creator: z.object({
     name: z.string(),
   }),
@@ -63,6 +64,7 @@ export const TasksStateSchema = z.object({
       status: z.enum(['open', 'assigned', 'completed', 'canceled']),
       deadline: z.string(),
       creatorId: z.number(),
+      created_at: z.string(),
       creator: z.object({
         name: z.string(),
       }),

@@ -8,8 +8,7 @@ export const fetchTask = createAsyncThunk('tasks/fetchTask', async (id: string) 
 });
 
 export const editTask = createAsyncThunk('tasks/editTask', async (data: TaskUpdate) => {
-  const updatedTask = await TasksService.editTask(data);
-  return updatedTask;
+   await TasksService.editTask(data);
 });
 
 export const fetchAllTasks = createAsyncThunk('tasks/fetchAllTasks', async () => {
