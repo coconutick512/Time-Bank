@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,54 +8,59 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       hashpass: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       balance: {
         type: Sequelize.DECIMAL(10, 2),
-        defaultValue: 0.00
+        defaultValue: 0.0,
       },
-      city:{
-        type:Sequelize.STRING,
-        allowNull:true
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      avatar:{
-        type:Sequelize.STRING,
-        allowNull:true
+      avatar: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      timezone:{
-        type:Sequelize.STRING,
-        allowNull:true
+      timezone: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      about:{
-        type:Sequelize.TEXT,
-        allowNull:true
+      availableDates: {
+        type: Sequelize.JSON,
+        allowNull: true,
+        defaultValue: [],
+      },
+      about: {
+        type: Sequelize.TEXT,
+        allowNull: true,
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
+        defaultValue: Sequelize.fn('NOW'),
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
-      }
+        defaultValue: Sequelize.fn('NOW'),
+      },
     });
   },
   async down(queryInterface) {
     await queryInterface.dropTable('users');
-  }
+  },
 };

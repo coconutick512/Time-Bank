@@ -1,4 +1,4 @@
-const { User, UserSkill } = require('../../db/models/');
+const { User, UserSkill, Skill } = require('../../db/models/');
 const bcrypt = require('bcrypt');
 
 class AuthService {
@@ -75,17 +75,63 @@ class AuthService {
 
   static async addSkillToUser(userId, skills) {
     console.log(skills);
-    const skillIds = JSON.parse(skills)
-    console.log(skillIds,'------');
-    
+    const skillIds = JSON.parse(skills);
+    console.log(skillIds, '------');
+
     const logskills = skillIds.map((el) =>
-       UserSkill.create({
+      UserSkill.create({
         userId,
-        skillId: parseInt(el,10),
+        skillId: parseInt(el, 10),
       }),
     );
     await Promise.all(logskills);
-    
+  }
+
+  static async updateProfile(userId, data) {
+    const user = await User.update(
+      {
+        avatar: data.avatar,
+        city: data.city,
+        timezone: data.time,
+        about: data.about,
+      },
+      { where: { id: userId } },
+    );
+    const updatedUser = await User.findByPk(userId);
+    const plainUser = updatedUser.get();
+    delete plainUser.hashpass;
+    return plainUser;
+  }
+
+  static async updateSkills(userId, skills) {
+    console.log(skills);
+    const skillIds = JSON.parse(skills);
+    console.log(skillIds, '------');
+
+    const logskills = skillIds.map((el) =>
+      UserSkill.create({
+        userId,
+        skillId: parseInt(el, 10),
+      }),
+    );
+    await Promise.all(logskills);
+  }
+
+  static async getUserSkills(userId) {
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: Skill,
+          as: 'skills',
+          through: { attributes: [] },
+        },
+      ],
+      attributes: ['id', 'name'],
+    });
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+    return user.skills;
   }
 }
 

@@ -1,12 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserService } from '../api/userService';
 import type {
-
+  UserSkillsResponse,
   UserLogin,
   UserRegister,
   UserResponse,
   AncetaResponse,
+  ProfileUpdateResponse,
 } from '../types/schema';
+import { UserOnlySchema } from '../types/schema';
+import type { UserOnly } from '../types/schema';
+import { z } from 'zod';
+import { UserOnlyResponseSchema } from '../api/userService';
+import type { UserOnlyResponse } from '../api/userService';
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (): Promise<UserResponse> => {
   const user = await UserService.refresh();
@@ -46,5 +52,28 @@ export const submitAnceta = createAsyncThunk(
   async (formData: FormData): Promise<AncetaResponse> => {
     const res = await UserService.submitAnceta(formData);
     return res;
+  },
+);
+export const fetchUserSkills = createAsyncThunk(
+  'user/fetchUserSkills',
+  async (id: number): Promise<UserSkillsResponse> => {
+    const res = await UserService.fetchUserSkills(id);
+    return res;
+  },
+);
+
+export const fetchUserById = createAsyncThunk(
+  'user/fetchUserById',
+  async (userId: number): Promise<UserOnlyResponse> => {
+    const response = await UserService.findOne(userId);
+    console.log('Thunk received:', response);
+    return response;
+  },
+);
+export const updateProfile = createAsyncThunk(
+  'user/updateProfile',
+  async (formData: FormData): Promise<ProfileUpdateResponse> => {
+    const response = await UserService.updateProfile(formData);
+    return response;
   },
 );
