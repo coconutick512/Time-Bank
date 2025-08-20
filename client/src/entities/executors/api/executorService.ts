@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
-import { AllExecutorsResponseSchema, type Executor, ExecutorSchema } from "../types/schema";
-import axiosInstance from "@/shared/api/axiosinstance";
+import { AllExecutorsResponseSchema, type Executor, ExecutorSchema } from '../types/schema';
+import axiosInstance from '@/shared/api/axiosinstance';
 
 export class ExecutorService {
   static async getExecutor(id: number): Promise<Executor> {
@@ -18,8 +18,9 @@ export class ExecutorService {
 
   static async getAllExecutors(): Promise<Executor[]> {
     try {
-      const response = await axiosInstance.get("/users");
-       return AllExecutorsResponseSchema.parse(response.data); 
+      const response = await axiosInstance.get('/users');
+      console.log('__________________', response.data);
+      return AllExecutorsResponseSchema.parse(response.data);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
