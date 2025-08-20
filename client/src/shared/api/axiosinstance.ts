@@ -1,5 +1,6 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
+import type { User } from '@/entities/user/types/schema';
 
 const axiosInstance = axios.create({
   baseURL: '/api',
@@ -29,7 +30,7 @@ axiosInstance.interceptors.response.use(
     const { config } = error;
 
     if (error.response?.status === 403 && !config.send) {
-      const res = await axiosInstance.get<{ accessToken: string }>('/auth/refresh');
+      const res = await axiosInstance.get<{  accessToken: string }>('/auth/refresh');
       setAccessToken(res.data.accessToken);
       config.send = true;
       config.headers.set('Authorization', `Bearer ${accessToken}`);

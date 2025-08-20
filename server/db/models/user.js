@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      availableDates: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: [],
+      },
     },
     {
       sequelize,
