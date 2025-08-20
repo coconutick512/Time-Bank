@@ -9,8 +9,8 @@ export const TaskSchema = z.object({
   status: z.enum(['open', 'assigned', 'completed', 'canceled']),
   deadline: z.string(),
   creatorId: z.number(),
-  executorId: z.number().nullable(),
-  created_at: z.string(),
+  executorId: z.number().nullish(),
+       created_at: z.string(),
   creator: z.object({
     name: z.string(),
   }),
@@ -52,6 +52,8 @@ export const TaskUpdateSchema = z.object({
   id: z.number(),
   title: z.string(),
   description: z.string(),
+  status: z.enum(['open', 'assigned', 'completed', 'canceled']),
+  executorId: z.number().optional(),
 });
 
 
@@ -87,6 +89,7 @@ export const TasksStateSchema = z.object({
       status: z.enum(['open', 'assigned', 'completed', 'canceled']),
       deadline: z.string(),
       creatorId: z.number(),
+      executorId: z.number().optional(),
       created_at: z.string(),
       creator: z.object({
         name: z.string(),

@@ -35,7 +35,11 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   }, [open, initialId, initialTitle, initialDescription]);
 
   const handleSave = (): void => {
-    onSave({ id, title, description });
+    onSave({
+      id, title, description,
+      status: 'open',
+      executorId: 0
+    });
     onClose();
     navigate(`/orders`);
     // СДЕЛАТЬ ТАК, ЧТОБЫ НАВИГИРОВАЛ НА СТРАНИЦУ ЗАКЗОВ САМОГО ЮЗЕРА, А НЕ ВСЕ

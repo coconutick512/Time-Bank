@@ -1,21 +1,29 @@
-'use strict';
+"use strict";
 
-const { Model } = require('sequelize');
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate({ Task, Transaction, Review, Skill, UserSkill }) {
-      this.hasMany(Task, { foreignKey: 'creatorId', as: 'createdTasks' });
-      this.hasMany(Task, { foreignKey: 'executorId', as: 'executedTasks' });
-      this.hasMany(Transaction, { foreignKey: 'senderId' });
-      this.hasMany(Transaction, { foreignKey: 'receiverId' });
-      this.hasMany(Review, { foreignKey: 'authorId' });
-      this.hasMany(Review, { foreignKey: 'targetUserId' });
+    static associate({
+      Task,
+      Transaction,
+      Review,
+      Skill,
+      UserSkill,
+      Message,
+    }) {
+      this.hasMany(Task, { foreignKey: "creatorId", as: "createdTasks" });
+      this.hasMany(Task, { foreignKey: "executorId", as: "executedTasks" });
+      this.hasMany(Transaction, { foreignKey: "senderId" });
+      this.hasMany(Transaction, { foreignKey: "receiverId" });
+      this.hasMany(Review, { foreignKey: "authorId" });
+      this.hasMany(Review, { foreignKey: "targetUserId" }); 
       this.belongsToMany(Skill, {
         through: UserSkill,
-        foreignKey: 'userId',
-        as: 'skills',
+        foreignKey: "userId",
+        as: "skills",
       });
+      this.hasMany(Message, { foreignKey: "senderId" });
     }
   }
 
@@ -61,12 +69,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'User',
-      tableName: 'users',
+      modelName: "User",
+      tableName: "users",
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
   );
 
   return User;
