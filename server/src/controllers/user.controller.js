@@ -8,7 +8,6 @@ const { Skill } = require('../../db/models/');
 class AuthController {
   static async signup(req, res) {
     try {
-      // console.log(req.body,'---------------------------')
       const user = await UserService.createUser(req.body);
 
       const { accessToken, refreshToken } = generateTokens({ user });
@@ -19,7 +18,6 @@ class AuthController {
     } catch (err) {
       console.error('❌ Signup error:', err);
 
-      // Handle Sequelize validation errors specifically
       if (err.name === 'SequelizeValidationError') {
         const validationErrors = err.errors.map((e) => `${e.path}: ${e.message}`);
         console.error('🚫 Validation errors:', validationErrors);
@@ -29,7 +27,6 @@ class AuthController {
         });
       }
 
-      // Handle unique constraint errors
       if (err.name === 'SequelizeUniqueConstraintError') {
         console.error('🚫 Unique constraint error:', err.fields);
         return res.status(409).json({

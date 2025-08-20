@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
+import { createTask, deleteTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
 import {
   createSpecialTask,
   fetchAllTasks,
@@ -14,6 +15,7 @@ const initialState: TasksState = {
   executedTasks: [], // Add this for executed tasks
   error: null,
   personalTask: null,
+  categories: [],
 };
 
 const tasksSlice = createSlice({
@@ -90,6 +92,44 @@ const tasksSlice = createSlice({
         state.status = 'reject';
         state.error = action.error.message ?? 'Ошибка создания задачи';
       });
+
+    builder.addCase(fetchCategories.pending, (state) => {
+      state.error = null;
+    });
+    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+      state.categories = action.payload;
+      state.error = null;
+    });
+    builder.addCase(fetchCategories.rejected, (state, action) => {
+      state.categories = [];
+      state.error = action.error.message ?? 'Ошибка при получении категорий';
+    });
+
+    builder.addCase(deleteTask.pending, (state) => {
+      state.status = 'loading';
+      state.error = null;
+    });
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      state.status = 'done';
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      state.error = null;
+    });
+    builder.addCase(deleteTask.rejected, (state, action) => {
+      state.error = action.error.message ?? 'Ошибка при удалении задач';
+    });
+
+    builder.addCase(createTask.pending, (state) => {
+      state.status = 'loading';
+      state.error = null;
+    });
+    builder.addCase(createTask.fulfilled, (state, action) => {
+      state.tasks = [...state.tasks, action.payload];
+      state.status = 'done';
+      state.error = null;
+    });
+    builder.addCase(createTask.rejected, (state, action) => {
+      state.error = action.error.message ?? 'Ошибка при создании задачи';
+    });
   },
 });
 

@@ -27,7 +27,6 @@ import {
 import { logoutUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
-import { AnimatedLogoutButton } from './AnimatedLogoutButton';
 ;
 
 type NavbarProps = {
@@ -410,21 +409,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
               )}
 
-              {/* Язык */}
-              <Select
-                value={currentLanguage}
-                onChange={(e) => onLanguageChange(e.target.value)}
-                size="small"
-                sx={{
-                  minWidth: 80,
-                  '& .MuiSelect-select': {
-                    py: 0.75,
-                  },
-                }}
-              >
-                <MenuItem value="ru">RU</MenuItem>
-                <MenuItem value="en">EN</MenuItem>
-              </Select>
+              
             </Box>
           )}
         </Toolbar>
