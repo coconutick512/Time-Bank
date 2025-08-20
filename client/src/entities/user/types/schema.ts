@@ -10,6 +10,16 @@ export const UserSchema = z.object({
     .refine((val) => !Number.isNaN(val), { message: 'Balance must be a valid number' })
     .optional()
     .or(z.number().optional()),
+  avatar: z.string().optional().nullable(),
+  timezone: z.string().optional().nullable(),
+  about: z.string().optional().nullable(),
+  city: z.string().optional().nullable(),
+  skills: z
+    .array(z.object({ id: z.number(), name: z.string() }))
+    .optional()
+    .nullable(),
+  created_at: z.string().optional().nullable(),
+  availableDates: z.array(z.string()).optional().nullable(),
 });
 
 export type User = z.infer<typeof UserSchema>;
@@ -41,12 +51,15 @@ export const UserScoreSchema = z.object({
 export type UserScore = z.infer<typeof UserScoreSchema>;
 
 export type UserState = {
-  status: 'loading' | 'guest' | 'logged';
+  status: 'loading' | 'guest' | 'logged' | 'done' | 'reject';
   user: User | null;
   error: string | null;
   score: UserScore | null;
   profileCompleted: boolean;
   profileData: UserAnceta | null;
+  skills: UserSkillsResponse | null;
+  viewingUser: User | null;
+  viewingUserSkills: UserSkillsResponse | null;
 };
 export const UserAncetaSchema = z.object({
   avatar: z.string().optional(),
@@ -60,7 +73,39 @@ export const UserAncetaResponseSchema = z.object({
   user: UserAncetaSchema,
   accessToken: z.string(),
 });
+export const UserSkillsResponseSchema = z.object({
+  skills: z.array(z.object({ id: z.number(), name: z.string() })),
+});
+export type UserSkillsResponse = z.infer<typeof UserSkillsResponseSchema>;
 export type AncetaResponse = z.infer<typeof UserAncetaResponseSchema>;
 
 export type UserAncetaResponse = z.infer<typeof UserAncetaResponseSchema>;
 export type UserAnceta = z.infer<typeof UserAncetaSchema>;
+export const ProfileUpdateDataSchema = z.object({
+  name: z.string().min(1, 'Имя обязательно'),
+  city: z.string().optional(),
+  timezone: z.string().optional(),
+  about: z.string().optional(),
+  availableDates: z.array(z.string()).optional(),
+  skillIds: z.array(z.number()).optional(),
+});
+
+export type ProfileUpdateData = z.infer<typeof ProfileUpdateDataSchema>;
+
+export const ProfileUpdateResponseSchema = z.object({
+  user: z.object({
+    id: z.number(),
+    name: z.string(),
+    email: z.string(),
+    city: z.string().nullable(),
+    timezone: z.string().nullable(),
+    about: z.string().nullable(),
+    availableDates: z.array(z.string()).nullable(),
+    avatar: z.string().nullable(),
+    balance: z.number().optional(),
+    created_at: z.string().optional(),
+  }),
+  message: z.string(),
+});
+
+export type ProfileUpdateResponse = z.infer<typeof ProfileUpdateResponseSchema>;

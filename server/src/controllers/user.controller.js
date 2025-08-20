@@ -3,11 +3,11 @@ const UserService = require('../services/user.service');
 const generateTokens = require('../utils/generateTokens');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const { Skill } = require('../../db/models/');
 
 class AuthController {
   static async signup(req, res) {
     try {
-      // console.log(req.body,'---------------------------')
       const user = await UserService.createUser(req.body);
 
       const { accessToken, refreshToken } = generateTokens({ user });
@@ -18,7 +18,6 @@ class AuthController {
     } catch (err) {
       console.error('❌ Signup error:', err);
 
-      // Handle Sequelize validation errors specifically
       if (err.name === 'SequelizeValidationError') {
         const validationErrors = err.errors.map((e) => `${e.path}: ${e.message}`);
         console.error('🚫 Validation errors:', validationErrors);
@@ -28,7 +27,6 @@ class AuthController {
         });
       }
 
-      // Handle unique constraint errors
       if (err.name === 'SequelizeUniqueConstraintError') {
         console.error('🚫 Unique constraint error:', err.fields);
         return res.status(409).json({
@@ -47,18 +45,16 @@ class AuthController {
 
   static async refresh(req, res) {
     try {
-      // console.log(req)
-
       const { refreshToken: oldRefreshToken } = req.cookies;
       const { user } = jwt.verify(oldRefreshToken, process.env.REFRESH_TOKEN_SECRET);
-      console.log(user, { refreshToken: oldRefreshToken });
 
-      const { accessToken, refreshToken } = generateTokens({ user });
+      const { user: dbUser } = await UserService.findOne(user.id);
+      console.log(dbUser, 'dbUser');
+      const { accessToken, refreshToken } = generateTokens({ user: dbUser });
 
-      console.log(user, '+=+==+=+=++=+=');
       res
         .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-        .json({ user, accessToken });
+        .json({ user: dbUser, accessToken });
     } catch (err) {
       res.status(401).json({ message: err.message });
     }
@@ -103,6 +99,34 @@ class AuthController {
       });
       const skill = await UserService.addSkillToUser(res.locals.user.id, req.body.skills);
       res.status(200).json({ user, skill });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async updateProfile(req, res) {
+    try {
+      const avatar = req.file ? req.file.filename : null;
+      const user = await UserService.updateProfile(res.locals.user.id, {
+        ...req.body,
+        avatar,
+      });
+      const skill = await UserService.updateSkills(res.locals.user.id, req.body.skills);
+      res.status(200).json({ user, skill });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  }
+
+  static async getUserSkills(req, res) {
+    try {
+      const { id } = req.params;
+      const skills = await UserService.getUserSkills(id);
+      res.status(200).json({ skills });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: error.message });

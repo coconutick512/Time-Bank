@@ -20,7 +20,6 @@ type Executor = {
   email: string;
   balance: string;
   skills: Skill[];
-  avatar: string | null;
 };
 
 type ExecutorsState = {

@@ -15,7 +15,6 @@ export const ExecutorSchema = z.object({
       name: z.string(),
     }),
   ),
-  avatar: z.string().optional().nullable(),
 });
 
 export const ExecutorResponseSchema = ExecutorSchema;

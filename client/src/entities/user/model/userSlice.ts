@@ -2,11 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { UserState } from '../types/schema';
 import {
   fetchUser,
+  fetchUserSkills,
   loginUser,
   logoutUser,
   registerUser,
   scoreUser,
   submitAnceta,
+  fetchUserById,
+  updateProfile,
 } from './userThunk';
 
 const initialState: UserState = {
@@ -16,7 +19,9 @@ const initialState: UserState = {
   score: null,
   profileCompleted: false,
   profileData: null,
-
+  skills: null,
+  viewingUser: null, // Add this for storing other user's data
+  viewingUserSkills: null, // Add this for other user's skills
 };
 
 const userSlice = createSlice({
@@ -71,7 +76,7 @@ const userSlice = createSlice({
         state.user = null;
         state.error = null;
         state.profileData = null;
-      })
+      });
 
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -117,6 +122,50 @@ const userSlice = createSlice({
         state.status = 'guest';
         state.profileData = null;
         state.error = action.error.message ?? 'Ошибка при обновлении токена';
+      });
+    builder
+      .addCase(fetchUserSkills.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchUserSkills.fulfilled, (state, action) => {
+        state.status = 'logged';
+        state.skills = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUserSkills.rejected, (state, action) => {
+        state.status = 'guest';
+        state.skills = null;
+        state.error = action.error.message ?? 'Ошибка при обновлении токена';
+      });
+    builder
+      .addCase(fetchUserById.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.status = 'done';
+        console.log('Slice storing viewingUser:', action.payload.user);
+        state.viewingUser = action.payload.user;
+        state.error = null;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.status = 'reject';
+        state.viewingUser = null;
+        state.error = action.error.message ?? 'Ошибка при получении пользователя';
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.status = 'logged';
+        state.user = action.payload.user;
+        state.error = null;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.status = 'logged';
+        state.error = action.error.message ?? 'Ошибка при обновлении профиля';
       });
   },
 });

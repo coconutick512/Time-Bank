@@ -1,11 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import { editTask, fetchTask } from '@/entities/tasks/model/tasksThunk';
+import { deleteTask, editTask, fetchTask } from '@/entities/tasks/model/tasksThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Chip, Skeleton, Button } from '@mui/material';
 import { Schedule, Person, Category } from '@mui/icons-material';
 import type { TasksState, TaskUpdate } from '@/entities/tasks/types/schema';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { UserState } from '@/entities/user/types/schema';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { EditTaskModal } from '@/features/taskCreate/ui/EditTaskModal';
@@ -21,6 +21,7 @@ type RootState = {
 
 export default function PersonalOrder(): React.JSX.Element {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { status, personalTask } = useAppSelector((state: RootState) => state.tasks);
   const { user } = useAppSelector((state: RootState) => state.user);
@@ -153,9 +154,15 @@ export default function PersonalOrder(): React.JSX.Element {
         )}
 
         {personalTask.creatorId === user?.id && (
+          <>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
           </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+            <Button onClick={() => {void dispatch(deleteTask(personalTask.id)); navigate('/orders')}}>Удалить</Button>
+          </Box>
+          </>
         )}
 
         {personalTask.status === 'open' && (

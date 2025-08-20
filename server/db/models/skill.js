@@ -1,5 +1,5 @@
-// models/skill.js
 'use strict';
+
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -8,22 +8,26 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsToMany(User, {
         through: UserSkill,
         foreignKey: 'skillId',
-        as: 'users'
+        as: 'users',
       });
     }
   }
-  
-  Skill.init({
-    name: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    modelName: 'Skill',
-    tableName: 'skills'
-  });
-  
+
+  Skill.init(
+    {
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Skill',
+      tableName: 'skills',
+      timestamps: false,
+    },
+  );
+
   return Skill;
 };
