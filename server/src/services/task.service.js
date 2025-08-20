@@ -52,17 +52,14 @@ class TaskService {
     }
   }
 
-  static async updateTask(id, title, description, hours, status, deadline, categories) {
+  static async updateTask(id, data) {
     try {
+
+      console.log(data, '-------');
       const task = await Task.update(
-        {
-          title,
-          description,
-          hours,
-          status,
-          deadline,
-          categories,
-        },
+        
+          data
+        ,
         {
           where: { id },
         },
@@ -76,7 +73,7 @@ class TaskService {
   }
 
 
-  static async createTask(title, description, hours, deadline, categories, creatorId) {
+  static async createNewTask(title, description, hours, deadline, categories, creatorId) {
     try {
       const task = await Task.create({
         title,
@@ -230,9 +227,8 @@ class TaskService {
 
   static async deleteTask(id) {
     try {
-      const task = await Task.destroy({
-        where: { id },
-      });
+      console.log(id,'OROROOROROR')
+      const task = await Task.destroy({ where: { id } });
       return task;
     } catch (error) {
       console.error("Error deleting task:", error);

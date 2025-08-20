@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
-import { createTask, deleteTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
+import { createTask, deleteTask, editTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
 import {
   createSpecialTask,
   fetchUserTasks,
@@ -108,8 +108,8 @@ const tasksSlice = createSlice({
       state.error = null;
     });
     builder.addCase(deleteTask.fulfilled, (state, action) => {
-      state.status = 'done';
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      state.status = 'done';
       state.error = null;
     });
     builder.addCase(deleteTask.rejected, (state, action) => {
@@ -125,9 +125,22 @@ const tasksSlice = createSlice({
       state.status = 'done';
       state.error = null;
     });
-    builder.addCase(createTask.rejected, (state, action) => {
-      state.error = action.error.message ?? 'Ошибка при создании задачи';
-    });
+    // builder.addCase(editTask.rejected, (state, action) => {
+    //   state.error = action.error.message ?? 'Ошибка при обновлении задачи';
+    //   state.status = 'reject';
+    //   state.tasks = [];
+    // });
+    // builder.addCase(editTask.fulfilled, (state, action) => {
+    //   state.tasks = state.tasks.map((task) => {
+    //     if (task.id === action.payload.id) {
+    //       return action.payload;
+    //     }
+    //     return task;
+    //   });
+    //   state.status = 'done';
+    //   state.error = null;
+    // });
+    
   },
 });
 

@@ -19,6 +19,7 @@ const executorSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchAllExecutors.fulfilled, (state, action) => {
+        console.log(action.payload,'AAAAAAAAAAAA');
         state.status = 'done';
         state.executors = action.payload;
         state.error = null;

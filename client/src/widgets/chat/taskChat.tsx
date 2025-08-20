@@ -53,10 +53,10 @@ socket.on('connect', () => {
     };
   }, []);
 
-  useEffect(() => {
-    // autoscroll
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [localMessages]);
+  // useEffect(() => {
+  //   // autoscroll
+  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // }, [localMessages]);
 
   const handleSend = (): void => {
     if (input.trim() === '') return;

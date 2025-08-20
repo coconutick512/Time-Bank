@@ -141,7 +141,7 @@ export default function OrdersPage(): React.JSX.Element {
   const paginatedTasks = useMemo(() => {
     const startIndex = (page - 1) * itemsPerPage;
     return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredAndSortedTasks, page]);
+  }, [filteredAndSortedTasks, page ]);
 
   const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
 
@@ -173,7 +173,7 @@ export default function OrdersPage(): React.JSX.Element {
     }
   };
 
-  if (status === 'loading' && tasks.length === 0) {
+  if (status === 'loading' ) {
     return (
       <Box sx={{ p: 3 }}>
         {[...Array(5)].map((_, index) => (
@@ -366,7 +366,7 @@ export default function OrdersPage(): React.JSX.Element {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Person fontSize="small" sx={{ color: 'text.secondary' }} />
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Автор: {task.creator.name}
+                      Автор: {task.creator?.name}
                     </Typography>
                   </Box>
 
@@ -378,7 +378,7 @@ export default function OrdersPage(): React.JSX.Element {
                   </Box>
                 </Box>
 
-                {task.categories.length > 0 && (
+                {task.categories?.length > 0 && (
                   <Box sx={{ mt: 2 }}>
                     <Typography
                       variant="subtitle2"

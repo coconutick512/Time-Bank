@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
 import { Box, Typography, Avatar, Chip, Skeleton, Divider, useTheme } from '@mui/material';
 import { Schedule as TimeIcon, Work as SkillsIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 type Skill = {
   id: number;
@@ -33,6 +34,7 @@ type RootState = {
 };
 
 export default function ExecutorsPage(): React.JSX.Element {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { status, executors, error } = useAppSelector((state: RootState) => state.executors);
@@ -75,6 +77,8 @@ export default function ExecutorsPage(): React.JSX.Element {
           {executors.map((executor) => (
             <Box
               key={executor.id}
+              onClick={() => navigate(`/profile/${executor.id}`)}
+              style ={{cursor: 'pointer'}}
               sx={{
                 p: 3,
                 border: '1px solid',

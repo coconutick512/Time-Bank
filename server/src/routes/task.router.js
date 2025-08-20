@@ -8,7 +8,7 @@ taskRouter.get("/oneTask/:id", TaskController.getTask);
 taskRouter.get("/", TaskController.getAllTasks);
 taskRouter.post("/update", TaskController.updateTask);
 taskRouter.put("/:id", TaskController.updateTask);
-taskRouter.post("/newTask", TaskController.createTask);
+taskRouter.post("/newTask", TaskController.createNewTask);
 taskRouter.get("/categories", TaskController.getCategories);
 taskRouter.delete("/:id", TaskController.deleteTask);
 taskRouter.get('/user/:userId', TaskController.getUserTasks);

@@ -77,6 +77,9 @@ export default function PersonalOrder(): React.JSX.Element {
     );
   }
 
+  console.log('PersonalTask:',personalTask);
+  console.log('User:',user);
+
   return (
     <>
       <Box
@@ -165,7 +168,7 @@ export default function PersonalOrder(): React.JSX.Element {
           </>
         )}
 
-        {personalTask.status === 'open' && (
+        {personalTask.status === 'open' && personalTask.creatorId !== user?.id && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button
               onClick={() =>
@@ -177,9 +180,9 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         )}
       </Box>
-      {personalTask.status !== 'open' && chatId && (
+      {(personalTask.status !== 'open' && chatId && (personalTask.creatorId === user?.id || personalTask.executorId === user?.id)) && (
         <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
-      )}
+      ) }
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}

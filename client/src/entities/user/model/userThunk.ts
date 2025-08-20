@@ -8,15 +8,10 @@ import type {
   AncetaResponse,
   ProfileUpdateResponse,
 } from '../types/schema';
-import { UserOnlySchema } from '../types/schema';
-import type { UserOnly } from '../types/schema';
-import { z } from 'zod';
-import { UserOnlyResponseSchema } from '../api/userService';
 import type { UserOnlyResponse } from '../api/userService';
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (): Promise<UserResponse> => {
   const user = await UserService.refresh();
-  console.log(user);
   return user;
 });
 
