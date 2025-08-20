@@ -77,7 +77,7 @@ class AuthService {
     const skillIds = JSON.parse(skills)
     
     console.log(skills);
-    const skillIds = JSON.parse(skills);
+
     console.log(skillIds, '------');
 
     const logskills = skillIds.map((el) =>

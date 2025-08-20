@@ -68,7 +68,8 @@ export default function ProfilePage(): React.JSX.Element {
       void dispatch(fetchUserSkills(targetUserId));
     }
   }, [dispatch, userId, currentUser?.id]);
-  const oneCity = profileUser?.city.split(' ')[0];
+
+  // const oneCity = profileUser?.city.split(' ')[0];
 
   if (status === 'loading' || (!profileUser && userId)) {
     return <div>Loading...</div>;
@@ -142,7 +143,7 @@ export default function ProfilePage(): React.JSX.Element {
         {isEditing && isOwner ? (
           <ProfileEditForm
             user={profileUser}
-            skills={profileSkills?.skills || []}
+            skills={profileSkills?.skills ?? []}
             onCancel={() => setIsEditing(false)}
             onSuccess={handleEditSuccess}
           />

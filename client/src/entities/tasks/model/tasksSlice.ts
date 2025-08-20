@@ -3,8 +3,6 @@ import type { TasksState } from '../types/schema';
 import { createTask, deleteTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
 import {
   createSpecialTask,
-  fetchAllTasks,
-  fetchTask,
   fetchUserTasks,
   fetchUserExecutedTasks,
 } from './tasksThunk';
