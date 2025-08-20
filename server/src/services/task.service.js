@@ -131,6 +131,10 @@ class TaskService {
       return categories;
     } catch (error) {
       console.error("Error fetching categories:", error);
+    }
+  }
+
+
   static async getUserTasks(userId) {
     const tasks = await Task.findAll({
       where: { creatorId: userId },
@@ -234,6 +238,7 @@ class TaskService {
       console.error("Error deleting task:", error);
       throw error;
     }
+  }
   static async createSpecialTask({
     title,
     description,

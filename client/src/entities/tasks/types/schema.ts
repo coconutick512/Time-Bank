@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from 'zod';
 
 export const TaskSchema = z.object({
@@ -17,7 +18,7 @@ export const TaskSchema = z.object({
     .union([z.array(z.string()), z.string(), z.null(), z.undefined()])
     .optional()
     .nullable()
-    .transform((val) => {
+    .transform((val): string[] | string | null => {
       if (!val) return null;
       if (typeof val === 'string') {
         try {

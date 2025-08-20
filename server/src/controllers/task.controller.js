@@ -97,6 +97,9 @@ class TaskController {
       res.status(500).json({
         error: "Ошибка при удалении задачи в контроллере",
       });
+    }
+  }
+  
   static async getUserExecutedTasks(req, res) {
     try {
       const { userId } = req.params;
