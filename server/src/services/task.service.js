@@ -61,6 +61,8 @@ class TaskService {
 
   static async updateTask(id, data) {
     try {
+      const taskforStat= await Task.findByPk(id);
+
       const task = await Task.update(data, {
         where: { id },
       });
@@ -68,7 +70,7 @@ class TaskService {
     
 
       const completedTask = await Task.findByPk(id);
-      if (data.status === 'completed' && completedTask.status === 'running') {
+      if (data.status === 'completed' && taskforStat.status === 'running') {
         const user = await User.findByPk(completedTask.executorId);
         await user.update(
           {
