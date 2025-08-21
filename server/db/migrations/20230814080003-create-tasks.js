@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('open', 'assigned', 'completed', 'canceled'),
+        type: Sequelize.ENUM('open', 'assigned', 'completed', 'running'),
         defaultValue: 'open',
       },
       bookedDates: {
@@ -33,6 +33,7 @@ module.exports = {
       deadline: {
         type: Sequelize.DATE,
       },
+      
       creatorId: {
         type: Sequelize.INTEGER,
         allowNull: false,

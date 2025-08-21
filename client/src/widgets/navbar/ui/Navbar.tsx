@@ -268,34 +268,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </IconButton>
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              {/* Поиск */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#f3f4f6',
-                  borderRadius: 2,
-                  px: 2,
-                  py: 0.5,
-                  width: 300,
-                  '&:focus-within': {
-                    boxShadow: '0 0 0 2px #bfdbfe',
-                  },
-                }}
-              >
-                <SearchIcon size={18} color="#6b7280" style={{ marginRight: 8 }} />
-                <InputBase
-                  placeholder="Поиск услуг..."
-                  value={searchQuery}
-                  onChange={(e) => onSearch(e.target.value)}
-                  sx={{
-                    width: '100%',
-                    '& input': {
-                      py: 1,
-                    },
-                  }}
-                />
-              </Box>
+             
 
               {user ? (
                 <>

@@ -24,6 +24,7 @@ export const fetchCategories = createAsyncThunk('tasks/fetchCategories', async (
 });
 
 export const createTask = createAsyncThunk('tasks/createTask', async (data: CreateTaskData) => {
+  console.log('createTask data:', data);
   const response = await TasksService.createTask(data);
   return response
 });

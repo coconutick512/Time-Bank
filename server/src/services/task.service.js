@@ -65,6 +65,18 @@ class TaskService {
         where: { id },
       });
 
+    
+
+      const completedTask = await Task.findByPk(id);
+      if (data.status === 'completed' && completedTask.status === 'running') {
+        const user = await User.findByPk(completedTask.executorId);
+        await user.update(
+          {
+           balance: Number(user.balance) + Number(completedTask.hours),
+          },
+        );
+      }
+
       return task;
     } catch (error) {
       console.error("Error updating task:", error);
@@ -75,17 +87,20 @@ class TaskService {
   static async createNewTask(
     title,
     description,
+    created_at,
     hours,
     deadline,
     categories,
     creatorId
   ) {
     try {
+      console.log('createNewTask data:', title, description, hours, deadline, categories, creatorId,'----------------------------------');
       const task = await Task.create({
         title,
         description,
         hours,
         status: "open",
+        created_at,
         deadline,
         creatorId,
       });
@@ -113,6 +128,8 @@ class TaskService {
           },
         ],
       });
+
+      
 
       const user = await User.findByPk(res.creatorId);
       await user.update(

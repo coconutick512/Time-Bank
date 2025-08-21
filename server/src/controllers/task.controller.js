@@ -53,11 +53,12 @@ class TaskController {
 
   static async createNewTask(req, res) {
     try {
-
-      const { title, description, hours, deadline, categories ,creatorId} = req.body;
+      console.log('Received data:', req.body,'----------------------------------');
+      const { title, description, hours,created_at, deadline, categories ,creatorId} = req.body;
       const task = await TaskService.createNewTask(
         title,
         description,
+        created_at,
         hours,
         deadline,
         categories,
