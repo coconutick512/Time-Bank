@@ -75,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 mr: 2,
               }}
             >
-              <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : '/default-avatar.png'} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+              <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
             </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight="bold">
@@ -345,7 +345,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         mr: 1.5,
                       }}
                     >
-                      <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : '/default-avatar.png'} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+                      <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />

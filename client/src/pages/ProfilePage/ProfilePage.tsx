@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { fetchUserById } from '@/entities/user/model/userThunk';
 import ProfileEditForm from '@/widgets/UserProfileForm/ui/ProfilePageEdit';
 import './ProfilePage.css';
+import { Avatar } from '@mui/material';
 
 export default function ProfilePage(): React.JSX.Element {
   const dispatch = useAppDispatch();
@@ -48,7 +49,7 @@ export default function ProfilePage(): React.JSX.Element {
   };
 
   useEffect(() => {
-    document.title = 'Профиль'
+    document.title = 'Профиль';
     const targetUserId = userId ? parseInt(userId, 10) : currentUser?.id;
     const isViewingOwnProfile = !userId || Number(currentUser?.id) === targetUserId;
 
@@ -86,15 +87,11 @@ export default function ProfilePage(): React.JSX.Element {
       <div className="profile-header">
         <div className="profile-header-content">
           <div className="profile-avatar-section">
-            <img
-              src={
-                profileUser.avatar
-                  ? `http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`
-                  : '/default-avatar.png'
-              }
-              alt="avatar"
-              className="profile-avatar"
-            />
+            <Avatar
+                  src={`http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`}
+                  className="executor-avatar"
+                  alt={profileUser.name}
+                />
             <div className="profile-info">
               <h2>{profileUser.name}</h2>
               <p>Баланс: {profileUser.balance} TD</p>
@@ -106,10 +103,7 @@ export default function ProfilePage(): React.JSX.Element {
           {/* Action Buttons */}
           <div className="profile-actions">
             {isOwner ? (
-              <button 
-                className="profile-btn" 
-                onClick={() => setIsEditing(!isEditing)}
-              >
+              <button className="profile-btn" onClick={() => setIsEditing(!isEditing)}>
                 {isEditing ? 'Отменить' : 'Редактировать профиль'}
               </button>
             ) : (
@@ -145,7 +139,7 @@ export default function ProfilePage(): React.JSX.Element {
               <div className="profile-section">
                 <h3>Навыки</h3>
                 <div className="profile-skills-list">
-                  {profileSkills?.skills?.map((skill) => (
+                  {profileSkills?.skills.map((skill) => (
                     <span className="profile-skill-badge" key={skill.id}>
                       {skill.name}
                     </span>
