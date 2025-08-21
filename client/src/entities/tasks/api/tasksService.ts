@@ -35,7 +35,7 @@ export class TasksService {
     try {
       await axiosInstance.put(`/tasks/${data.id.toString()}`, data);
       return data
-    } catch (error) {
+    } catch (error) { 
       if (error instanceof Error) {
         console.log(error.message);
       }

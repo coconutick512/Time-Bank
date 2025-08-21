@@ -1,7 +1,7 @@
+// SignPage.tsx
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-// eslint-disable-next-line fsd-layers/no-import-from-top
 import { useAppDispatch } from '@/app/store';
 import { loginUser, registerUser } from '@/entities/user/model/userThunk';
 import type { UserLogin, UserRegister } from '@/entities/user/types/schema';
@@ -18,6 +18,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { Visibility, VisibilityOff, Person, Email, Lock } from '@mui/icons-material';
+import './SignPage.css';
 
 function SignPage(): React.JSX.Element {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -66,28 +67,9 @@ function SignPage(): React.JSX.Element {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        bgcolor: '#f5f5f5',
-        p: 2,
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%',
-          maxWidth: 500,
-        }}
-      >
-        <Typography variant="h5" gutterBottom>
+    <div className="sign-root">
+      <Paper className="sign-paper" elevation={3}>
+        <Typography className="sign-title" gutterBottom>
           Банк Времени
         </Typography>
 
@@ -95,14 +77,14 @@ function SignPage(): React.JSX.Element {
           value={activeTab}
           onChange={(_, newValue: number) => setActiveTab(newValue)}
           variant="fullWidth"
-          sx={{ mb: 3 }}
+          className="sign-tabs"
         >
           <Tab label="Вход" />
           <Tab label="Регистрация" />
         </Tabs>
 
         {activeTab === 0 && (
-          <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} sx={{ width: '100%' }}>
+          <Box component="form" onSubmit={handleLoginSubmit(handleLogin)} className="sign-form">
             <TextField
               margin="normal"
               fullWidth
@@ -160,7 +142,7 @@ function SignPage(): React.JSX.Element {
               }}
             />
 
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button type="submit" fullWidth variant="contained" className="sign-button">
               Войти
             </Button>
           </Box>
@@ -170,7 +152,7 @@ function SignPage(): React.JSX.Element {
           <Box
             component="form"
             onSubmit={handleRegisterSubmit(handleRegister)}
-            sx={{ width: '100%' }}
+            className="sign-form"
           >
             <TextField
               margin="normal"
@@ -196,7 +178,6 @@ function SignPage(): React.JSX.Element {
                 },
               }}
             />
-
             <TextField
               margin="normal"
               fullWidth
@@ -221,7 +202,6 @@ function SignPage(): React.JSX.Element {
                 },
               }}
             />
-
             <TextField
               margin="normal"
               fullWidth
@@ -253,13 +233,12 @@ function SignPage(): React.JSX.Element {
                 },
               }}
             />
-
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              className="sign-button-alt"
               color="secondary"
-              sx={{ mt: 3, mb: 2 }}
             >
               Зарегистрироваться
             </Button>
@@ -269,7 +248,7 @@ function SignPage(): React.JSX.Element {
 
       {/* Profile Form Modal */}
       {showProfileModal && <UserProfileForm onClose={handleCloseProfileModal} />}
-    </Box>
+    </div>
   );
 }
 

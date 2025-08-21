@@ -1,0 +1,245 @@
+/* Общий фон и корень */
+.profile-root,
+body {
+  min-height: 100vh;
+  background: linear-gradient(to right, #f3f4f6 1px, transparent 1px) 0 0,
+    linear-gradient(to bottom, #f3f4f6 1px, transparent 1px) 0 0;
+  background-size: 40px 40px;
+  background-color: #fcfcfd;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #18191c;
+  margin: 0;
+  padding: 0;
+}
+
+/* Контейнер профиля */
+.profile-content {
+  max-width: 1200px;
+  margin: 48px auto;
+  background: transparent;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Header пользователя */
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 2px 14px rgba(60, 72, 120, 0.08);
+  padding: 36px 38px;
+  min-width: 370px;
+}
+
+.profile-avatar {
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(120, 130, 140, 0.08);
+  object-fit: cover;
+  border: 3px solid #f5f7fb;
+  background: #f5f7fa;
+}
+
+.profile-basic {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.profile-basic h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.profile-basic p {
+  font-size: 1.09rem;
+  color: #646c7a;
+  margin: 0 0 2px 0;
+}
+
+.profile-btns {
+  margin-top: 17px;
+  display: flex;
+  gap: 11px;
+}
+.profile-btn,
+.profile-btn-alt {
+  font-size: 0.97rem;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-weight: 500;
+  border: none;
+  background: #18191c;
+  color: #fff;
+  transition: background 0.13s;
+  cursor: pointer;
+}
+.profile-btn:hover,
+.profile-btn-alt:hover {
+  background: #29292e;
+}
+.profile-btn-alt {
+  background: #4370f7;
+}
+.profile-btn-alt:hover {
+  background: #2948c6;
+}
+
+/* Рейтинг и отзывы */
+.profile-reviews-summary {
+  margin: 21px 0 0 0;
+  text-align: left;
+}
+.profile-stars {
+  color: #fdcd3b;
+  letter-spacing: 2px;
+  font-size: 1.13rem;
+}
+.profile-avg {
+  color: #232b36;
+  margin-top: 3px;
+  font-size: 1.04rem;
+}
+
+/* Основной контент профиля */
+.profile-mainArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 44px;
+  margin-top: 38px;
+  justify-content: center;
+}
+
+.profile-col {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 330px;
+  max-width: 440px;
+  flex: 1 1 350px;
+}
+
+.profile-section {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 1.5px 10px rgba(70, 90, 140, 0.09);
+  padding: 28px 22px 24px 22px;
+}
+
+.profile-section h3 {
+  font-size: 1.11rem;
+  margin-bottom: 8px;
+  color: #222;
+  font-weight: 600;
+}
+
+/* Навыки/skills бэйджи */
+.profile-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.profile-skill-badge {
+  padding: 5px 13px;
+  border-radius: 7px;
+  background: #e6f6ef;
+  color: #22c47c;
+  font-size: 0.98rem;
+  font-weight: 500;
+  border: 1.1px solid #d3eedc;
+}
+
+/* Мои задания */
+.profile-task-item {
+  padding: 14px 0 7px 0;
+  border-bottom: 1.2px solid #f2f2f8;
+  margin-bottom: 9px;
+}
+.profile-task-item:last-child {
+  border-bottom: none;
+}
+.profile-task-item h4 {
+  font-size: 1.06rem;
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+.profile-task-item p {
+  margin: 0 0 3px 0;
+  color: #62728c;
+}
+.profile-task-status {
+  color: #4061ef;
+  background: #ecf2fa;
+  padding: 1px 9px;
+  border-radius: 8px;
+  font-size: 0.99rem;
+  margin-left: 5px;
+}
+
+/* Reviews */
+.profile-reviews-section {
+  margin-top: 36px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(70, 90, 140, 0.09);
+  padding: 24px 18px 12px 19px;
+  max-width: 540px;
+}
+.profile-review-item {
+  margin-bottom: 17px;
+}
+.profile-review-stars {
+  color: #fdcd3b;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+.profile-review-text {
+  color: #323d48;
+  font-size: 1.06rem;
+}
+
+/* Skeleton loader и Not-found */
+.profile-loader,
+.profile-notfound {
+  padding: 82px 0;
+  text-align: center;
+  color: #8493a4;
+  font-size: 1.33rem;
+}
+
+@media (max-width: 950px) {
+  .profile-content,
+  .profile-mainArea {
+    flex-direction: column;
+    align-items: center;
+    gap: 23px;
+  }
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 17px;
+    min-width: 200px;
+    padding: 27px 10px;
+  }
+  .profile-col {
+    max-width: 98vw;
+  }
+}
+@media (max-width: 600px) {
+  .profile-section,
+  .profile-reviews-section {
+    border-radius: 12px;
+    padding: 14px 5px 14px 8px;
+  }
+  .profile-content {
+    margin: 19px 2px;
+  }
+}

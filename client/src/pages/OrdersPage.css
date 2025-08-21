@@ -1,0 +1,243 @@
+/* --- Корневой контейнер --- */
+.orders-root {
+  max-width: 1200px;
+  margin: 36px auto;
+  padding: 24px 20px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #18191c;
+  background-color: transparent;
+}
+
+/* --- Заголовок и панель действий --- */
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.orders-title {
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+
+/* --- Панель кнопок --- */
+.orders-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- Кнопки --- */
+.orders-btn-primary {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 26px;
+  transition: background-color 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.orders-btn-primary:hover {
+  background-color: #2563eb;
+}
+
+.orders-icon-btn {
+  color: #4061ef;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  border-radius: 50%;
+}
+
+.orders-icon-btn:hover {
+  color: #1e3a8a;
+}
+
+/* --- Фильтры и поиск --- */
+.orders-filter-panel {
+  padding: 20px 22px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(60, 72, 120, 0.07);
+  margin-bottom: 36px;
+}
+
+.orders-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
+
+.orders-search-input {
+  min-width: 200px;
+  flex-grow: 1;
+}
+
+.orders-select {
+  min-width: 140px;
+}
+
+/* --- Инфо о найденных задачах и сброс --- */
+.orders-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  color: #565c6a;
+}
+
+.orders-reset-btn {
+  background: transparent;
+  border: none;
+  color: #4061ef;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+}
+
+.orders-reset-btn:hover {
+  text-decoration: underline;
+}
+
+/* --- Ошибки --- */
+.orders-error-alert {
+  margin-bottom: 32px;
+}
+
+/* --- Список заданий --- */
+.orders-task-list {
+  display: grid;
+  gap: 24px;
+}
+
+.orders-task-item {
+  background: #fff;
+  padding: 22px 24px;
+  border-radius: 20px;
+  box-shadow: 0 3px 16px rgba(40, 55, 80, 0.08);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.orders-task-item:hover,
+.orders-task-item:focus {
+  box-shadow: 0 6px 30px rgba(40, 55, 80, 0.12);
+  transform: translateY(-4px);
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.orders-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  color: #18191c;
+}
+
+.orders-task-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.orders-task-chip {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.orders-task-description {
+  font-size: 1rem;
+  color: #606672;
+  line-height: 1.43;
+  margin-bottom: 18px;
+}
+
+.orders-task-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  color: #555c6a;
+  margin-bottom: 10px;
+}
+
+.orders-task-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.orders-task-info-item svg {
+  color: #4061ef;
+}
+
+.orders-task-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.orders-task-category-chip {
+  border-color: #bbf7d0 !important;
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+
+/* --- Пагинация --- */
+.orders-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+/* --- Пустое состояние --- */
+.orders-empty-state {
+  padding: 48px 32px;
+  text-align: center;
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+  background: #f9fafb;
+  color: #606672;
+}
+
+.orders-empty-icon {
+  font-size: 54px;
+  color: #a0aec0;
+  margin-bottom: 16px;
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 980px) {
+  .orders-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .orders-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .orders-root {
+    padding: 20px 12px;
+  }
+  .orders-task-list {
+    gap: 18px;
+  }
+  .orders-task-item {
+    padding: 18px 14px;
+  }
+  .orders-task-title {
+    font-size: 1.12rem;
+  }
+}

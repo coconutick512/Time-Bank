@@ -1,0 +1,154 @@
+/* Корневой контейнер */
+.po-root {
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 24px 32px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 3px 18px rgba(40, 55, 80, 0.1), 0 1.5px 4px rgba(65, 75, 95, 0.07);
+  color: #18191c;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Хедер */
+.po-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.po-title {
+  font-weight: 600;
+  font-size: 2rem;
+  color: #18191c;
+}
+
+/* Описание */
+.po-description {
+  font-size: 1.15rem;
+  color: #606672;
+  line-height: 1.5;
+}
+
+/* Информационные блоки (дата, автор) */
+.po-info-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  color: #555c6a;
+}
+
+.po-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.po-info-text {
+  color: #555c6a;
+}
+
+/* Категории */
+.po-categories-section {
+  margin-top: 12px;
+}
+
+.po-categories-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1rem;
+  gap: 8px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.po-categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.po-category-chip {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0 !important;
+  font-weight: 500;
+}
+
+/* Кнопки */
+.po-btns-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.po-btn-edit,
+.po-btn-delete,
+.po-btn-take {
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: background-color 0.15s ease;
+}
+
+.po-btn-edit {
+  background-color: #4061ef;
+  color: white;
+}
+.po-btn-edit:hover {
+  background-color: #2948c6;
+}
+
+.po-btn-delete {
+  background-color: #ef4444;
+  color: white;
+}
+.po-btn-delete:hover {
+  background-color: #b72323;
+}
+
+.po-btn-take {
+  background-color: #22c55e;
+  color: white;
+}
+.po-btn-take:hover {
+  background-color: #16a34a;
+}
+
+/* Скелетон для загрузки */
+.po-skeleton-container {
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 24px 32px;
+}
+
+.po-skeleton-text,
+.po-skeleton-rect {
+  border-radius: 12px;
+}
+
+/* Адаптив */
+@media (max-width: 650px) {
+  .po-root {
+    padding: 16px 18px;
+    margin: 20px 8px;
+  }
+
+  .po-btns-row {
+    justify-content: center;
+  }
+
+  .po-info-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

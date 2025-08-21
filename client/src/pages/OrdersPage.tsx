@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-deprecated */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable no-nested-ternary */
+import {
+  deleteTask,
+  editTask,
+  fetchTask,
+  fetchAllTasks,
+  fetchCategories,
+  createTask,
+} from '@/entities/tasks/model/tasksThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import React, { useState, useMemo } from 'react';
-import { createTask, fetchAllTasks, fetchCategories } from '@/entities/tasks/model/tasksThunk';
-import type { TasksState } from '@/entities/tasks/types/schema';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -21,10 +23,10 @@ import {
   Alert,
   IconButton,
   Tooltip,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Dialog,
   Checkbox,
 } from '@mui/material';
 import {
@@ -42,11 +44,11 @@ import {
 } from '@mui/icons-material';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useNavigate } from 'react-router-dom';
+import './OrdersPage.css';
 
 type RootState = {
   tasks: TasksState;
 };
-
 
 type TaskStatus = 'all' | 'open' | 'assigned' | 'completed';
 type SortOption = 'newest' | 'oldest' | 'deadline' | 'title';
@@ -58,8 +60,10 @@ export default function OrdersPage(): React.JSX.Element {
   const navigate = useNavigate();
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
-
-  const handleOpenCreateModal = (): void => {setCreateModalOpen(true);void dispatch(fetchCategories())};
+  const handleOpenCreateModal = (): void => {
+    setCreateModalOpen(true);
+    void dispatch(fetchCategories());
+  };
   const handleCloseCreateModal = (): void => setCreateModalOpen(false);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -68,10 +72,9 @@ export default function OrdersPage(): React.JSX.Element {
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
 
-  React.useEffect(() => {
+  useEffect(() => {
     void dispatch(fetchAllTasks());
     void dispatch(fetchUser());
-    
   }, [dispatch]);
 
   const [newTask, setNewTask] = useState({
@@ -83,20 +86,20 @@ export default function OrdersPage(): React.JSX.Element {
     categories: [] as number[],
   });
 
-  const handleNewTaskChange = (field: string, value: unknown):void => {
+  const handleNewTaskChange = (field: string, value: unknown): void => {
     setNewTask((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleCreateTask = async (): Promise<void> => {
     if (!user?.id) {
-    console.error('User ID is not available');
-    return;
-  }
+      console.error('User ID is not available');
+      return;
+    }
 
-  const taskWithCreator = {
-    ...newTask,
-    creatorId: user.id,
-  };
+    const taskWithCreator = {
+      ...newTask,
+      creatorId: user.id,
+    };
     await dispatch(createTask(taskWithCreator));
     setCreateModalOpen(false);
 
@@ -111,7 +114,6 @@ export default function OrdersPage(): React.JSX.Element {
   };
 
   const filteredAndSortedTasks = useMemo(() => {
-   
     const filtered = tasks.filter((task) => {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -141,7 +143,7 @@ export default function OrdersPage(): React.JSX.Element {
   const paginatedTasks = useMemo(() => {
     const startIndex = (page - 1) * itemsPerPage;
     return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredAndSortedTasks, page ]);
+  }, [filteredAndSortedTasks, page]);
 
   const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
 
@@ -173,16 +175,16 @@ export default function OrdersPage(): React.JSX.Element {
     }
   };
 
-  if (status === 'loading' ) {
+  if (status === 'loading') {
     return (
-      <Box sx={{ p: 3 }}>
+      <Box className="orders-root" role="progressbar">
         {[...Array(5)].map((_, index) => (
           <Skeleton
             key={index}
             variant="rectangular"
             width="100%"
             height={180}
-            sx={{ mb: 2, borderRadius: 2 }}
+            className="po-skeleton-rect"
           />
         ))}
       </Box>
@@ -190,37 +192,29 @@ export default function OrdersPage(): React.JSX.Element {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 1200, mx: 'auto' }}>
+    <Box className="orders-root">
       {/* Заголовок и действия */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mb: 3,
-          flexWrap: 'wrap',
-          gap: 2,
-        }}
-      >
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: '#000000' }}>
+      <Box className="orders-header">
+        <Typography variant="h4" component="h1" className="orders-title">
           Доступные задания
         </Typography>
 
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box className="orders-actions">
           <Tooltip title="Обновить список">
-            <IconButton onClick={handleRefresh} color="primary">
+            <IconButton
+              onClick={handleRefresh}
+              className="orders-icon-btn"
+              aria-label="refresh list"
+            >
               <Refresh />
             </IconButton>
           </Tooltip>
 
           <Button
-            variant="contained"
-            startIcon={<Add />}
             onClick={handleOpenCreateModal}
-            sx={{
-              bgcolor: '#3b82f6',
-              '&:hover': { bgcolor: '#2563eb' },
-            }}
+            variant="contained"
+            className="orders-btn-primary"
+            startIcon={<Add />}
           >
             Создать задание
           </Button>
@@ -228,22 +222,20 @@ export default function OrdersPage(): React.JSX.Element {
       </Box>
 
       {/* Фильтры и поиск */}
-      <Box sx={{ mb: 3, p: 3, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1 }}>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+      <Box className="orders-filter-panel">
+        <Box className="orders-filter-row">
           <TextField
+            className="orders-search-input"
             placeholder="Поиск заданий..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            slotProps={{
-              input: {
-                startAdornment: <Search sx={{ color: 'text.secondary', mr: 1 }} />,
-              },
-            }}
-            sx={{ minWidth: 200, flexGrow: 1 }}
             size="small"
+            InputProps={{
+              startAdornment: <Search sx={{ color: 'text.secondary', mr: 1 }} />,
+            }}
           />
 
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" className="orders-select">
             <InputLabel>Статус</InputLabel>
             <Select
               value={statusFilter}
@@ -257,7 +249,7 @@ export default function OrdersPage(): React.JSX.Element {
             </Select>
           </FormControl>
 
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" className="orders-select">
             <InputLabel>Сортировка</InputLabel>
             <Select
               value={sortBy}
@@ -273,182 +265,136 @@ export default function OrdersPage(): React.JSX.Element {
         </Box>
       </Box>
 
-
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box className="orders-info-row">
         <Typography variant="body2" color="text.secondary">
           Найдено заданий: {filteredAndSortedTasks.length}
         </Typography>
-        {searchTerm || statusFilter !== 'all' ? (
-          <Button
-            size="small"
+        {(searchTerm || statusFilter !== 'all') && (
+          <button
+            type="button"
             onClick={() => {
               setSearchTerm('');
               setStatusFilter('all');
             }}
+            className="orders-reset-btn"
           >
             Сбросить фильтры
-          </Button>
-        ) : null}
+          </button>
+        )}
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+        <Alert severity="error" className="orders-error-alert" role="alert">
           Ошибка при загрузке заданий: {error}
         </Alert>
       )}
 
- 
       {paginatedTasks.length > 0 ? (
-        <>
-          <Box sx={{ display: 'grid', gap: 3, mb: 3 }}>
-            {paginatedTasks.map((task) => (
-              <Box
-                key={task.id}
-                onClick={() => navigate(`/orders/${task.id.toString()}`)}
-                sx={{
-                  p: 3,
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: 2,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    transform: 'translateY(-2px)',
-                    borderColor: 'primary.main',
-                  },
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    navigate(`/orders/${task.id.toString()}`);
-                  }
-                }}
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography
-                    variant="h5"
-                    component="h3"
-                    sx={{ fontWeight: 600, color: '#000000' }}
-                  >
-                    {task.title}
-                  </Typography>
-                  <Chip
-                    icon={getStatusIcon(task.status)}
-                    label={
-                      task.status === 'open'
-                        ? 'Открыто'
-                        : task.status === 'assigned'
-                        ? 'Назначено'
-                        : 'Завершено'
-                    }
-                    color={getStatusColor(typeof task.status === 'string' ? task.status : 'default')}
-                    size="small"
-                  />
-                </Box>
-
-                <Typography sx={{ mb: 3, color: '#000000', lineHeight: 1.6 }}>
-                  {task.description.length > 150
-                    ? `${task.description.substring(0, 150)}...`
-                    : task.description}
+        <Box className="orders-task-list" role="list">
+          {paginatedTasks.map((task) => (
+            <Box
+              key={task.id}
+              className="orders-task-item"
+              role="listitem"
+              tabIndex={0}
+              onClick={() => navigate(`/orders/${task.id}`)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  navigate(`/orders/${task.id}`);
+                }
+              }}
+              aria-label={`Задание ${task.title}`}
+            >
+              <Box className="orders-task-header">
+                <Typography variant="h5" component="h3" className="orders-task-title">
+                  {task.title}
                 </Typography>
+                <Chip
+                  icon={getStatusIcon(task.status)}
+                  label={
+                    task.status === 'open'
+                      ? 'Открыто'
+                      : task.status === 'assigned'
+                      ? 'Назначено'
+                      : 'Завершено'
+                  }
+                  color={getStatusColor(typeof task.status === 'string' ? task.status : 'default')}
+                  size="small"
+                  className="orders-task-chip"
+                />
+              </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Schedule fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Срок: {new Date(task.deadline).toLocaleDateString()}
-                    </Typography>
-                  </Box>
+              <Typography className="orders-task-description">
+                {task.description.length > 150
+                  ? `${task.description.substring(0, 150)}...`
+                  : task.description}
+              </Typography>
 
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Person fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Автор: {task.creator?.name}
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Work fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
-                      {task.hours} TD
-                    </Typography>
-                  </Box>
+              <Box className="orders-task-info-row">
+                <Box className="orders-task-info-item">
+                  <Schedule fontSize="small" />
+                  <Typography variant="body2" className="orders-task-info-text">
+                    Срок: {new Date(task.deadline).toLocaleDateString()}
+                  </Typography>
                 </Box>
 
-                {task.categories?.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        mb: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        color: 'text.secondary',
-                      }}
-                    >
-                      <Category fontSize="small" /> Категории:
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {task.categories.map((category) => (
-                        <Chip
-                          key={category.id}
-                          label={category.name}
-                          size="small"
-                          variant="outlined"
-                          sx={{
-                            borderColor: '#bbf7d0',
-                            color: '#166534',
-                            '&:hover': {
-                              backgroundColor: '#f0fdf4',
-                            },
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            ))}
-          </Box>
+                <Box className="orders-task-info-item">
+                  <Person fontSize="small" />
+                  <Typography variant="body2" className="orders-task-info-text">
+                    Автор: {task.creator?.name}
+                  </Typography>
+                </Box>
 
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(_, value) => setPage(value)}
-                color="primary"
-                showFirstButton
-                showLastButton
-              />
+                <Box className="orders-task-info-item">
+                  <Work fontSize="small" />
+                  <Typography
+                    variant="body2"
+                    className="orders-task-info-text"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    {task.hours} TD
+                  </Typography>
+                </Box>
+              </Box>
+
+              {task.categories?.length > 0 && (
+                <Box className="orders-task-categories">
+                  <Typography variant="subtitle2" className="orders-task-categories-title">
+                    <Category fontSize="small" /> Категории:
+                  </Typography>
+                  <Box className="orders-task-categories-list">
+                    {task.categories.map((category) => (
+                      <Chip
+                        key={category.id}
+                        label={category.name}
+                        size="small"
+                        variant="outlined"
+                        className="orders-task-category-chip"
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              )}
             </Box>
-          )}
-        </>
+          ))}
+        </Box>
       ) : (
-        <Box
-          sx={{
-            p: 4,
-            textAlign: 'center',
-            border: '1px dashed',
-            borderColor: 'divider',
-            borderRadius: 2,
-            bgcolor: 'background.default',
-          }}
-        >
-          <FilterList sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+        <Box className="orders-empty-state" role="alert">
+          <FilterList className="orders-empty-icon" />
           <Typography variant="h6" color="text.secondary" gutterBottom>
             Задания не найдены
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body1" color="text.secondary" mb={3}>
             {searchTerm || statusFilter !== 'all'
               ? 'Попробуйте изменить параметры поиска'
               : 'Создайте первое задание'}
           </Typography>
-          <Button variant="contained" startIcon={<Add />} onClick={handleOpenCreateModal}>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={handleOpenCreateModal}
+            className="orders-btn-primary"
+          >
             Создать задание
           </Button>
         </Box>
@@ -492,7 +438,7 @@ export default function OrdersPage(): React.JSX.Element {
               onChange={(e) => handleNewTaskChange('categories', e.target.value)}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected).map((id) => {
+                  {selected.map((id) => {
                     const category = categories.find((cat) => cat.id === id);
                     return (
                       <Chip

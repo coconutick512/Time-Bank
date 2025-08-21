@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { deleteTask, editTask, fetchTask } from '@/entities/tasks/model/tasksThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React, { useEffect, useState } from 'react';
@@ -12,6 +11,7 @@ import { EditTaskModal } from '@/features/taskCreate/ui/EditTaskModal';
 import { createChat, fetchChat } from '@/entities/chat/model/chatThunk';
 import { ChatWindow } from '@/widgets/chat/taskChat';
 import type { ChatState } from '@/entities/chat/types/schema';
+import './PersonalOrder.css';
 
 type RootState = {
   tasks: TasksState;
@@ -70,34 +70,21 @@ export default function PersonalOrder(): React.JSX.Element {
 
   if (status === 'loading' || !personalTask) {
     return (
-      <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
-        <Skeleton variant="text" height={40} sx={{ mb: 2, borderRadius: 1 }} />
-        <Skeleton variant="rectangular" height={180} sx={{ borderRadius: 2 }} />
+      <Box className="po-skeleton-container">
+        <Skeleton variant="text" height={40} className="po-skeleton-text" />
+        <Skeleton variant="rectangular" height={180} className="po-skeleton-rect" />
       </Box>
     );
   }
 
-  console.log('PersonalTask:',personalTask);
-  console.log('User:',user);
+  console.log('PersonalTask:', personalTask);
+  console.log('User:', user);
 
   return (
     <>
-      <Box
-        sx={{
-          maxWidth: 600,
-          mx: 'auto',
-          p: 3,
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 2,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-          transition: 'all 0.2s',
-          color: '#000000',
-          backgroundColor: '#fff',
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-          <Typography variant="h5" component="h1" sx={{ fontWeight: 600, color: '#000000' }}>
+      <Box className="po-root">
+        <Box className="po-header">
+          <Typography variant="h5" component="h1" className="po-title">
             {personalTask.title}
           </Typography>
           <Chip
@@ -113,43 +100,36 @@ export default function PersonalOrder(): React.JSX.Element {
           />
         </Box>
 
-        <Typography sx={{ mb: 3, color: '#000000' }}>{personalTask.description}</Typography>
+        <Typography className="po-description">{personalTask.description}</Typography>
 
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3, color: '#000000' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Schedule fontSize="small" sx={{ color: '#000000' }} />
-            <Typography variant="body2" sx={{ color: '#000000' }}>
+        <Box className="po-info-row">
+          <Box className="po-info-item">
+            <Schedule fontSize="small" />
+            <Typography variant="body2" className="po-info-text">
               {new Date(personalTask.deadline).toLocaleDateString()}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Person fontSize="small" sx={{ color: '#000000' }} />
-            <Typography variant="body2" sx={{ color: '#000000' }}>
+          <Box className="po-info-item">
+            <Person fontSize="small" />
+            <Typography variant="body2" className="po-info-text">
               {personalTask.creator.name}
             </Typography>
           </Box>
         </Box>
 
         {personalTask.categories.length > 0 && (
-          <Box>
-            <Typography
-              variant="subtitle2"
-              sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: '#000000' }}
-            >
-              <Category fontSize="small" sx={{ color: '#000000' }} />
+          <Box className="po-categories-section">
+            <Typography variant="subtitle2" className="po-categories-title">
+              <Category fontSize="small" />
               Категории:
             </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            <Box className="po-categories-list">
               {personalTask.categories.map((category) => (
                 <Chip
                   key={category.id}
                   label={category.name}
                   size="small"
-                  sx={{
-                    backgroundColor: '#f0fdf4',
-                    color: '#166534',
-                    border: '1px solid #bbf7d0',
-                  }}
+                  className="po-category-chip"
                 />
               ))}
             </Box>
@@ -158,31 +138,46 @@ export default function PersonalOrder(): React.JSX.Element {
 
         {personalTask.creatorId === user?.id && (
           <>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
-          </Box>
+            <Box className="po-btns-row">
+              <Button onClick={() => setIsEditOpen(true)} className="po-btn-edit">
+                Редактировать
+              </Button>
+            </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button onClick={() => {void dispatch(deleteTask(personalTask.id)); navigate('/orders')}}>Удалить</Button>
-          </Box>
+            <Box className="po-btns-row">
+              <Button
+                onClick={() => {
+                  void dispatch(deleteTask(personalTask.id));
+                  navigate('/orders');
+                }}
+                className="po-btn-delete"
+              >
+                Удалить
+              </Button>
+            </Box>
           </>
         )}
 
         {personalTask.status === 'open' && personalTask.creatorId !== user?.id && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+          <Box className="po-btns-row">
             <Button
               onClick={() =>
                 handleExecutorSave({ ...personalTask, status: 'assigned', executorId: user?.id })
               }
+              className="po-btn-take"
             >
               Взять в работу
             </Button>
           </Box>
         )}
       </Box>
-      {(personalTask.status !== 'open' && chatId && (personalTask.creatorId === user?.id || personalTask.executorId === user?.id)) && (
-        <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
-      ) }
+
+      {personalTask.status !== 'open' &&
+        chatId &&
+        (personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && (
+          <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
+        )}
+
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}

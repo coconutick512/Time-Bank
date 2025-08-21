@@ -60,6 +60,7 @@ export const fetchUserSkills = createAsyncThunk(
 export const fetchUserById = createAsyncThunk(
   'user/fetchUserById',
   async (userId: number): Promise<UserOnlyResponse> => {
+    console.log('Саночка принимает такой id:', userId);
     const response = await UserService.findOne(userId);
     console.log('Thunk received:', response);
     return response;

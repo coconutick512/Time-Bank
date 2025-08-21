@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '@/shared/hooks/hooks';
 import { createSpecialTask } from '@/entities/tasks/model/tasksThunk';
+import './CreateSpecialTask.css';
 
 type Props = {
   isOpen: boolean;
@@ -32,8 +33,8 @@ export default function CreateTaskModal({
         description,
         deadline,
         bookedDate,
-        executorId, 
-        creatorId, 
+        executorId,
+        creatorId,
       }),
     ).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
@@ -46,47 +47,49 @@ export default function CreateTaskModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-96">
-        <h2 className="text-xl font-semibold mb-4">Новое задание</h2>
-        <p className="text-sm text-gray-600 mb-4">Время: {new Date(bookedDate).toLocaleString()}</p>
+    <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div className="modal-window">
+        <h2 id="modal-title" className="modal-title">
+          Новое задание
+        </h2>
+        <p className="modal-booked-time">Время: {new Date(bookedDate).toLocaleString()}</p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="modal-form" noValidate>
           <input
             type="text"
             placeholder="Название"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border rounded p-2"
+            className="modal-input"
             required
+            aria-required="true"
+            aria-label="Название задания"
           />
           <textarea
             placeholder="Описание"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="border rounded p-2"
+            className="modal-textarea"
             required
+            rows={4}
+            aria-required="true"
+            aria-label="Описание задания"
           />
           <input
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
-            className="border rounded p-2"
+            className="modal-input"
             required
+            aria-required="true"
+            aria-label="Срок выполнения"
           />
 
-          <div className="flex gap-2 justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-            >
+          <div className="modal-buttons">
+            <button type="button" onClick={onClose} className="modal-btn-cancel">
               Отмена
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-            >
+            <button type="submit" className="modal-btn-submit" disabled={!title || !deadline}>
               Создать
             </button>
           </div>

@@ -1,4 +1,3 @@
-/* eslint-disable fsd-layers/no-import-from-top */
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css';
