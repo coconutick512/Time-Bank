@@ -77,8 +77,8 @@ export default function PersonalOrder(): React.JSX.Element {
     );
   }
 
-  console.log('PersonalTask:',personalTask);
-  console.log('User:',user);
+  console.log('PersonalTask:', personalTask);
+  console.log('User:', user);
 
   return (
     <>
@@ -153,18 +153,47 @@ export default function PersonalOrder(): React.JSX.Element {
                 />
               ))}
             </Box>
+
+            {(personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && personalTask.status === 'assigned' && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    void dispatch(
+                      editTask({
+                        id: personalTask.id,
+                        title: personalTask.title,
+                        description: personalTask.description,
+                        status: 'open',
+                        executorId: personalTask.executorId,
+                      }),
+                    );
+                    void dispatch(fetchTask(personalTask.id));
+                  }}
+                >
+                  отказаться
+                </Button>
+              </Box>
+            )}
           </Box>
         )}
 
-        {personalTask.creatorId === user?.id && (
+        {personalTask.creatorId === user?.id && personalTask.status === 'open' && (
           <>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
-          </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+              <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
+            </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button onClick={() => {void dispatch(deleteTask(personalTask.id)); navigate('/orders')}}>Удалить</Button>
-          </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+              <Button
+                onClick={() => {
+                  void dispatch(deleteTask(personalTask.id));
+                  navigate('/orders');
+                  void dispatch(fetchUser());
+                }}
+              >
+                Удалить
+              </Button>
+            </Box>
           </>
         )}
 
@@ -180,9 +209,11 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         )}
       </Box>
-      {(personalTask.status !== 'open' && chatId && (personalTask.creatorId === user?.id || personalTask.executorId === user?.id)) && (
-        <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
-      ) }
+      {personalTask.status !== 'open' &&
+        chatId &&
+        (personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && (
+          <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
+        )}
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}

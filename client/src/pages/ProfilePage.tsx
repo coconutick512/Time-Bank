@@ -95,6 +95,7 @@ export default function ProfilePage(): React.JSX.Element {
             />
             <div>
               <h2>{profileUser.name}</h2>
+              <p>{profileUser.balance}</p>
               <p>{profileUser.city}</p>
               <p>{profileUser.timezone}</p>
             </div>

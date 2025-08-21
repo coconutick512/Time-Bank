@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
-import { createTask, deleteTask, editTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
+import { createTask, deleteTask,  fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
 import {
   createSpecialTask,
   fetchUserTasks,
@@ -84,7 +84,7 @@ const tasksSlice = createSlice({
       })
       .addCase(createSpecialTask.fulfilled, (state, action) => {
         state.status = 'done';
-        state.tasks.push(action.payload);
+        state.tasks = [...state.tasks, action.payload];
       })
       .addCase(createSpecialTask.rejected, (state, action) => {
         state.status = 'reject';
