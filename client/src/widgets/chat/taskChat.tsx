@@ -1,60 +1,57 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { fetchMessages } from '../../entities/chat/model/chatThunk';
 import type { RootState } from '@/app/store';
 import io from 'socket.io-client';
+import './taskChat.css';
 
 type ChatWindowProps = {
   chatId: number;
   userId: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+// Один экземпляр сокета вне компонента
 const socket = io('http://localhost:3001', {
   withCredentials: true,
 });
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId, userId }) => {
-
-socket.on('connect', () => {
-  console.log('Socket connected, id:', socket.id);
-});
-
   const dispatch = useAppDispatch();
   const messages = useAppSelector((state: RootState) => state.chat.messages);
   const [input, setInput] = useState('');
   const [localMessages, setLocalMessages] = useState(messages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  socket.on('connect', () => {
+    console.log('Socket connected, id:', socket.id);
+  });
+
   useEffect(() => {
-    // Получаем историю сообщений
     void dispatch(fetchMessages(chatId));
     socket.emit('joinChat', chatId);
 
     return () => {
-      socket.emit('leaveChat', chatId); // если реализовано на сервере
+      socket.emit('leaveChat', chatId); // если есть реализация
       socket.off('newMessage');
     };
   }, [chatId, dispatch]);
 
-  // Следим за обновлением сообщений redux
   useEffect(() => {
     setLocalMessages(messages);
   }, [messages]);
 
-  // Listen socket for new messages
   useEffect(() => {
     socket.on('newMessage', (msg) => {
       setLocalMessages((prev) => [...prev, msg]);
     });
+
     return () => {
       socket.off('newMessage');
     };
   }, []);
 
+  // Автоскролл можно снять комментарий при необходимости
   // useEffect(() => {
-  //   // autoscroll
   //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   // }, [localMessages]);
 
@@ -65,44 +62,36 @@ socket.on('connect', () => {
   };
 
   return (
-    <Box sx={{ mt: 4, p: 2, background: '#f9fafb', borderRadius: 2 }}>
-      <Typography variant="h6" mb={2}>
-        Чат
-      </Typography>
-      <Paper
-        variant="outlined"
-        sx={{ p: 2, maxHeight: 260, overflowY: 'auto', mb: 2, bgcolor: 'white' }}
-      >
+    <div className="taskchat-root">
+      <h2 className="taskchat-title">Чат</h2>
+      <div className="taskchat-messages">
         {localMessages.map((msg) => (
-          <Box
+          <div
             key={msg.id}
-            sx={{
-              mb: 1,
-              textAlign: msg.senderId === userId ? 'right' : 'left',
-            }}
+            className={`taskchat-message ${msg.senderId === userId ? 'self' : 'other'}`}
           >
             <b>{msg.senderId === userId ? 'Вы' : 'Собеседник'}: </b>
             <span>{msg.text}</span>
-          </Box>
+          </div>
         ))}
         <div ref={messagesEndRef} />
-      </Paper>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        <TextField
-          variant="outlined"
-          size="small"
-          fullWidth
+      </div>
+
+      <div className="taskchat-input-container">
+        <input
+          type="text"
           placeholder="Введите сообщение…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSend();
           }}
+          className="taskchat-input"
         />
-        <Button variant="contained" onClick={handleSend}>
+        <button type="button" onClick={handleSend} className="taskchat-send-button">
           Отправить
-        </Button>
-      </Box>
-    </Box>
+        </button>
+      </div>
+    </div>
   );
 };

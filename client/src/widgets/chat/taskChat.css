@@ -1,0 +1,100 @@
+.taskchat-root {
+  margin-top: 32px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  max-width: 600px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #18191c;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskchat-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.taskchat-messages {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskchat-message {
+  margin-bottom: 12px;
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 16px;
+  word-wrap: break-word;
+}
+
+.taskchat-message.self {
+  background-color: #3662ff;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.taskchat-message.other {
+  background-color: #f1f5f9;
+  color: #18191c;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.taskchat-input-container {
+  display: flex;
+  gap: 12px;
+}
+
+.taskchat-input {
+  flex-grow: 1;
+  border: 1.5px solid #d1d5db;
+  border-radius: 16px;
+  padding: 8px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.taskchat-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px #3b82f6aa;
+}
+
+.taskchat-send-button {
+  background-color: #3662ff;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 16px;
+  padding: 8px 22px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.taskchat-send-button:hover {
+  background-color: #2746c4;
+}
+
+@media (max-width: 640px) {
+  .taskchat-root {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .taskchat-messages {
+    max-height: 200px;
+    padding: 12px;
+  }
+}
