@@ -83,6 +83,7 @@ export default function OrdersPage(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  
 
   const handleOpenCreateModal = (): void => {
     setCreateModalOpen(true);
@@ -171,7 +172,7 @@ export default function OrdersPage(): React.JSX.Element {
     return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredAndSortedTasks, page]);
 
-  // const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
 
   const handleRefresh = (): void => {
     void dispatch(fetchAllTasks());
@@ -378,7 +379,7 @@ export default function OrdersPage(): React.JSX.Element {
                 </Box>
               </Box>
 
-              {task.categories?.length > 0 && (
+              {task?.categories.length > 0 && (
                 <Box sx={{ mt: 2 }}>
                   <Typography
                     variant="subtitle2"
