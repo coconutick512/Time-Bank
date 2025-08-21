@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { fetchUserSkills } from '@/entities/user/model/userThunk';
 import { fetchUserTasks, fetchUserExecutedTasks } from '@/entities/tasks/model/tasksThunk';
 import UserCalendar from '@/widgets/calendar/ui/profileCalendar';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchUserById } from '@/entities/user/model/userThunk';
 import ProfileEditForm from '@/widgets/UserProfileForm/ui/ProfilePageEdit';
 import './ProfilePage.css';
@@ -23,6 +23,7 @@ export default function ProfilePage(): React.JSX.Element {
 
   const profileUser = isOwnerProfile ? currentUser : viewingUser;
   const profileSkills = isOwnerProfile ? skills : viewingUserSkills;
+  const navigate = useNavigate();
 
   const [isOwner, setIsOwner] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -188,7 +189,7 @@ export default function ProfilePage(): React.JSX.Element {
                 <h3>Мои задания</h3>
                 <div>
                   {tasks.map((task) => (
-                    <div className="profile-task-item" key={task.id}>
+                    <div className="profile-task-item" key={task.id} onClick={() => navigate(`/orders/${task.id}`)} style={{ cursor: 'pointer' }}>
                       <h4>{task.title}</h4>
                       <p>{task.description}</p>
                       <p className="profile-task-status">Статус: {task.status}</p>
