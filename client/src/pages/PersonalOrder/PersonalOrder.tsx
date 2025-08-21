@@ -88,7 +88,17 @@ export default function PersonalOrder(): React.JSX.Element {
             {personalTask.title}
           </Typography>
           <Chip
-            label={personalTask.status}
+            label={
+                    personalTask.status === 'open'
+                      ? 'Открыто'
+                      : personalTask.status === 'assigned'
+                      ? 'Назначено'
+                      : personalTask.status === 'running'
+                      ? 'В процессе'
+                      : personalTask.status === 'completed'
+                      ? 'Завершено'
+                      : 'Проверка'
+                  }
             color={
               personalTask.status === 'completed'
                 ? 'success'
@@ -151,6 +161,50 @@ export default function PersonalOrder(): React.JSX.Element {
                   }}
                 >
                   отказаться
+                </Button>
+              </Box>
+            )}
+
+            {personalTask.creatorId === user?.id && personalTask.status === 'assigned' && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    void dispatch(
+                      editTask({
+                        id: personalTask.id,
+                        title: personalTask.title,
+                        description: personalTask.description,
+                        status: 'running',
+                        executorId: personalTask.executorId,
+                      }),
+                    );
+                    void dispatch(fetchTask(personalTask.id));
+                  }}
+                >
+                  Начать работу
+                </Button>
+              </Box>
+            )}
+
+
+            {personalTask.status === 'running' && personalTask.creatorId === user?.id && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    void dispatch(
+                      editTask({
+                        id: personalTask.id,
+                        title: personalTask.title,
+                        description: personalTask.description,
+                        status: 'completed',
+                        executorId: personalTask.executorId,
+                      }),
+                    );
+                    
+                    void dispatch(fetchTask(personalTask.id));
+                  }}
+                >
+                  Завершить
                 </Button>
               </Box>
             )}

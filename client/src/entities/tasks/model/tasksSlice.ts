@@ -84,7 +84,7 @@ const tasksSlice = createSlice({
       })
       .addCase(createSpecialTask.fulfilled, (state, action) => {
         state.status = 'done';
-        state.tasks = [...state.tasks, action.payload];
+        state.tasks = state.tasks.concat(action.payload);
       })
       .addCase(createSpecialTask.rejected, (state, action) => {
         state.status = 'reject';

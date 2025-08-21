@@ -4,7 +4,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('tasks', [
       {
-        id: 1,
         title: 'Разработать сайт',
         description: 'Нужен лендинг для стартапа',
         hours: 20.5,
@@ -21,7 +20,6 @@ module.exports = {
         ]),
       },
       {
-        id: 2,
         title: 'Создать логотип',
         description: 'Лого для IT компании',
         hours: 10.0,
@@ -32,7 +30,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 3,
         title: 'Приготовить ужин',
         description: 'Семейный ужин на 4 персоны',
         hours: 3,
@@ -43,7 +40,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 4,
         title: 'Пробежать 10 км',
         description: 'Подготовка к марафону',
         hours: 2,
@@ -54,7 +50,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 5,
         title: 'Сфотографировать мероприятие',
         description: 'Фотосессия для школьного концерта',
         hours: 6,
@@ -65,7 +60,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 6,
         title: 'Выучить песню на гитаре',
         description: 'Разучить 3 аккорда и исполнить',
         hours: 4,
@@ -76,7 +70,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 7,
         title: 'Посадить цветы',
         description: 'Озеленение двора у дома',
         hours: 5,
@@ -87,7 +80,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 8,
         title: 'Подготовить презентацию',
         description: 'Выступление для конференции',
         hours: 12,
