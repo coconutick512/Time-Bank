@@ -1,3 +1,6 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable no-nested-ternary */
 import {
   deleteTask,
   editTask,
@@ -202,11 +205,7 @@ export default function OrdersPage(): React.JSX.Element {
 
         <Box className="orders-actions">
           <Tooltip title="Обновить список">
-            <IconButton
-              onClick={handleRefresh}
-              className="orders-icon-btn"
-              aria-label="refresh list"
-            >
+            <IconButton onClick={handleRefresh} className="orders-icon-btn" aria-label="refresh list">
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -305,9 +304,24 @@ export default function OrdersPage(): React.JSX.Element {
                 }
               }}
               aria-label={`Задание ${task.title}`}
+              sx={{
+                position: 'relative',
+                p: 3,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                transition: 'all 0.2s',
+                cursor: 'pointer',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transform: 'translateY(-2px)',
+                  borderColor: 'primary.main',
+                },
+              }}
             >
-              <Box className="orders-task-header">
-                <Typography variant="h5" component="h3" className="orders-task-title">
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                <Typography variant="h5" component="h3" sx={{ fontWeight: 600, color: '#000000' }}>
                   {task.title}
                 </Typography>
                 <Chip
@@ -321,88 +335,60 @@ export default function OrdersPage(): React.JSX.Element {
                   }
                   color={getStatusColor(typeof task.status === 'string' ? task.status : 'default')}
                   size="small"
-                  className="orders-task-chip"
                 />
               </Box>
 
-              <Typography className="orders-task-description">
+              <Typography sx={{ mb: 3, color: '#000000', lineHeight: 1.6 }}>
                 {task.description.length > 150
                   ? `${task.description.substring(0, 150)}...`
                   : task.description}
               </Typography>
 
-              <Box className="orders-task-info-row">
-                <Box className="orders-task-info-item">
-                  <Schedule fontSize="small" />
-                  <Typography variant="body2" className="orders-task-info-text">
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Schedule fontSize="small" sx={{ color: 'text.secondary' }} />
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Срок: {new Date(task.deadline).toLocaleDateString()}
                   </Typography>
                 </Box>
 
-                <Typography sx={{ mb: 3, color: '#000000', lineHeight: 1.6 }}>
-                  {task.description.length > 150
-                    ? `${task.description.substring(0, 150)}...`
-                    : task.description}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Person fontSize="small" sx={{ color: 'text.secondary' }} />
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    Автор: {task.creator?.name}
+                  </Typography>
+                </Box>
 
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Schedule fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Срок: {new Date(task.deadline).toLocaleDateString()}
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Person fontSize="small" sx={{ color: 'text.secondary' }} />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Автор: {task.creator.name}
-                    </Typography>
-                  </Box>
-
-                <Box className="orders-task-info-item">
-                  <Work fontSize="small" />
-                  <Typography
-                    variant="body2"
-                    className="orders-task-info-text"
-                    sx={{ fontWeight: 'bold' }}
-                  >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Work fontSize="small" sx={{ color: 'text.secondary' }} />
+                  <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
                     {task.hours} TD
                   </Typography>
                 </Box>
               </Box>
 
-                {task.categories.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        mb: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        color: 'text.secondary',
-                      }}
-                    >
-                      <Category fontSize="small" /> Категории:
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {task.categories.map((category) => (
-                        <Chip
-                          key={category.id}
-                          label={category.name}
-                          size="small"
-                          variant="outlined"
-                          sx={{
-                            borderColor: '#bbf7d0',
-                            color: '#166534',
-                            '&:hover': {
-                              backgroundColor: '#f0fdf4',
-                            },
-                          }}
-                        />
-                      ))}
-                    </Box>
+              {task.categories?.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}
+                  >
+                    <Category fontSize="small" /> Категории:
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {task.categories.map((category) => (
+                      <Chip
+                        key={category.id}
+                        label={category.name}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          borderColor: '#bbf7d0',
+                          color: '#166534',
+                          '&:hover': { backgroundColor: '#f0fdf4' },
+                        }}
+                      />
+                    ))}
                   </Box>
                 </Box>
               )}
@@ -461,6 +447,19 @@ export default function OrdersPage(): React.JSX.Element {
             inputProps={{ min: 0 }}
           />
           <FormControl fullWidth margin="normal">
+            <InputLabel>Статус</InputLabel>
+            <Select
+              label="Статус"
+              value={newTask.status}
+              onChange={(e) => handleNewTaskChange('status', e.target.value)}
+              size="small"
+            >
+              <MenuItem value="open">Открытые</MenuItem>
+              <MenuItem value="assigned">Назначенные</MenuItem>
+              <MenuItem value="completed">Завершенные</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
             <InputLabel>Категории</InputLabel>
             <Select
               multiple
@@ -469,7 +468,7 @@ export default function OrdersPage(): React.JSX.Element {
               onChange={(e) => handleNewTaskChange('categories', e.target.value)}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((id) => {
+                  {(selected as number[]).map((id) => {
                     const category = categories.find((cat) => cat.id === id);
                     return (
                       <Chip
