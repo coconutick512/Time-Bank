@@ -41,6 +41,8 @@ export default function ProfilePage(): React.JSX.Element {
     return [new Date(dates)];
   };
 
+  const { id } = useParams<{ id: string }>();
+
   const handleEditSuccess = (): void => {
     setIsEditing(false);
     if (profileUser?.id) {
@@ -187,6 +189,7 @@ export default function ProfilePage(): React.JSX.Element {
 
               <div className="profile-section">
                 <h3>Мои задания</h3>
+                  {!id && <button className="profile-btn" onClick={() => navigate('/tasks')}>Посмотреть все задания</button>}
                 <div>
                   {tasks.map((task) => (
                     <div className="profile-task-item" key={task.id} onClick={() => navigate(`/orders/${task.id}`)} style={{ cursor: 'pointer' }}>
