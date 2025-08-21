@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-nested-ternary */
@@ -48,6 +49,7 @@ import {
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useNavigate } from 'react-router-dom';
 import './OrdersPage.css';
+import type { TasksState } from '@/entities/tasks/types/schema';
 
 type RootState = {
   tasks: TasksState;
@@ -72,10 +74,11 @@ export default function OrdersPage(): React.JSX.Element {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const itemsPerPage = 8;
 
   useEffect(() => {
+    document.title = 'Заказы'
     void dispatch(fetchAllTasks());
     void dispatch(fetchUser());
   }, [dispatch]);
@@ -149,7 +152,7 @@ export default function OrdersPage(): React.JSX.Element {
     return filteredAndSortedTasks.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredAndSortedTasks, page]);
 
-  const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
+  // const totalPages = Math.ceil(filteredAndSortedTasks.length / itemsPerPage);
 
   const handleRefresh = (): void => {
     void dispatch(fetchAllTasks());
@@ -355,7 +358,7 @@ export default function OrdersPage(): React.JSX.Element {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Person fontSize="small" sx={{ color: 'text.secondary' }} />
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Автор: {task.creator?.name}
+                    Автор: {task.creator.name}
                   </Typography>
                 </Box>
 

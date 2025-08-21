@@ -8,6 +8,7 @@ export const ExecutorSchema = z.object({
   timezone: z.string().optional(),
   about: z.string().optional(),
   email: z.string().email(),
+  role: z.string(),
   balance: z.string(),
   skills: z.array(
     z.object({

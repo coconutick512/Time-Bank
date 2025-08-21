@@ -1,5 +1,5 @@
 // SignPage.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/app/store';
@@ -26,6 +26,10 @@ function SignPage(): React.JSX.Element {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = 'Вход'
+  }, []);
 
   const {
     register: loginRegister,

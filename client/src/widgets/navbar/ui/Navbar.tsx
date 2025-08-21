@@ -43,7 +43,6 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  userBalance = 0,
   currentLanguage,
   searchQuery,
   onSearch,
@@ -85,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Clock size={16} color="#10b981" style={{ marginRight: 4 }} />
                 <Typography variant="body2" color="text.secondary">
-                  {userBalance} TD
+                  {user.balance} TD
                 </Typography>
               </Box>
             </Box>
@@ -351,7 +350,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />
                       <Typography variant="body2" fontWeight="medium">
-                        {userBalance} TD
+                        {user.balance} TD
                       </Typography>
                     </Box>
                   </Box>

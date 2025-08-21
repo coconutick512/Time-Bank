@@ -48,6 +48,7 @@ export default function ProfilePage(): React.JSX.Element {
   };
 
   useEffect(() => {
+    document.title = 'Профиль'
     const targetUserId = userId ? parseInt(userId, 10) : currentUser?.id;
     const isViewingOwnProfile = !userId || Number(currentUser?.id) === targetUserId;
 
