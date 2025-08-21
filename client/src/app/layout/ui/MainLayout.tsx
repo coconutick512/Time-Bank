@@ -41,6 +41,7 @@ export const MainLayout = (): React.JSX.Element => {
   });
 
   const handleLogout = async (): Promise<void> => {
+    
     console.log(' Logout clicked - current status:', userStatus);
     try {
       justLoggedOut.current = true;

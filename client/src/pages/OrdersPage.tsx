@@ -101,6 +101,7 @@ export default function OrdersPage(): React.JSX.Element {
       creatorId: user.id,
     };
     await dispatch(createTask(taskWithCreator));
+    await dispatch(fetchUser());
     setCreateModalOpen(false);
 
     setNewTask({
@@ -338,12 +339,26 @@ export default function OrdersPage(): React.JSX.Element {
                   </Typography>
                 </Box>
 
-                <Box className="orders-task-info-item">
-                  <Person fontSize="small" />
-                  <Typography variant="body2" className="orders-task-info-text">
-                    Автор: {task.creator?.name}
-                  </Typography>
-                </Box>
+                <Typography sx={{ mb: 3, color: '#000000', lineHeight: 1.6 }}>
+                  {task.description.length > 150
+                    ? `${task.description.substring(0, 150)}...`
+                    : task.description}
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Schedule fontSize="small" sx={{ color: 'text.secondary' }} />
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Срок: {new Date(task.deadline).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Person fontSize="small" sx={{ color: 'text.secondary' }} />
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Автор: {task.creator.name}
+                    </Typography>
+                  </Box>
 
                 <Box className="orders-task-info-item">
                   <Work fontSize="small" />
@@ -357,21 +372,37 @@ export default function OrdersPage(): React.JSX.Element {
                 </Box>
               </Box>
 
-              {task.categories?.length > 0 && (
-                <Box className="orders-task-categories">
-                  <Typography variant="subtitle2" className="orders-task-categories-title">
-                    <Category fontSize="small" /> Категории:
-                  </Typography>
-                  <Box className="orders-task-categories-list">
-                    {task.categories.map((category) => (
-                      <Chip
-                        key={category.id}
-                        label={category.name}
-                        size="small"
-                        variant="outlined"
-                        className="orders-task-category-chip"
-                      />
-                    ))}
+                {task.categories.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        mb: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        color: 'text.secondary',
+                      }}
+                    >
+                      <Category fontSize="small" /> Категории:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {task.categories.map((category) => (
+                        <Chip
+                          key={category.id}
+                          label={category.name}
+                          size="small"
+                          variant="outlined"
+                          sx={{
+                            borderColor: '#bbf7d0',
+                            color: '#166534',
+                            '&:hover': {
+                              backgroundColor: '#f0fdf4',
+                            },
+                          }}
+                        />
+                      ))}
+                    </Box>
                   </Box>
                 </Box>
               )}

@@ -8,6 +8,7 @@ import OrdersPage from '@/pages/OrdersPage';
 import PersonalOrder from '@/pages/PersonalOrder';
 import ProfilePage from '@/pages/ProfilePage';
 import ErrorPage from '@/pages/ErrorPage';
+import UserTasksPage from '@/pages/UserTasksPage';
 
 export default function Router(): React.JSX.Element {
   return (
@@ -20,6 +21,7 @@ export default function Router(): React.JSX.Element {
         <Route path="/orders/:id" element={<PersonalOrder />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route path="/tasks" element={<UserTasksPage />} />
       </Route>
         <Route path="*" element={<ErrorPage />} />
     </Routes>

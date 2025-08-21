@@ -82,25 +82,30 @@ export default function ProfilePage(): React.JSX.Element {
   return (
     <div className="profile-root">
       {/* Profile Header */}
-      <div className="profile-content">
-        <header className="profile-header">
-          <img
-            className="profile-avatar"
-            src={
-              profileUser.avatar
-                ? `http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`
-                : '/default-avatar.png'
-            }
-            alt="avatar"
-          />
-          <div className="profile-basic">
-            <h2>{profileUser.name}</h2>
-            <p>{profileUser.city}</p>
-            <p>{profileUser.timezone}</p>
+      <div>
+        <div>
+          <div>
+            <img
+              src={
+                profileUser.avatar
+                  ? `http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`
+                  : '/default-avatar.png'
+              }
+              alt="avatar"
+            />
+            <div>
+              <h2>{profileUser.name}</h2>
+              <p>{profileUser.balance}</p>
+              <p>{profileUser.city}</p>
+              <p>{profileUser.timezone}</p>
+            </div>
+          </div>
 
-            <div className="profile-btns">
-              {isOwner ? (
-                <button className="profile-btn" onClick={() => setIsEditing(!isEditing)}>
+          {/* Action Buttons */}
+          <div>
+            {isOwner ? (
+              <>
+                <button onClick={() => setIsEditing(!isEditing)}>
                   {isEditing ? 'Отменить' : 'Редактировать профиль'}
                 </button>
               ) : (

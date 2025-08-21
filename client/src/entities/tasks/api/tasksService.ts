@@ -112,8 +112,8 @@ export class TasksService {
   static async createSpecialTask(data: TaskCreate): Promise<Task> {
     try {
       const response = await axiosInstance.post('/tasks/create', data);
-      const validData = TaskSchema.parse(response.data);
-      return validData;
+      // const validData = TaskSchema.parse(response.data);
+      return response.data;
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);

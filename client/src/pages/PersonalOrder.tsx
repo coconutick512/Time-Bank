@@ -133,24 +133,43 @@ export default function PersonalOrder(): React.JSX.Element {
                 />
               ))}
             </Box>
+
+            {(personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && personalTask.status === 'assigned' && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    void dispatch(
+                      editTask({
+                        id: personalTask.id,
+                        title: personalTask.title,
+                        description: personalTask.description,
+                        status: 'open',
+                        executorId: personalTask.executorId,
+                      }),
+                    );
+                    void dispatch(fetchTask(personalTask.id));
+                  }}
+                >
+                  отказаться
+                </Button>
+              </Box>
+            )}
           </Box>
         )}
 
-        {personalTask.creatorId === user?.id && (
+        {personalTask.creatorId === user?.id && personalTask.status === 'open' && (
           <>
-            <Box className="po-btns-row">
-              <Button onClick={() => setIsEditOpen(true)} className="po-btn-edit">
-                Редактировать
-              </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+              <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
             </Box>
 
-            <Box className="po-btns-row">
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
               <Button
                 onClick={() => {
                   void dispatch(deleteTask(personalTask.id));
                   navigate('/orders');
+                  void dispatch(fetchUser());
                 }}
-                className="po-btn-delete"
               >
                 Удалить
               </Button>
@@ -171,13 +190,11 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         )}
       </Box>
-
       {personalTask.status !== 'open' &&
         chatId &&
         (personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && (
           <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
         )}
-
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}

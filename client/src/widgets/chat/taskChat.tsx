@@ -31,7 +31,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId, userId }) => {
     socket.emit('joinChat', chatId);
 
     return () => {
-      socket.emit('leaveChat', chatId); // если есть реализация
+      socket.emit('leaveChat', chatId); 
       socket.off('newMessage');
     };
   }, [chatId, dispatch]);
