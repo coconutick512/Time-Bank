@@ -48,7 +48,26 @@ import {
 } from '@mui/icons-material';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useNavigate } from 'react-router-dom';
-import './OrdersPage.css';
+import {
+  OrdersRoot,
+  OrdersHeader,
+  OrdersTitle,
+  OrdersActions,
+  OrdersButtonPrimary,
+  OrdersIconButton,
+  OrdersFilterPanel,
+  OrdersFilterRow,
+  OrdersSearchInput,
+  OrdersSelect,
+  OrdersInfoRow,
+  OrdersResetButton,
+  OrdersErrorAlert,
+  OrdersTaskList,
+  OrdersTaskItem,
+  OrdersEmptyState,
+  OrdersEmptyIcon,
+  OrdersSkeletonRect,
+} from './OrdersPage.styles';
 import type { TasksState } from '@/entities/tasks/types/schema';
 
 type RootState = {
@@ -184,51 +203,43 @@ export default function OrdersPage(): React.JSX.Element {
 
   if (status === 'loading') {
     return (
-      <Box className="orders-root" role="progressbar">
+      <OrdersRoot role="progressbar">
         {[...Array(5)].map((_, index) => (
-          <Skeleton
-            key={index}
-            variant="rectangular"
-            width="100%"
-            height={180}
-            className="po-skeleton-rect"
-          />
+          <OrdersSkeletonRect key={index} variant="rectangular" width="100%" height={180} />
         ))}
-      </Box>
+      </OrdersRoot>
     );
   }
 
   return (
-    <Box className="orders-root">
+    <OrdersRoot>
       {/* Заголовок и действия */}
-      <Box className="orders-header">
-        <Typography variant="h4" component="h1" className="orders-title">
+      <OrdersHeader>
+        <OrdersTitle variant="h4" component="h1">
           Доступные задания
-        </Typography>
+        </OrdersTitle>
 
-        <Box className="orders-actions">
+        <OrdersActions>
           <Tooltip title="Обновить список">
-            <IconButton onClick={handleRefresh} className="orders-icon-btn" aria-label="refresh list">
+            <OrdersIconButton aria-label="refresh list" onClick={handleRefresh}>
               <Refresh />
-            </IconButton>
+            </OrdersIconButton>
           </Tooltip>
 
-          <Button
-            onClick={handleOpenCreateModal}
+          <OrdersButtonPrimary
             variant="contained"
-            className="orders-btn-primary"
             startIcon={<Add />}
+            onClick={handleOpenCreateModal}
           >
             Создать задание
-          </Button>
-        </Box>
-      </Box>
+          </OrdersButtonPrimary>
+        </OrdersActions>
+      </OrdersHeader>
 
       {/* Фильтры и поиск */}
-      <Box className="orders-filter-panel">
-        <Box className="orders-filter-row">
-          <TextField
-            className="orders-search-input"
+      <OrdersFilterPanel>
+        <OrdersFilterRow>
+          <OrdersSearchInput
             placeholder="Поиск заданий..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -238,7 +249,7 @@ export default function OrdersPage(): React.JSX.Element {
             }}
           />
 
-          <FormControl size="small" className="orders-select">
+          <OrdersSelect size="small">
             <InputLabel>Статус</InputLabel>
             <Select
               value={statusFilter}
@@ -250,9 +261,9 @@ export default function OrdersPage(): React.JSX.Element {
               <MenuItem value="assigned">Назначенные</MenuItem>
               <MenuItem value="completed">Завершенные</MenuItem>
             </Select>
-          </FormControl>
+          </OrdersSelect>
 
-          <FormControl size="small" className="orders-select">
+          <OrdersSelect size="small">
             <InputLabel>Сортировка</InputLabel>
             <Select
               value={sortBy}
@@ -264,40 +275,37 @@ export default function OrdersPage(): React.JSX.Element {
               <MenuItem value="deadline">По сроку</MenuItem>
               <MenuItem value="title">По названию</MenuItem>
             </Select>
-          </FormControl>
-        </Box>
-      </Box>
+          </OrdersSelect>
+        </OrdersFilterRow>
+      </OrdersFilterPanel>
 
-      <Box className="orders-info-row">
+      <OrdersInfoRow>
         <Typography variant="body2" color="text.secondary">
           Найдено заданий: {filteredAndSortedTasks.length}
         </Typography>
         {(searchTerm || statusFilter !== 'all') && (
-          <button
-            type="button"
+          <OrdersResetButton
             onClick={() => {
               setSearchTerm('');
               setStatusFilter('all');
             }}
-            className="orders-reset-btn"
           >
             Сбросить фильтры
-          </button>
+          </OrdersResetButton>
         )}
-      </Box>
+      </OrdersInfoRow>
 
       {error && (
-        <Alert severity="error" className="orders-error-alert" role="alert">
+        <OrdersErrorAlert severity="error" role="alert">
           Ошибка при загрузке заданий: {error}
-        </Alert>
+        </OrdersErrorAlert>
       )}
 
       {paginatedTasks.length > 0 ? (
-        <Box className="orders-task-list" role="list">
+        <OrdersTaskList role="list">
           {paginatedTasks.map((task) => (
-            <Box
+            <OrdersTaskItem
               key={task.id}
-              className="orders-task-item"
               role="listitem"
               tabIndex={0}
               onClick={() => navigate(`/orders/${task.id}`)}
@@ -374,7 +382,13 @@ export default function OrdersPage(): React.JSX.Element {
                 <Box sx={{ mt: 2 }}>
                   <Typography
                     variant="subtitle2"
-                    sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}
+                    sx={{
+                      mb: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      color: 'text.secondary',
+                    }}
                   >
                     <Category fontSize="small" /> Категории:
                   </Typography>
@@ -395,12 +409,14 @@ export default function OrdersPage(): React.JSX.Element {
                   </Box>
                 </Box>
               )}
-            </Box>
+            </OrdersTaskItem>
           ))}
-        </Box>
+        </OrdersTaskList>
       ) : (
-        <Box className="orders-empty-state" role="alert">
-          <FilterList className="orders-empty-icon" />
+        <OrdersEmptyState role="alert">
+          <OrdersEmptyIcon>
+            <FilterList />
+          </OrdersEmptyIcon>
           <Typography variant="h6" color="text.secondary" gutterBottom>
             Задания не найдены
           </Typography>
@@ -409,14 +425,24 @@ export default function OrdersPage(): React.JSX.Element {
               ? 'Попробуйте изменить параметры поиска'
               : 'Создайте первое задание'}
           </Typography>
-          <Button
+          <OrdersButtonPrimary
             variant="contained"
             startIcon={<Add />}
             onClick={handleOpenCreateModal}
-            className="orders-btn-primary"
           >
             Создать задание
-          </Button>
+          </OrdersButtonPrimary>
+        </OrdersEmptyState>
+      )}
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5.5 }}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(_, value) => setPage(value)}
+            color="primary"
+          />
         </Box>
       )}
 
@@ -471,7 +497,7 @@ export default function OrdersPage(): React.JSX.Element {
               onChange={(e) => handleNewTaskChange('categories', e.target.value)}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected as number[]).map((id) => {
+                  {selected.map((id) => {
                     const category = categories.find((cat) => cat.id === id);
                     return (
                       <Chip
@@ -516,6 +542,6 @@ export default function OrdersPage(): React.JSX.Element {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </OrdersRoot>
   );
 }
