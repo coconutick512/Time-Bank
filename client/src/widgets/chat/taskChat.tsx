@@ -28,22 +28,19 @@ socket.on('connect', () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Получаем историю сообщений
     void dispatch(fetchMessages(chatId));
     socket.emit('joinChat', chatId);
 
     return () => {
-      socket.emit('leaveChat', chatId); // если реализовано на сервере
+      socket.emit('leaveChat', chatId); 
       socket.off('newMessage');
     };
   }, [chatId, dispatch]);
 
-  // Следим за обновлением сообщений redux
   useEffect(() => {
     setLocalMessages(messages);
   }, [messages]);
 
-  // Listen socket for new messages
   useEffect(() => {
     socket.on('newMessage', (msg) => {
       setLocalMessages((prev) => [...prev, msg]);

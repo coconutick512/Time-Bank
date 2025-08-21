@@ -133,7 +133,7 @@ class TaskController {
       console.log('Received data:', req.body);
       console.log('User from token:', req.user);
 
-      const { title, description, deadline, bookedDate, executorId, creatorId } =
+      const { title, description, deadline, bookedDate, executorId,hours ,creatorId ,categories} =
         req.body;
 
       console.log('Extracted executorId:', executorId);
@@ -144,8 +144,10 @@ class TaskController {
         description,
         deadline,
         bookedDate,
-        creatorId, // From request body
+        creatorId,
         executorId,
+        hours,
+        categories
       });
 
       console.log('Created task:', task);

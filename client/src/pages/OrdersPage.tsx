@@ -98,6 +98,7 @@ export default function OrdersPage(): React.JSX.Element {
     creatorId: user.id,
   };
     await dispatch(createTask(taskWithCreator));
+    await dispatch(fetchUser());
     setCreateModalOpen(false);
 
     setNewTask({
@@ -366,7 +367,7 @@ export default function OrdersPage(): React.JSX.Element {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Person fontSize="small" sx={{ color: 'text.secondary' }} />
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Автор: {task.creator?.name}
+                      Автор: {task.creator.name}
                     </Typography>
                   </Box>
 
@@ -378,7 +379,7 @@ export default function OrdersPage(): React.JSX.Element {
                   </Box>
                 </Box>
 
-                {task.categories?.length > 0 && (
+                {task.categories.length > 0 && (
                   <Box sx={{ mt: 2 }}>
                     <Typography
                       variant="subtitle2"
