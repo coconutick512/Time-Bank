@@ -6,6 +6,7 @@ import tasksReducer from '@/entities/tasks/model/tasksSlice';
 import languageReducer from '@/entities/language/model/languageSlice';
 import skillsReducer from '@/entities/skills/model/skillsSlice';
 import chatReducer from '@/entities/chat/model/chatSlice';
+import reviewReducer from '@/entities/reviews/model/reviewSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     language: languageReducer,
     skills: skillsReducer,
     chat: chatReducer,
+    review: reviewReducer,
   },
 });
 

@@ -124,7 +124,7 @@ export const UserService = {
   fetchUserSkills: async (id: number): Promise<User> => {
     try {
       const response = await axiosInstance.get<User>(`/users/${id.toString()}`);
-      console.log(123123);
+      console.log(response.data);
       const validData = UserSchema.parse(response.data);
       return validData;
     } catch (error) {

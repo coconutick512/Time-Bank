@@ -104,7 +104,7 @@ const userSlice = createSlice({
         state.score = null;
       })
       .addCase(scoreUser.rejected, (state, action) => {
-        state.status = 'guest';
+        state.status = 'reject';
         state.score = null;
         state.error = action.error.message ?? 'Ошибка при обновлении токена';
       });
@@ -119,7 +119,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(submitAnceta.rejected, (state, action) => {
-        state.status = 'guest';
+        state.status = 'reject';
         state.profileData = null;
         state.error = action.error.message ?? 'Ошибка при обновлении токена';
       });
@@ -134,7 +134,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserSkills.rejected, (state, action) => {
-        state.status = 'guest';
+        state.status = 'reject';
         state.skills = null;
         state.error = action.error.message ?? 'Ошибка при обновлении токена';
       });
@@ -144,7 +144,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserById.fulfilled, (state, action) => {
-        state.status = 'done';
+        state.status = 'logged';
         console.log('Slice storing viewingUser:', action.payload.user);
         state.viewingUser = action.payload.user;
         state.error = null;
@@ -164,7 +164,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        state.status = 'logged';
+        state.status = 'reject';
         state.error = action.error.message ?? 'Ошибка при обновлении профиля';
       });
   },

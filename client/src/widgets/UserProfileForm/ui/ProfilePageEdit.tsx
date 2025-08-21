@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import { updateProfile } from '@/entities/user/model/userThunk';
+import { fetchUser, updateProfile } from '@/entities/user/model/userThunk';
 import type { User } from '@/entities/user/types/schema';
 import type { Skill } from '@/entities/skills/types/schema';
 import {
@@ -74,6 +74,8 @@ export default function ProfileEditForm({
       console.log('Sending skillIds JSON:', JSON.stringify(selectedSkills || []));
 
       await dispatch(updateProfile(formDataToSend)).unwrap();
+      await dispatch(fetchUser()).unwrap();
+
       onSuccess();
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -121,7 +123,10 @@ export default function ProfileEditForm({
       prev.includes(skillId) ? prev.filter((id) => id !== skillId) : [...prev, skillId],
     );
   };
-
+  const status = useAppSelector((state) => state.user.status);
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
   return (
     <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, bgcolor: 'white' }}>
       <Typography variant="h5" component="h3" gutterBottom sx={{ color: 'text.primary' }}>
