@@ -97,7 +97,10 @@ class AuthController {
         ...req.body,
         avatar,
       });
-      const skill = await UserService.addSkillToUser(res.locals.user.id, req.body.skills);
+      const skill = await UserService.addSkillToUser(
+        res.locals.user.id,
+        req.body.skills,
+      );
       res.status(200).json({ user, skill });
     } catch (error) {
       console.log(error);
@@ -112,7 +115,7 @@ class AuthController {
         ...req.body,
         avatar,
       });
-      const skill = await UserService.updateSkills(res.locals.user.id, req.body.skills);
+      const skill = await UserService.updateSkills(res.locals.user.id, req.body.skillIds);
       res.status(200).json({ user, skill });
     } catch (error) {
       console.log(error);

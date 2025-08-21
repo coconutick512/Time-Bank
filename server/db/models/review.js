@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'reviews',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    updatedAt: false
   });
   
   return Review;

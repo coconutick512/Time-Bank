@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import { updateProfile } from '@/entities/user/model/userThunk';
+import { fetchUser, updateProfile } from '@/entities/user/model/userThunk';
 import type { User } from '@/entities/user/types/schema';
 import type { Skill } from '@/entities/skills/types/schema';
 
@@ -57,6 +57,7 @@ export default function ProfileEditForm({
       console.log('Sending skillIds JSON:', JSON.stringify(selectedSkills || []));
 
       await dispatch(updateProfile(formDataToSend)).unwrap();
+      await dispatch(fetchUser()).unwrap();
 
       onSuccess();
     } catch (error) {
@@ -107,8 +108,12 @@ export default function ProfileEditForm({
       prev.includes(skillId) ? prev.filter((id) => id !== skillId) : [...prev, skillId],
     );
   };
-
+  const status = useAppSelector((state) => state.user.status);
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
   return (
+   
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <h3 className="text-xl font-semibold mb-4">Редактировать профиль</h3>
 

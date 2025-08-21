@@ -4,6 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('tasks', [
       {
+        id: 1,
         title: 'Разработать сайт',
         description: 'Нужен лендинг для стартапа',
         hours: 20.5,
@@ -20,6 +21,7 @@ module.exports = {
         ]),
       },
       {
+        id: 2,
         title: 'Создать логотип',
         description: 'Лого для IT компании',
         hours: 10.0,
@@ -29,12 +31,78 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id: 3,
+        title: 'Приготовить ужин',
+        description: 'Семейный ужин на 4 персоны',
+        hours: 3,
+        status: 'open',
+        deadline: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+        creatorId: 2,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 4,
+        title: 'Пробежать 10 км',
+        description: 'Подготовка к марафону',
+        hours: 2,
+        status: 'open',
+        deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+        creatorId: 3,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 5,
+        title: 'Сфотографировать мероприятие',
+        description: 'Фотосессия для школьного концерта',
+        hours: 6,
+        status: 'assigned',
+        deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+        creatorId: 4,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 6,
+        title: 'Выучить песню на гитаре',
+        description: 'Разучить 3 аккорда и исполнить',
+        hours: 4,
+        status: 'open',
+        deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+        creatorId: 4,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 7,
+        title: 'Посадить цветы',
+        description: 'Озеленение двора у дома',
+        hours: 5,
+        status: 'open',
+        deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+        creatorId: 2,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 8,
+        title: 'Подготовить презентацию',
+        description: 'Выступление для конференции',
+        hours: 12,
+        status: 'assigned',
+        deadline: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
+        creatorId: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]);
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('tasks', {
-      title: ['Разработать сайт', 'Создать логотип'],
+      id: { [Sequelize.Op.in]: [1, 2, 3, 4, 5, 6, 7, 8] },
     });
   },
 };

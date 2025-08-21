@@ -116,7 +116,7 @@ export default function CreateTaskModal({
             multiline
             rows={3}
             required
-            rows={4}
+            // rows={4}
             aria-required="true"
             aria-label="Описание задания"
           />
