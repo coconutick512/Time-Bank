@@ -1,0 +1,111 @@
+/* Фоновое затемнение модалки */
+.edit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1.5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Модальное окно */
+.edit-modal-box {
+  background-color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 384px;
+  max-width: 90vw;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Заголовок */
+.edit-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #18191c;
+}
+
+/* Отступы между полями */
+.edit-modal-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Метки для полей */
+.edit-modal-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+/* Универсальные стили для input и textarea */
+.edit-modal-textfield {
+  border: 1.5px solid #d1d5db;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1e293b;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.edit-modal-textfield:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px #3b82f6aa;
+}
+
+/* Кнопочная группа */
+.edit-modal-btn-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Кнопки */
+.edit-modal-btn-cancel,
+.edit-modal-btn-save {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.edit-modal-btn-cancel {
+  background-color: #e5e7eb;
+  color: #475569;
+}
+
+.edit-modal-btn-cancel:hover {
+  background-color: #cbd5e1;
+}
+
+.edit-modal-btn-save {
+  background-color: #2563eb;
+  color: white;
+}
+
+.edit-modal-btn-save:hover {
+  background-color: #1e40af;
+}
+
+/* Адаптив */
+@media (max-width: 480px) {
+  .edit-modal-box {
+    width: 95vw;
+    padding: 20px 18px;
+  }
+}

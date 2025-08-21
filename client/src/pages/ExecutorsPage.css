@@ -1,0 +1,136 @@
+/* Корневой блок */
+.executors-root {
+  max-width: 1200px;
+  margin: 36px auto;
+  padding: 24px 20px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #18191c;
+  background-color: transparent;
+}
+
+/* Заголовок */
+.executors-title {
+  font-size: 2.25rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #18191c;
+}
+
+.executor-about-text {
+  display: block;
+  max-width: 100%; /* расширяется по содержимому в доступных рамках */
+  white-space: nowrap; /* Запрещаем перенос */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Показываем многоточие при переполнении */
+  vertical-align: middle;
+  color: #4061ef;
+  font-weight: 600;
+  font-size: 1.03rem;
+}
+
+/* Список исполнителей */
+.executors-list {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* Карточка исполнителя */
+.executor-card {
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 2px 12px rgba(60, 72, 120, 0.06);
+  padding: 26px 28px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.executor-card:hover,
+.executor-card:focus {
+  box-shadow: 0 6px 28px rgba(40, 59, 110, 0.14);
+  transform: translateY(-4px);
+  outline: none;
+}
+
+/* Заголовок и аватар */
+.executor-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.executor-avatar {
+  width: 64px;
+  height: 64px;
+  font-size: 28px;
+  background-color: #4061ef !important;
+  color: #fff !important;
+}
+
+.executor-name {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.executor-email {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+/* Баланс */
+.executor-balance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1.03rem;
+  color: #4061ef;
+  margin-bottom: 12px;
+}
+
+/* Навыки */
+.executor-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.executor-skill-chip {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1px solid #bbf7d0 !important;
+}
+
+/* Пустое состояние */
+.executors-empty {
+  padding: 48px 24px;
+  text-align: center;
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+  background: #f9fafb;
+  color: #606672;
+}
+
+.executors-empty h6 {
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Адаптив */
+@media (max-width: 800px) {
+  .executors-list {
+    grid-template-columns: 1fr;
+  }
+  .executor-card {
+    padding: 20px;
+  }
+}

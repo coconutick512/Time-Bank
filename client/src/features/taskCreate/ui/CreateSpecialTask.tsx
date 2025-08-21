@@ -103,6 +103,8 @@ export default function CreateTaskModal({
             onChange={(e) => setTitle(e.target.value)}
             margin="normal"
             required
+            aria-required="true"
+            aria-label="Название задания"
           />
 
           <TextField
@@ -114,6 +116,9 @@ export default function CreateTaskModal({
             multiline
             rows={3}
             required
+            rows={4}
+            aria-required="true"
+            aria-label="Описание задания"
           />
 
           <TextField
@@ -125,6 +130,8 @@ export default function CreateTaskModal({
             margin="normal"
             InputLabelProps={{ shrink: true }}
             required
+            aria-required="true"
+            aria-label="Срок выполнения"
           />
 
           <TextField

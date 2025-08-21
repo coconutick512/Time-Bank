@@ -1,17 +1,17 @@
-const { User, UserSkill, Skill } = require('../../db/models/');
-const bcrypt = require('bcrypt');
+const { User, UserSkill, Skill } = require("../../db/models/");
+const bcrypt = require("bcrypt");
 
 class AuthService {
   static async createUser({ email, password, name }) {
     if (!email || !password || !name) {
-      throw new Error('Не все поля');
+      throw new Error("Не все поля");
     }
 
     const hashpass = await bcrypt.hash(password, 10);
 
     const user = await User.create({ email, name, hashpass });
     if (!user) {
-      throw new Error('Не смог создать user');
+      throw new Error("Не смог создать user");
     }
 
     const plainUser = user.get();
@@ -32,15 +32,15 @@ class AuthService {
 
   static async signin({ email, password }) {
     if (!email || !password) {
-      throw new Error('Не все поля');
+      throw new Error("Не все поля");
     }
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      throw new Error('Пользователь не найден');
+      throw new Error("Пользователь не найден");
     }
     const isMatch = await bcrypt.compare(password, user.hashpass);
     if (!isMatch) {
-      throw new Error('Неверный пароль');
+      throw new Error("Неверный пароль");
     }
     const plainUser = user.get();
     delete plainUser.hashpass;
@@ -48,9 +48,10 @@ class AuthService {
   }
 
   static async findOne(id) {
+    console.log("____________ID USERl", id);
     const user = await User.findByPk(id);
     if (!user) {
-      throw new Error('Пользователь не найден');
+      throw new Error("Пользователь не найден");
     }
     const plainUser = user.get();
     delete plainUser.hashpass;
@@ -65,7 +66,7 @@ class AuthService {
         timezone: data.time,
         about: data.about,
       },
-      { where: { id: userId } },
+      { where: { id: userId } }
     );
     const updatedUser = await User.findByPk(userId);
     const plainUser = updatedUser.get();
@@ -74,17 +75,17 @@ class AuthService {
   }
 
   static async addSkillToUser(userId, skills) {
-    const skillIds = JSON.parse(skills)
-    
+    const skillIds = JSON.parse(skills);
+
     console.log(skills);
 
-    console.log(skillIds, '------');
+    console.log(skillIds, "------");
 
     const logskills = skillIds.map((el) =>
       UserSkill.create({
         userId,
         skillId: parseInt(el, 10),
-      }),
+      })
     );
     await Promise.all(logskills);
   }
@@ -97,7 +98,7 @@ class AuthService {
         timezone: data.time,
         about: data.about,
       },
-      { where: { id: userId } },
+      { where: { id: userId } }
     );
     const updatedUser = await User.findByPk(userId);
     const plainUser = updatedUser.get();
@@ -108,13 +109,13 @@ class AuthService {
   static async updateSkills(userId, skills) {
     console.log(skills);
     const skillIds = JSON.parse(skills);
-    console.log(skillIds, '------');
+    console.log(skillIds, "------");
 
     const logskills = skillIds.map((el) =>
       UserSkill.create({
         userId,
         skillId: parseInt(el, 10),
-      }),
+      })
     );
     await Promise.all(logskills);
   }
@@ -124,14 +125,14 @@ class AuthService {
       include: [
         {
           model: Skill,
-          as: 'skills',
+          as: "skills",
           through: { attributes: [] },
         },
       ],
-      attributes: ['id', 'name'],
+      attributes: ["id", "name"],
     });
     if (!user) {
-      throw new Error('Пользователь не найден');
+      throw new Error("Пользователь не найден");
     }
     return user.skills;
   }

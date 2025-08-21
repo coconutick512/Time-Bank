@@ -54,12 +54,11 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
           ...prev,
           teachingCategories: currentSkills.filter((id) => id !== skillId),
         };
-      } 
-        return {
-          ...prev,
-          teachingCategories: [...currentSkills, skillId],
-        };
-      
+      }
+      return {
+        ...prev,
+        teachingCategories: [...currentSkills, skillId],
+      };
     });
   };
 
@@ -79,12 +78,12 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
 
     try {
       await dispatch(submitAnceta(submitData)).unwrap();
-      onClose();
     } catch (err) {
       console.error('Error saving profile:', err);
     } finally {
       setUploading(false);
     }
+    onClose();
   };
 
   const skillsLoading = skillsStatus === 'loading';
@@ -192,11 +191,7 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={uploading}
-            className="submit-button"
-          >
+          <button type="submit" disabled={uploading} className="submit-button">
             {uploading ? 'Загрузка...' : 'Сохранить анкету'}
           </button>
         </form>

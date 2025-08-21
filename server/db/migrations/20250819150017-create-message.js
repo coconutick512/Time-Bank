@@ -15,6 +15,7 @@ module.exports = {
           model: "Chats",
           key: "id",
         },
+        onDelete: "CASCADE",
         type: Sequelize.INTEGER,
       },
       senderId: {
@@ -23,6 +24,7 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onDelete: "CASCADE",
         type: Sequelize.INTEGER,
       },
       text: {

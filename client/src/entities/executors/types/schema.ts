@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const ExecutorSchema = z.object({
   id: z.number(),
   name: z.string(),
-  avatar: z.string().optional(),
+  avatar: z.string().optional().nullable(),
   city: z.string().optional(),
   timezone: z.string().optional(),
   about: z.string().optional(),

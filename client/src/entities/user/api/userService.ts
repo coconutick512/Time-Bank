@@ -125,7 +125,6 @@ export const UserService = {
     try {
       const response = await axiosInstance.get<User>(`/users/${id.toString()}`);
       console.log(123123);
-
       const validData = UserSchema.parse(response.data);
       return validData;
     } catch (error) {

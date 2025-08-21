@@ -8,9 +8,9 @@ type Props = {
   bookedDates: Date[];
   availableDates: Date[];
   onChangeAvailableDates: (dates: Date[]) => void;
-  userId: number; // Current user ID
-  profileOwnerId: number; // Profile owner ID
-  isOwnerView: boolean; // Add this prop
+  userId: number;
+  profileOwnerId: number;
+  isOwnerView: boolean;
 };
 
 export default function UserCalendar({
@@ -44,7 +44,6 @@ export default function UserCalendar({
     if (isOwnerView) {
       return;
     }
-
     setSelectedDay(date);
   };
 
@@ -65,7 +64,7 @@ export default function UserCalendar({
       const year = selectedDay.getFullYear();
       const month = String(selectedDay.getMonth() + 1).padStart(2, '0');
       const day = String(selectedDay.getDate()).padStart(2, '0');
-      const dateStr = `${year.toString()}-${month}-${day}`;
+      const dateStr = `${year}-${month}-${day}`;
 
       try {
         const res = await fetch(
@@ -83,11 +82,6 @@ export default function UserCalendar({
     void fetchHours();
   }, [selectedDay, profileOwnerId, isOwnerView]);
 
-  const getButtonColor = (isBooked: boolean, isAvailable: boolean): string => {
-    if (isBooked) return '#ccc';
-    return isAvailable ? '#4caf50' : '#f44336';
-  };
-
   return (
     <div>
       <Calendar
@@ -97,45 +91,24 @@ export default function UserCalendar({
       />
 
       {!isOwnerView && (
-        <div
-          style={{
-            marginTop: '10px',
-            padding: '10px',
-            backgroundColor: '#f5f5f5',
-            borderRadius: '4px',
-          }}
-        >
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <div
-                style={{
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: '#4caf50',
-                  borderRadius: '3px',
-                }}
-              ></div>
-              <span>Доступные даты</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <div
-                style={{
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: '#f44336',
-                  borderRadius: '3px',
-                }}
-              ></div>
-              <span>Забронированные даты</span>
-            </div>
+        <div className="legend">
+          <div className="legend-item">
+            <div className="legend-color legend-available" />
+            <span>Доступные даты</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color legend-booked" />
+            <span>Забронированные даты</span>
           </div>
         </div>
       )}
 
       {!isOwnerView && selectedDay && (
-        <div style={{ marginTop: '10px' }}>
-          <h4>Выберите час для бронирования {selectedDay.toLocaleDateString()}:</h4>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <section>
+          <h4 className="hours-selection">
+            Выберите час для бронирования {selectedDay.toLocaleDateString()}:
+          </h4>
+          <div className="hours-buttons">
             {Array.from({ length: 24 }, (_, i) => i).map((hour) => {
               const isBooked = bookedHours.includes(hour);
               const isAvailable = availableHours.includes(hour);
@@ -143,25 +116,19 @@ export default function UserCalendar({
                 <button
                   key={hour}
                   disabled={!isAvailable || isBooked}
-                  style={{
-                    padding: '6px 12px',
-                    backgroundColor: getButtonColor(isBooked, isAvailable),
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: !isAvailable || isBooked ? 'not-allowed' : 'pointer',
-                  }}
                   onClick={() => handleHourClick(hour)}
+                  className={`hours-button ${
+                    isBooked ? 'booked' : isAvailable ? 'available' : 'unavailable'
+                  }`}
                 >
                   {hour}:00
                 </button>
               );
             })}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Modal only shows for non-owners */}
       {!isOwnerView && (
         <CreateTaskModal
           isOpen={isModalOpen}

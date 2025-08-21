@@ -1,13 +1,20 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { fetchAllExecutors } from '@/entities/executors/model/executorThunk';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
-import { Box, Typography, Avatar, Chip, Skeleton, Divider, useTheme } from '@mui/material';
-import { Schedule as TimeIcon, Work as SkillsIcon } from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+  Avatar,
+  Chip,
+  Skeleton,
+  Divider,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
+import { Schedule as TimeIcon, Work as SkillsIcon, Refresh } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import './ExecutorsPage.css';
 
 type Skill = {
   id: number;
@@ -15,12 +22,13 @@ type Skill = {
 };
 
 type Executor = {
-  avatar?: string ;
+  avatar?: string;
   id: number;
   name: string;
   email: string;
   balance: string;
   skills: Skill[];
+  about: string;
 };
 
 type ExecutorsState = {
@@ -36,7 +44,6 @@ type RootState = {
 export default function ExecutorsPage(): React.JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { status, executors, error } = useAppSelector((state: RootState) => state.executors);
 
   React.useEffect(() => {
@@ -67,90 +74,71 @@ export default function ExecutorsPage(): React.JSX.Element {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 1200, mx: 'auto', color: 'black' }}>
-      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600, color: 'black' }}>
+    <Box className="executors-root">
+      <Typography className="executors-title" variant="h4" component="h1">
         Наши исполнители
       </Typography>
 
       {executors.length > 0 ? (
-        <Box sx={{ display: 'grid', gap: 3 }}>
+        <Box className="executors-list">
           {executors.map((executor) => (
             <Box
               key={executor.id}
+              role="button"
+              tabIndex={0}
+              className="executor-card"
               onClick={() => navigate(`/profile/${executor.id}`)}
-              style ={{cursor: 'pointer'}}
-              sx={{
-                p: 3,
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 2,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                transition: 'all 0.2s',
-                color: 'black',
-                '&:hover': {
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  transform: 'translateY(-2px)',
-                },
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  navigate(`/profile/${executor.id}`);
+                }
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Box className="executor-header">
                 <Avatar
-                 src={`/api/uploads/avatars/${executor.avatar}`}
-                sx={{ 
-                  width: 56, 
-                  height: 56, 
-                  bgcolor: theme.palette.primary.main,
-                  mr: 2,
-                  fontSize: 24
-                }}>
-                 
-                </Avatar>
+                  src={`/api/uploads/avatars/${executor.avatar}`}
+                  className="executor-avatar"
+                  alt={executor.name}
+                />
                 <Box>
-                  <Typography variant="h5" component="h3" sx={{ fontWeight: 600, color: 'black' }}>
+                  <Typography className="executor-name" variant="h5" component="h3">
                     {executor.name}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'black' }}>
+                  <Typography className="executor-email" variant="body2">
                     {executor.email}
                   </Typography>
                 </Box>
               </Box>
 
-              <Divider sx={{ my: 2 }} />
+              <Divider />
 
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TimeIcon color="primary" fontSize="small" />
-                  <Typography variant="body1" sx={{ color: 'black' }}>
-                    <b>{executor.balance}</b> TD
-                  </Typography>
-                </Box>
+              <Box className="executor-balance">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: 'bold', color: 'inherit' }}
+                  className="executor-about-text"
+                >
+                  {executor.about.length > 50 ? `${executor.about.slice(0, 50)}…` : executor.about}
+                </Typography>
               </Box>
 
               {executor.skills.length > 0 && (
-                <Box sx={{ mt: 2 }}>
+                <Box>
                   <Typography
+                    className="executor-skills-title"
                     variant="subtitle2"
-                    sx={{
-                      mb: 1,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      color: 'black',
-                    }}
+                    sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1, color: 'black' }}
                   >
                     <SkillsIcon fontSize="small" /> Навыки:
                   </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  <Box className="executor-skills">
                     {executor.skills.map((skill) => (
                       <Chip
                         key={skill.id}
                         label={skill.name}
                         size="small"
-                        sx={{
-                          backgroundColor: '#f0fdf4',
-                          color: 'black',
-                          border: '1px solid #bbf7d0',
-                        }}
+                        className="executor-skill-chip"
                       />
                     ))}
                   </Box>

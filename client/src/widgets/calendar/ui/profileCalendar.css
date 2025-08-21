@@ -1,9 +1,129 @@
+/* Для календаря react-calendar */
+.react-calendar {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+.react-calendar__tile {
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.25s ease;
+}
+
+.react-calendar__tile--active {
+  background: #3662ff;
+  color: white;
+  font-weight: 700;
+  border-radius: 14px;
+}
+
 .booked-date {
-    background-color: #ef4444; /* red for booked dates */
-    color: white;
+  background-color: #ef4444 !important; /* Красный - занятые */
+  color: white !important;
+  border-radius: 14px;
+}
+
+.available-date {
+  background-color: #34d399 !important; /* Зелёный - доступные */
+  color: white !important;
+  border-radius: 14px;
+}
+
+/* Раздел с подсказками цветов */
+.legend {
+  margin-top: 14px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a5568;
+}
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.legend-available {
+  background-color: #34d399;
+}
+
+.legend-booked {
+  background-color: #ef4444;
+}
+
+/* Часы бронирования */
+.hours-selection {
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.hours-buttons {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hours-button {
+  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 6px;
+  color: white;
+  border: none;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+}
+
+.hours-button.available {
+  background-color: #4caf50;
+}
+
+.hours-button.booked {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.hours-button.unavailable {
+  background-color: #ef4444;
+  cursor: not-allowed;
+}
+
+.hours-button:disabled {
+  opacity: 0.6;
+}
+
+.owner-view .react-calendar__tile--active,
+.owner-view .booked-date,
+.owner-view .available-date {
+  cursor: default !important;
+}
+
+/* Адаптив */
+@media (max-width: 480px) {
+  .react-calendar {
+    max-width: 100%;
   }
-  
-  .booked {
-    background-color: #34d399; /* green for available dates */
-    color: white;
+  .hours-buttons {
+    justify-content: center;
   }
+}
