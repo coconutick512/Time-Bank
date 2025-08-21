@@ -1,7 +1,12 @@
+/* eslint-disable fsd-layers/no-import-from-top */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  AppBar,
+  Toolbar,
   Box,
+  InputBase,
   MenuItem,
   Select,
   Button,
@@ -21,26 +26,8 @@ import {
 } from 'lucide-react';
 import { logoutUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import type { RootState } from '@/app/store';
-import {
-  StyledAppBar,
-  StyledToolbar,
-  LogoContainer,
-  LogoIconContainer,
-  MenuContainer,
-  SearchContainer,
-  SearchInput,
-  ProfileContainer,
-  ProfileIconContainer,
-  DrawerPaper,
-  DrawerMenuItem,
-  ProfileBox,
-  ProfileIconBox,
-  CreateTaskButton,
-  AuthButton,
-  JoinButton,
-  LogoutButton,
-} from './Navbar.styles.ts';
+import { RootState } from '@/app/store';
+;
 
 type NavbarProps = {
   userBalance?: number;
@@ -56,7 +43,6 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  userBalance = 0,
   currentLanguage,
   searchQuery,
   onSearch,
@@ -66,6 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const { status, user } = useAppSelector((state: RootState) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -75,10 +62,21 @@ export const Navbar: React.FC<NavbarProps> = ({
     <Box sx={{ width: 280, p: 3 }}>
       {user ? (
         <>
-          <ProfileBox>
-            <ProfileIconBox>
-              <User size={20} color="#0369a1" />
-            </ProfileIconBox>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#e0f2fe',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 2,
+              }}
+            >
+              <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : '/default-avatar.png'} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+            </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight="bold">
                 Мой профиль
@@ -86,62 +84,67 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Clock size={16} color="#10b981" style={{ marginRight: 4 }} />
                 <Typography variant="body2" color="text.secondary">
-                  {userBalance} TD
+                  {user.balance} TD
                 </Typography>
               </Box>
             </Box>
-          </ProfileBox>
+          </Box>
 
-          <CreateTaskButton
+          <Button
             fullWidth
             variant="contained"
+            sx={{ mb: 2, bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' } }}
             onClick={() => {
               navigate('/create-task');
               setDrawerOpen(false);
             }}
           >
             Создать задание
-          </CreateTaskButton>
+          </Button>
 
           <Divider sx={{ my: 2 }} />
 
-          <DrawerMenuItem
+          <MenuItem
             onClick={() => {
               navigate('/orders');
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Заказы
-          </DrawerMenuItem>
+          </MenuItem>
 
-          <DrawerMenuItem
+          <MenuItem
             onClick={() => {
               navigate('/executors');
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Исполнители
-          </DrawerMenuItem>
+          </MenuItem>
 
-          <DrawerMenuItem
+          <MenuItem
             onClick={() => {
               navigate('/profile');
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Настройки профиля
-          </DrawerMenuItem>
+          </MenuItem>
 
           <Divider sx={{ my: 2 }} />
 
-          <DrawerMenuItem
+          <MenuItem
             onClick={() => {
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1, color: '#ef4444' }}
           >
             <LogoutIcon size={18} style={{ marginRight: 8 }} />
             Выйти
-          </DrawerMenuItem>
+          </MenuItem>
         </>
       ) : (
         <>
@@ -149,38 +152,45 @@ export const Navbar: React.FC<NavbarProps> = ({
             Банк Времени
           </Typography>
 
-          <JoinButton
+          <Button
             fullWidth
             variant="contained"
+            sx={{
+              mb: 2,
+              bgcolor: '#3b82f6',
+              '&:hover': { bgcolor: '#2563eb' },
+            }}
             onClick={() => {
               navigate('/register');
               setDrawerOpen(false);
             }}
           >
             Присоединиться
-          </JoinButton>
+          </Button>
 
-          <AuthButton
+          <Button
             fullWidth
             variant="outlined"
+            sx={{ mb: 2 }}
             onClick={() => {
               onLogin();
               setDrawerOpen(false);
             }}
           >
             Войти
-          </AuthButton>
+          </Button>
 
           <Divider sx={{ my: 2 }} />
 
-          <DrawerMenuItem
+          <MenuItem
             onClick={() => {
               onHowItWorksClick();
               setDrawerOpen(false);
             }}
+            sx={{ py: 1.5, borderRadius: 1 }}
           >
             Как это работает
-          </DrawerMenuItem>
+          </MenuItem>
         </>
       )}
 
@@ -201,36 +211,91 @@ export const Navbar: React.FC<NavbarProps> = ({
   if (status === 'loading') {
     return <div>Loading...</div>;
   }
-
   return (
     <>
-      <StyledAppBar position="sticky" elevation={0}>
-        <StyledToolbar>
+      <AppBar
+        position="sticky"
+        elevation={0}
+        sx={{
+          backgroundColor: '#ffffff',
+          color: '#111827',
+          borderBottom: '1px solid #e5e7eb',
+          py: 1,
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            maxWidth: 'lg',
+            width: '100%',
+            mx: 'auto',
+            px: { xs: 2, sm: 4 },
+          }}
+        >
           {/* Логотип */}
-          <LogoContainer onClick={() => navigate('/')}>
-            <LogoIconContainer>
+          <Box
+            onClick={() => navigate('/')}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              '&:hover': { opacity: 0.8 },
+            }}
+          >
+            <Box
+              sx={{
+                width: 36,
+                height: 36,
+                bgcolor: '#3b82f6',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 1.5,
+              }}
+            >
               <Clock color="#ffffff" size={20} />
-            </LogoIconContainer>
+            </Box>
             <Typography variant="h6" fontWeight="bold" noWrap>
               Банк Времени
             </Typography>
-          </LogoContainer>
+          </Box>
 
           {isMobile ? (
             <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#374151' }}>
               <MenuIcon />
             </IconButton>
           ) : (
-            <MenuContainer>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               {/* Поиск */}
-              <SearchContainer>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: '#f3f4f6',
+                  borderRadius: 2,
+                  px: 2,
+                  py: 0.5,
+                  width: 300,
+                  '&:focus-within': {
+                    boxShadow: '0 0 0 2px #bfdbfe',
+                  },
+                }}
+              >
                 <SearchIcon size={18} color="#6b7280" style={{ marginRight: 8 }} />
-                <SearchInput
+                <InputBase
                   placeholder="Поиск услуг..."
                   value={searchQuery}
                   onChange={(e) => onSearch(e.target.value)}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      py: 1,
+                    },
+                  }}
                 />
-              </SearchContainer>
+              </Box>
 
               {user ? (
                 <>
@@ -256,25 +321,54 @@ export const Navbar: React.FC<NavbarProps> = ({
                     Заказы
                   </Button>
 
-                  <ProfileContainer onClick={() => navigate('/profile')}>
-                    <ProfileIconContainer>
-                      <User size={16} color="#0369a1" />
-                    </ProfileIconContainer>
+                  <Box
+                    onClick={() => navigate('/profile')}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      px: 2,
+                      py: 1,
+                      borderRadius: 2,
+                      '&:hover': { backgroundColor: '#f3f4f6' },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        bgcolor: '#e0f2fe',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mr: 1.5,
+                      }}
+                    >
+                      <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : '/default-avatar.png'} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+                    </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />
                       <Typography variant="body2" fontWeight="medium">
-                        {userBalance} TD
+                        {user.balance} TD
                       </Typography>
                     </Box>
-                  </ProfileContainer>
+                  </Box>
 
-                  <LogoutButton
+                  <Button
                     variant="text"
                     onClick={() => dispatch(logoutUser())}
+                    sx={{
+                      color: '#ef4444',
+                      ml: 2,
+                      '&:hover': {
+                        backgroundColor: '#fee2e2',
+                      },
+                    }}
                     startIcon={<LogoutIcon size={18} />}
                   >
                     Выйти
-                  </LogoutButton>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -289,19 +383,36 @@ export const Navbar: React.FC<NavbarProps> = ({
                     Как это работает
                   </Button>
 
-                  <AuthButton variant="outlined" onClick={onLogin}>
+                  <Button
+                    variant="outlined"
+                    onClick={onLogin}
+                    sx={{
+                      color: '#111827',
+                      borderColor: '#d1d5db',
+                      '&:hover': { borderColor: '#9ca3af' },
+                    }}
+                  >
                     Войти
-                  </AuthButton>
+                  </Button>
 
-                  <JoinButton variant="contained" onClick={() => navigate('/login')}>
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate('/login')}
+                    sx={{
+                      bgcolor: '#3b82f6',
+                      '&:hover': { bgcolor: '#2563eb' },
+                    }}
+                  >
                     Присоединиться
-                  </JoinButton>
+                  </Button>
                 </>
               )}
-            </MenuContainer>
+
+              
+            </Box>
           )}
-        </StyledToolbar>
-      </StyledAppBar>
+        </Toolbar>
+      </AppBar>
 
       <Drawer
         anchor="right"
@@ -309,7 +420,19 @@ export const Navbar: React.FC<NavbarProps> = ({
         onClose={() => setDrawerOpen(false)}
         slotProps={{
           paper: {
-            component: DrawerPaper,
+            sx: {
+              width: 320,
+              backgroundColor: '#f8fafc', // Светло-голубой фон как на главной
+              boxShadow: 'xl',
+              borderLeft: '1px solid #e2e8f0',
+              '& .MuiMenuItem-root': {
+                borderRadius: '8px',
+                marginBottom: '4px',
+                '&:hover': {
+                  backgroundColor: '#f1f5f9',
+                },
+              },
+            },
           },
         }}
         ModalProps={{

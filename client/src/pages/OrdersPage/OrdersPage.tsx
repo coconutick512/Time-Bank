@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-nested-ternary */
@@ -82,6 +83,7 @@ export default function OrdersPage(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  
 
   const handleOpenCreateModal = (): void => {
     setCreateModalOpen(true);
@@ -92,10 +94,11 @@ export default function OrdersPage(): React.JSX.Element {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const itemsPerPage = 8;
 
   useEffect(() => {
+    document.title = 'Заказы'
     void dispatch(fetchAllTasks());
     void dispatch(fetchUser());
   }, [dispatch]);
@@ -364,7 +367,7 @@ export default function OrdersPage(): React.JSX.Element {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Person fontSize="small" sx={{ color: 'text.secondary' }} />
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Автор: {task.creator?.name}
+                    Автор: {task.creator.name}
                   </Typography>
                 </Box>
 
@@ -376,7 +379,7 @@ export default function OrdersPage(): React.JSX.Element {
                 </Box>
               </Box>
 
-              {task.categories?.length > 0 && (
+              {task?.categories.length > 0 && (
                 <Box sx={{ mt: 2 }}>
                   <Typography
                     variant="subtitle2"

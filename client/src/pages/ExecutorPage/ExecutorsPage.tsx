@@ -47,6 +47,7 @@ export default function ExecutorsPage(): React.JSX.Element {
   const { status, executors, error } = useAppSelector((state: RootState) => state.executors);
 
   React.useEffect(() => {
+    document.title = 'Исполнители'
     void dispatch(fetchAllExecutors());
     void dispatch(fetchUser());
   }, [dispatch]);

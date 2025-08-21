@@ -20,6 +20,18 @@ export const MainLayout = (): React.JSX.Element => {
   // Initialize user authentication on app start
   useEffect(() => {
     void dispatch(fetchUser());
+
+    // if (userStatus === 'loading' && !justLoggedOut.current) {
+    //   console.log('🔄 Attempting to fetch user session...');
+    //   dispatch(fetchUser()).catch(() => {
+    //     console.log('🚫 Failed to fetch user - staying as guest');
+    //   });
+    // }
+
+
+    // if (userStatus !== 'guest') {
+    //   justLoggedOut.current = false;
+    // }
   }, [dispatch]);
 
   console.log('MainLayout Debug:', {

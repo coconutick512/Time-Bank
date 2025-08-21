@@ -32,6 +32,7 @@ export default function MainPage(): React.JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    document.title = 'Банк'
     void dispatch(fetchUser());
   }, [dispatch]);
 
