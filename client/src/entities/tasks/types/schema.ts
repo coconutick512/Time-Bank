@@ -96,14 +96,14 @@ export const TasksStateSchema = z.object({
           id: z.number(),
           name: z.string(),
         }),
-      ).nullable().optional(),
+      ),
     })
     .nullable(),
   categories: z.array(
     z.object({
       id: z.number(),
       name: z.string(),
-    }).nullable().optional(),
+    }),
   ),
 });
 
@@ -123,7 +123,7 @@ export const TaskCreateSchema = z.object({
     z.object({
       id: z.number(),
       name: z.string(),
-    }).nullable().optional(),
+    }),
   ),
   hours: z.string(),
   bookedDate: z.string().optional().nullable(),
