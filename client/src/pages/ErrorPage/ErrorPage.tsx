@@ -9,12 +9,14 @@ export default function ErrorPage(): React.JSX.Element {
         <div className="container">
           <div className="content-wrapper">
             <div className="four_zero_four_bg"></div>
-            
+
             <div className="contant_box_404">
-              <h3 className="h2" style={{ color: 'black' }}>Looks like you&apos;re lost</h3>
-              <p style={{ color: 'black' }}>The page you are looking for is not available!</p>
-              <Link to="/" className="link_404" >
-                Go to Home Page
+              <h3 className="h2" style={{ color: 'black' }}>
+                Кажется Вы потерялись
+              </h3>
+              <p style={{ color: 'black' }}>Такой страницы не существует</p>
+              <Link to="/" className="link_404">
+                Вернуться на главную{' '}
               </Link>
             </div>
           </div>

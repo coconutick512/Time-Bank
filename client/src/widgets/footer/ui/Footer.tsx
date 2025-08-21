@@ -1,82 +1,123 @@
 import { useNavigate } from 'react-router-dom';
+import { Typography, Stack, Box } from '@mui/material';
+import {
+  FooterContainer,
+  FooterContent,
+  FooterSection,
+  FooterTitle,
+  BlueSpan,
+  FooterDesc,
+  FooterSocials,
+  FooterLinks,
+  FooterLinkItem,
+  FooterLinkButton,
+  FooterContacts,
+  FooterStats,
+  FooterStatBold,
+  StatGreen,
+  FooterBottom,
+  FooterBottomContent,
+  FooterLegalButton,
+} from './Footer.styles.ts';
 import { SocialButton } from './SocialButton';
-import './Footer.css';
 
 export const Footer = (): React.JSX.Element => {
   const navigate = useNavigate();
-  
+
   return (
-    <footer className="footer">
-      <div className="footer-content">
+    <FooterContainer component="footer">
+      <FooterContent>
         {/* Основная информация */}
-        <div className="footer-section">
-          <h3 className="footer-title">
-            Банк <span className="blue">Времени</span>
-          </h3>
-          <p className="footer-desc">
-            Обменивайтесь услугами за время, а не деньги. 
-            Каждый час работы = 1 тайм-доллар.
-          </p>
-          <div className="footer-socials">
+        <FooterSection>
+          <FooterTitle variant="h3">
+            Банк <BlueSpan>Времени</BlueSpan>
+          </FooterTitle>
+          <FooterDesc>
+            Обменивайтесь услугами за время, а не деньги. Каждый час работы = 1 тайм-доллар.
+          </FooterDesc>
+          <FooterSocials>
             <SocialButton platform="facebook" url="https://www.facebook.com/yourpage" />
             <SocialButton platform="twitter" url="https://www.twitter.com/yourpage" />
             <SocialButton platform="linkedin" url="https://www.linkedin.com/yourpage" />
             <SocialButton platform="instagram" url="https://www.instagram.com/yourpage" />
             <SocialButton platform="github" url="https://github.com/yourpage" />
-          </div>
-        </div>
+          </FooterSocials>
+        </FooterSection>
 
         {/* Навигация */}
-        <div className="footer-section">
-          <h4>Навигация</h4>
-          <ul className="footer-links">
-            <li><button onClick={() => navigate('/')}>Главная</button></li>
-            <li><button onClick={() => navigate('/executors')}>Специалисты</button></li>
-            <li><button onClick={() => navigate('/services')}>Услуги</button></li>
-            <li><button onClick={() => navigate('/about')}>О проекте</button></li>
-          </ul>
-        </div>
+        <FooterSection>
+          <Typography variant="h4">Навигация</Typography>
+          <FooterLinks>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/')}>Главная</FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/executors')}>
+                Специалисты
+              </FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/services')}>Услуги</FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/about')}>О проекте</FooterLinkButton>
+            </FooterLinkItem>
+          </FooterLinks>
+        </FooterSection>
 
         {/* Полезные ссылки */}
-        <div className="footer-section">
-          <h4>Полезное</h4>
-          <ul className="footer-links">
-            <li><button onClick={() => navigate('/how-it-works')}>Как это работает</button></li>
-            <li><button onClick={() => navigate('/faq')}>FAQ</button></li>
-            <li><button onClick={() => navigate('/rules')}>Правила</button></li>
-            <li><button onClick={() => navigate('/support')}>Поддержка</button></li>
-          </ul>
-        </div>
+        <FooterSection>
+          <Typography variant="h4">Полезное</Typography>
+          <FooterLinks>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/how-it-works')}>
+                Как это работает
+              </FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/faq')}>FAQ</FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/rules')}>Правила</FooterLinkButton>
+            </FooterLinkItem>
+            <FooterLinkItem>
+              <FooterLinkButton onClick={() => navigate('/support')}>Поддержка</FooterLinkButton>
+            </FooterLinkItem>
+          </FooterLinks>
+        </FooterSection>
 
         {/* Контакты и статистика */}
-        <div className="footer-section">
-          <h4>Контакты</h4>
-          <div className="footer-contacts">
-            <p>📧 info@timebank.ru</p>
-            <p>📞 +7 (999) 123-45-67</p>
-          </div>
-          
-          <div className="footer-stats">
-            <span className="footer-stat">
-              <b>500+</b> Участников
-            </span>
-            <span className="footer-stat">
-              <b className="stat-green">1000+</b> Услуг
-            </span>
-          </div>
-        </div>
-      </div>
+        <FooterSection>
+          <Typography variant="h4">Контакты</Typography>
+          <FooterContacts>
+            <Typography>📧 info@timebank.ru</Typography>
+            <Typography>📞 +7 (999) 123-45-67</Typography>
+          </FooterContacts>
+          <FooterStats>
+            <Box component="span" className="footer-stat">
+              <FooterStatBold>500+</FooterStatBold> Участников
+            </Box>
+            <Box component="span" className="footer-stat">
+              <StatGreen>1000+</StatGreen> Услуг
+            </Box>
+          </FooterStats>
+        </FooterSection>
+      </FooterContent>
 
       {/* Нижняя часть футера */}
-      <div className="footer-bottom">
-        <div className="footer-bottom-content">
-          <p>© 2025 Банк Времени. Все права защищены.</p>
-          <div className="footer-legal">
-            <button onClick={() => navigate('/privacy')}>Политика конфиденциальности</button>
-            <button onClick={() => navigate('/terms')}>Условия использования</button>
-          </div>
-        </div>
-      </div>
-    </footer>
+      <FooterBottom>
+        <FooterBottomContent>
+          <Typography>© 2025 Банк Времени. Все права защищены.</Typography>
+          <Stack direction="row" spacing={2} className="footer-legal">
+            <FooterLegalButton onClick={() => navigate('/privacy')}>
+              Политика конфиденциальности
+            </FooterLegalButton>
+            <FooterLegalButton onClick={() => navigate('/terms')}>
+              Условия использования
+            </FooterLegalButton>
+          </Stack>
+        </FooterBottomContent>
+      </FooterBottom>
+    </FooterContainer>
   );
 };
