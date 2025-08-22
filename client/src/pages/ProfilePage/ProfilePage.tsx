@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { fetchUserSkills } from '@/entities/user/model/userThunk';
 import { fetchUserTasks, fetchUserExecutedTasks } from '@/entities/tasks/model/tasksThunk';
 import UserCalendar from '@/widgets/calendar/ui/profileCalendar';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchUserById } from '@/entities/user/model/userThunk';
 import ProfileEditForm from '@/widgets/UserProfileForm/ui/ProfilePageEdit';
+import { fetchReviewsByUserId } from '@/entities/reviews/model/reviewThunk';
 import './ProfilePage.css';
 import { Avatar } from '@mui/material';
 
@@ -17,28 +18,25 @@ export default function ProfilePage(): React.JSX.Element {
   const { skills, status, viewingUser, viewingUserSkills } = useAppSelector((state) => state.user);
   const tasks = useAppSelector((state) => state.tasks.tasks);
   const executedTasks = useAppSelector((state) => state.tasks.executedTasks);
+  const { reviews, averageRating } = useAppSelector((state) => state.review);
 
   // Определяем, чей профиль показывается
   const isOwnerProfile = !userId || Number(userId) === currentUser?.id;
 
   const profileUser = isOwnerProfile ? currentUser : viewingUser;
   const profileSkills = isOwnerProfile ? skills : viewingUserSkills;
+  const navigate = useNavigate();
 
   const [isOwner, setIsOwner] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  const mockReviews = [
-    { id: 1, text: 'Отличный преподаватель!', rating: 5 },
-    { id: 2, text: 'Все было понятно и интересно', rating: 4 },
-    { id: 3, text: 'Нормально, но можно лучше', rating: 3 },
-    { id: 4, text: 'Очень помог разобраться в теме', rating: 5 },
-  ];
 
   const getAvailableDates = (dates: string | string[] | null | undefined): Date[] => {
     if (!dates) return [];
     if (Array.isArray(dates)) return dates.map((date) => new Date(date));
     return [new Date(dates)];
   };
+
+  const { id } = useParams<{ id: string }>();
 
   const handleEditSuccess = (): void => {
     setIsEditing(false);
@@ -59,6 +57,7 @@ export default function ProfilePage(): React.JSX.Element {
 
     void dispatch(fetchUserExecutedTasks(targetUserId));
     void dispatch(fetchUserTasks(targetUserId));
+    void dispatch(fetchReviewsByUserId(targetUserId));
 
     if (isViewingOwnProfile) {
       void dispatch(fetchUserSkills(targetUserId));
@@ -76,9 +75,9 @@ export default function ProfilePage(): React.JSX.Element {
     return <div className="profile-notfound">User not found</div>;
   }
 
-  // Вычисление среднего рейтинга
-  const avgRating =
-    mockReviews.reduce((acc, review) => acc + review.rating, 0) / (mockReviews.length || 1);
+  // Вычисление среднего рейтинга из реальных данных
+  const avgRating = averageRating?.averageRating ?? 0;
+  const totalReviews = averageRating?.totalReviews ?? 0;
   const stars = Array.from({ length: 5 }, (_, i) => (i < Math.floor(avgRating) ? '★' : '☆'));
 
   return (
@@ -95,8 +94,8 @@ export default function ProfilePage(): React.JSX.Element {
             <div className="profile-info">
               <h2>{profileUser.name}</h2>
               <p>Баланс: {profileUser.balance} TD</p>
-              <p>Город: {profileUser.city || 'Не указан'}</p>
-              <p>Часовой пояс: {profileUser.timezone || 'Не указан'}</p>
+              <p>Город: {profileUser.city ?? 'Не указан'}</p>
+              <p>Часовой пояс: {profileUser.timezone ?? 'Не указан'}</p>
             </div>
           </div>
 
@@ -114,7 +113,7 @@ export default function ProfilePage(): React.JSX.Element {
           <div className="profile-reviews-summary">
             <div className="profile-stars">{stars.join('')}</div>
             <p className="profile-avg">
-              {avgRating.toFixed(1)}/5 ({mockReviews.length} отзывов)
+              {avgRating.toFixed(1)}/5 ({totalReviews} отзывов)
             </p>
           </div>
         </div>
@@ -186,9 +185,10 @@ export default function ProfilePage(): React.JSX.Element {
 
               <div className="profile-section">
                 <h3>Мои задания</h3>
+                  {!id && <button className="profile-btn" onClick={() => navigate('/tasks')}>Посмотреть все задания</button>}
                 <div>
                   {tasks.map((task) => (
-                    <div className="profile-task-item" key={task.id}>
+                    <div className="profile-task-item" key={task.id} onClick={() => navigate(`/orders/${task.id}`)} style={{ cursor: 'pointer' }}>
                       <h4>{task.title}</h4>
                       <p>{task.description}</p>
                       <p className="profile-task-status">Статус: {task.status}</p>
@@ -207,14 +207,17 @@ export default function ProfilePage(): React.JSX.Element {
         <section className="profile-reviews-section">
           <h3>Отзывы</h3>
           <div className="profile-reviews-list">
-            {mockReviews.slice(-3).map((review) => (
+            {reviews.slice(-3).map((review) => (
               <article className="profile-review-item" key={review.id}>
                 <div className="profile-review-stars">
                   {'★'.repeat(review.rating) + '☆'.repeat(5 - review.rating)}
                 </div>
-                <p className="profile-review-text">{review.text}</p>
+                <p className="profile-review-text">{review.comment ?? 'Без комментария'}</p>
+                <p className="profile-review-author">— {review.author.name}</p>
+                {review.Task && <p className="profile-review-task">Задание: {review.Task.title}</p>}
               </article>
             ))}
+            {reviews.length === 0 && <p>Отзывов пока нет</p>}
           </div>
         </section>
       )}

@@ -2,19 +2,10 @@ import { fetchAllExecutors } from '@/entities/executors/model/executorThunk';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Avatar,
-  Chip,
-  Skeleton,
-  Divider,
-  Tooltip,
-  IconButton,
-} from '@mui/material';
-import { Schedule as TimeIcon, Work as SkillsIcon, Refresh } from '@mui/icons-material';
+import { Box, Typography, Avatar, Chip, Skeleton, Divider, Rating } from '@mui/material';
+import { Schedule as TimeIcon, Work as SkillsIcon, Star } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import './ExecutorsPage.css';
+import { fetchAverageRating } from '@/entities/reviews/model/reviewThunk';
 
 type Skill = {
   id: number;
@@ -31,9 +22,14 @@ type Executor = {
   about: string;
 };
 
+type ExecutorWithRating = Executor & {
+  averageRating?: number;
+  totalReviews?: number;
+};
+
 type ExecutorsState = {
   status: 'loading' | 'done' | 'reject';
-  executors: Executor[];
+  executors: ExecutorWithRating[];
   error: string | null;
 };
 
@@ -45,12 +41,45 @@ export default function ExecutorsPage(): React.JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { status, executors, error } = useAppSelector((state: RootState) => state.executors);
+  const [executorsWithRatings, setExecutorsWithRatings] = React.useState<ExecutorWithRating[]>([]);
 
   React.useEffect(() => {
     document.title = 'Исполнители'
     void dispatch(fetchAllExecutors());
     void dispatch(fetchUser());
   }, [dispatch]);
+
+  // Fetch ratings for all executors
+  React.useEffect(() => {
+    const fetchRatings = async () => {
+      if (executors.length > 0) {
+        const executorsWithRatingsData = await Promise.all(
+          executors.map(async (executor) => {
+            try {
+              const response = await fetch(`/api/reviews/rating/${executor.id}`);
+              const ratingData = await response.json();
+              return {
+                ...executor,
+                averageRating: ratingData.averageRating,
+                totalReviews: ratingData.totalReviews,
+              };
+            } catch (error) {
+              return {
+                ...executor,
+                averageRating: 0,
+                totalReviews: 0,
+              };
+            }
+          }),
+        );
+        setExecutorsWithRatings(executorsWithRatingsData);
+      }
+    };
+
+    if (status === 'done') {
+      void fetchRatings();
+    }
+  }, [executors, status]);
 
   if (status === 'loading') {
     return (
@@ -80,18 +109,18 @@ export default function ExecutorsPage(): React.JSX.Element {
         Наши исполнители
       </Typography>
 
-      {executors.length > 0 ? (
+      {executorsWithRatings.length > 0 ? (
         <Box className="executors-list">
-          {executors.map((executor) => (
+          {executorsWithRatings.map((executor) => (
             <Box
               key={executor.id}
               role="button"
               tabIndex={0}
               className="executor-card"
-              onClick={() => navigate(`/profile/${executor.id}`)}
+              onClick={() => navigate(`/profile/${executor.id.toString()}`)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  navigate(`/profile/${executor.id}`);
+                  navigate(`/profile/${executor.id.toString()}`);
                 }
               }}
             >
@@ -108,6 +137,21 @@ export default function ExecutorsPage(): React.JSX.Element {
                   <Typography className="executor-email" variant="body2">
                     {executor.email}
                   </Typography>
+
+                  {/* Review Rating Display */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                    <Rating
+                      value={executor.averageRating ?? 0}
+                      readOnly
+                      size="small"
+                      precision={0.1}
+                      emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      {executor.averageRating?.toFixed(1) ?? '0.0'} ({executor.totalReviews ?? 0}{' '}
+                      отзывов)
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
 

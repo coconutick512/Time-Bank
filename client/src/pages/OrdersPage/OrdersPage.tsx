@@ -69,6 +69,7 @@ import {
   OrdersSkeletonRect,
 } from './OrdersPage.styles';
 import type { TasksState } from '@/entities/tasks/types/schema';
+import { create } from 'domain';
 
 type RootState = {
   tasks: TasksState;
@@ -94,7 +95,7 @@ export default function OrdersPage(): React.JSX.Element {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [page] = useState(1);
+  const [page , setPage] = useState(1);
   const itemsPerPage = 8;
 
   useEffect(() => {
@@ -109,6 +110,7 @@ export default function OrdersPage(): React.JSX.Element {
     hours: '',
     status: 'open' as TaskStatus,
     deadline: '',
+    created_at: new Date(),
     categories: [] as number[],
   });
 
@@ -136,6 +138,7 @@ export default function OrdersPage(): React.JSX.Element {
       hours: '',
       status: 'open',
       deadline: '',
+      created_at: new Date(),
       categories: [],
     });
   };
@@ -343,7 +346,11 @@ export default function OrdersPage(): React.JSX.Element {
                       ? 'Открыто'
                       : task.status === 'assigned'
                       ? 'Назначено'
-                      : 'Завершено'
+                      : task.status === 'running'
+                      ? 'В процессе'
+                      : task.status === 'completed'
+                      ? 'Завершено'
+                      : 'Проверка'
                   }
                   color={getStatusColor(typeof task.status === 'string' ? task.status : 'default')}
                   size="small"
@@ -476,19 +483,7 @@ export default function OrdersPage(): React.JSX.Element {
             margin="normal"
             inputProps={{ min: 0 }}
           />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Статус</InputLabel>
-            <Select
-              label="Статус"
-              value={newTask.status}
-              onChange={(e) => handleNewTaskChange('status', e.target.value)}
-              size="small"
-            >
-              <MenuItem value="open">Открытые</MenuItem>
-              <MenuItem value="assigned">Назначенные</MenuItem>
-              <MenuItem value="completed">Завершенные</MenuItem>
-            </Select>
-          </FormControl>
+          
           <FormControl fullWidth margin="normal">
             <InputLabel>Категории</InputLabel>
             <Select

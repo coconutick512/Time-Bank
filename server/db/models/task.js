@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       status: {
-        type: DataTypes.ENUM('open', 'assigned', 'completed', 'canceled'),
+        type: DataTypes.ENUM('open', 'assigned', 'completed', 'running'),
         defaultValue: 'open',
       },
 
@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: [],
       },
+      
     },
     {
       sequelize,
