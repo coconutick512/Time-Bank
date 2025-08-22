@@ -3,4 +3,4 @@ WORKDIR /app
 COPY package*.json ./
 COPY . .
 RUN npm ci --omit=dev
-CMD ["npm", "start"]
+CMD ["npm","run", "start:prod"]
