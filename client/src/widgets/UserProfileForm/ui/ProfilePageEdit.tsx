@@ -41,6 +41,7 @@ export default function ProfileEditForm({
     city: user.city ?? '',
     timezone: user.timezone ?? '',
     about: user.about ?? '',
+    avatar: user.avatar ?? '',
     availableDates: user.availableDates ?? [],
   });
   const [selectedSkills, setSelectedSkills] = useState<number[]>(
@@ -73,8 +74,8 @@ export default function ProfileEditForm({
       console.log('Sending skillIds:', selectedSkills);
       console.log('Sending skillIds JSON:', JSON.stringify(selectedSkills || []));
 
-      await dispatch(updateProfile(formDataToSend)).unwrap();
-      await dispatch(fetchUser()).unwrap();
+      await dispatch(updateProfile(formDataToSend))
+      await dispatch(fetchUser())
 
       onSuccess();
     } catch (error) {
@@ -108,15 +109,15 @@ export default function ProfileEditForm({
     }
   };
 
-  const handleDateChange = (date: Date, isSelected: boolean): void => {
-    const dateStr = date.toISOString();
-    setFormData((prev) => ({
-      ...prev,
-      availableDates: isSelected
-        ? [...prev.availableDates, dateStr]
-        : prev.availableDates.filter((d) => d !== dateStr),
-    }));
-  };
+  // const handleDateChange = (date: Date, isSelected: boolean): void => {
+  //   const dateStr = date.toISOString();
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     availableDates: isSelected
+  //       ? [...prev.availableDates, dateStr]
+  //       : prev.availableDates.filter((d) => d !== dateStr),
+  //   }));
+  // };
 
   const handleSkillToggle = (skillId: number): void => {
     setSelectedSkills((prev) =>
@@ -265,57 +266,7 @@ export default function ProfileEditForm({
           </Box>
         </Box>
 
-        {/* Available Dates Section */}
-        <Box>
-          <InputLabel sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>
-            Доступные даты
-          </InputLabel>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Выберите даты, когда вы доступны для выполнения задач
-          </Typography>
-          <TextField
-            type="date"
-            onChange={(e) => {
-              const date = new Date(e.target.value);
-              handleDateChange(date, true);
-            }}
-            variant="outlined"
-            fullWidth
-            sx={{ bgcolor: 'white' }}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
-              Выбранные даты:
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {formData.availableDates.map((dateStr) => (
-                <Box
-                  key={`date-${dateStr}`}
-                  sx={{
-                    bgcolor: 'primary.light',
-                    color: 'primary.dark',
-                    px: 2,
-                    py: 0.5,
-                    borderRadius: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    fontSize: '0.875rem',
-                  }}
-                >
-                  {new Date(dateStr).toLocaleDateString()}
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDateChange(new Date(dateStr), false)}
-                    sx={{ ml: 1, color: 'primary.main' }}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        </Box>
+       
 
         {/* Action Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pt: 3 }}>

@@ -90,13 +90,23 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
   const hasSkillsError = skillsStatus === 'reject';
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div 
+  className="modal-overlay" 
+  onClick={(e) => {
+    // Полностью предотвращаем поведение по умолчанию и всплытие
+    e.preventDefault();
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+  }}
+  onMouseDown={(e) => {
+    // Также блокируем событие onMouseDown
+    e.preventDefault();
+    e.stopPropagation();
+  }}
+>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Заполните профиль</h2>
-          <button className="modal-close" onClick={onClose}>
-            ×
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="profile-form">
