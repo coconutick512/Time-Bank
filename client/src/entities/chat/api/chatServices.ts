@@ -21,6 +21,12 @@ export class ChatService {
     try {
       const response = await axiosInstance.get(`/chats/${taskId.toString()}`);
       console.log('____+_+_+_+_+_+_+_+_+_', response.data);
+      
+      // If no chat exists, create one
+      if (response.data === null) {
+        return await this.createChat(taskId);
+      }
+      
       const validData = ChatSchema.parse(response.data);
       return validData;
     } catch (error) {

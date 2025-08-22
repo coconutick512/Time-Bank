@@ -14,7 +14,7 @@ export const MainHeader = styled(Box)(({ theme }) => ({
   alignItems: 'flex-start',
   gap: '90px',
   background: 'none',
-  padding: '58px 0 54px 0',
+  padding: '58px 0 0 0',
   [theme.breakpoints.down(1050)]: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -137,7 +137,7 @@ export const MainHeaderRight = styled(Grid)(({ theme }) => ({
 // How it works section
 export const MainHow = styled(Container)(({ theme }) => ({
   background: 'aliceblue',
-  marginBottom:'2rem',
+  marginBottom: '2rem',
   borderRadius: '2rem',
   padding: '36px 0 44px 0',
   display: 'flex',
@@ -205,8 +205,8 @@ export const MainWhy = styled(Container)(({ theme }) => ({
   justifyContent: 'center',
   gap: '90px',
   padding: '52px 0 44px 0',
-  borderRadius:'2rem',
-  backgroundColor:'aliceblue',
+  borderRadius: '2rem',
+  backgroundColor: 'aliceblue',
   [theme.breakpoints.down(1050)]: {
     flexDirection: 'column',
     alignItems: 'center',

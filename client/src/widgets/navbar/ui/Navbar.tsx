@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
 import './Navbar.styles';
 import mail from '@/public/mail.png';
-import ship from '@/public/ship.png';
+import ship from '@/public/watches.svg';
 type NavbarProps = {
   userBalance?: number;
   currentLanguage: string;
@@ -217,9 +217,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     </Box>
   );
 
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
+  // if (status === 'loading') {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <>
       <AppBar
@@ -253,10 +253,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               '&:hover': { opacity: 0.8 },
             }}
           >
-            <img style={{ width: '45px', paddingRight: '1rem' }} src={ship}></img>
+            <img style={{ width: '32px', paddingRight: '1rem' }} src={ship}></img>
 
             <Typography variant="h6" fontWeight="bold" noWrap>
-              Skill Harbour
+              Time Bank
             </Typography>
           </Box>
 

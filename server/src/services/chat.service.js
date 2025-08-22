@@ -11,19 +11,21 @@ class ChatService {
       throw error;
     }
   }
+  
   static async getChats(taskId) {
-    try {
-      
-      const chats = await Chat.findOne({
-        where: {
-          taskId,
-        },
-      });
-      return chats;
-    } catch (error) {
-      console.error("Error fetching chats:", error);  
-      throw error;
+    console.log("_________________", taskId);
+    let chat = await Chat.findOne({
+      where: {
+        taskId,
+      },
+    });
+    
+    // If chat doesn't exist, create it
+    if (!chat) {
+      chat = await Chat.create({ taskId: taskId });
     }
+    
+    return chat;
   }
 }
 

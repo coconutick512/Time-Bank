@@ -60,7 +60,7 @@ export const CreateReviewForm: React.FC<CreateReviewFormProps> = ({
   return (
     <Paper elevation={3} sx={{ p: 3, maxWidth: 500, mx: 'auto' }}>
       <Typography variant="h6" gutterBottom>
-        Review for {targetUserName}
+        Отзыв для {targetUserName}
       </Typography>
 
       {error && (
@@ -72,7 +72,7 @@ export const CreateReviewForm: React.FC<CreateReviewFormProps> = ({
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ mb: 2 }}>
           <Typography component="legend" gutterBottom>
-            Rating *
+            Ваша оценка:
           </Typography>
           <Rating
             name="rating"
@@ -94,7 +94,7 @@ export const CreateReviewForm: React.FC<CreateReviewFormProps> = ({
               message: 'Comment must be at least 10 characters long',
             },
           })}
-          label="Comment"
+          label="Комментарий"
           multiline
           rows={4}
           fullWidth
@@ -105,12 +105,12 @@ export const CreateReviewForm: React.FC<CreateReviewFormProps> = ({
 
         <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
           <Button type="submit" variant="contained" disabled={isSubmitting || !rating} fullWidth>
-            {isSubmitting ? 'Submitting...' : 'Submit Review'}
+            {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
           </Button>
 
           {onCancel && (
             <Button variant="outlined" onClick={onCancel} disabled={isSubmitting} fullWidth>
-              Cancel
+              Отменить
             </Button>
           )}
         </Box>

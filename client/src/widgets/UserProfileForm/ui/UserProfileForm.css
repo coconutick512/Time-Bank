@@ -241,8 +241,8 @@
 }
 
 /* Дополнительные стили для обеспечения черного текста */
-input[type="text"],
-input[type="file"],
+input[type='text'],
+input[type='file'],
 select,
 textarea {
   color: #000 !important;
@@ -255,7 +255,7 @@ textarea::placeholder {
 
 /* Для автозаполнения в некоторых браузера */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
@@ -274,15 +274,15 @@ select:-webkit-autofill:focus {
     padding: 1.5rem;
     margin: 10px;
   }
-  
+
   .modal-header h2 {
     font-size: 1.5rem;
   }
-  
+
   .skills-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
-  
+
   .submit-button {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;

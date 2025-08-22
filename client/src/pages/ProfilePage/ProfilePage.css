@@ -1,31 +1,37 @@
 /* Общий фон и корень */
-.profile-root,
-.profile-content {
-  max-width: 1200px;
+.profile-root{
   margin: 48px auto;
   background: transparent;
   display: flex;
-  gap: 40px;
   flex-wrap: wrap;
+  gap:1rem;
   justify-content: center;
   color: #18191c;
+  /* border: rgb(17, 0, 255) solid; */
+
 }
 
 /* Header пользователя */
 .profile-header {
+  /* border: rgb(0, 255, 30) solid; */
+  background-color: aliceblue;
   display: flex;
   flex-direction: row;
   gap: 28px;
-  align-items: flex-start;
   border-radius: 22px;
   box-shadow: 0 2px 14px rgba(9, 11, 20, 0.485);
-  padding: 36px 38px;
+  padding: 1rem;
   min-width: 370px;
+  position: relative;
 }
 
 .profile-avatar {
-  width: 106px;
-  height: 106px;
+  /* border: rgb(81, 0, 255) solid; */
+  position: absolute;
+  top:1%;
+  right: 5%;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   box-shadow: 0 2px 10px rgba(120, 130, 140, 0.08);
   object-fit: cover;
@@ -33,64 +39,47 @@
   background: #f5f7fa;
 }
 
+.profile-col{
+  display: inline;
+  
+}
 .profile-basic {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  /* border: rgb(183, 0, 255) solid; */
+
   align-items: flex-start;
 }
 
 .profile-basic h2 {
+  
   font-size: 2rem;
   font-weight: 600;
   margin: 2px 0;
 }
 
 .profile-basic p {
+  
   font-size: 1.09rem;
   color: #646c7a;
   margin: 0 0 2px 0;
 }
-
-.profile-btns {
-  margin-top: 17px;
-  display: flex;
-  gap: 11px;
-}
-.profile-btn,
-.profile-btn-alt {
-  font-size: 0.97rem;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-weight: 500;
-  border: none;
-  background: #18191c;
-  color: #fff;
-  transition: background 0.13s;
-  cursor: pointer;
-}
-.profile-btn:hover,
-.profile-btn-alt:hover {
-  background: #29292e;
-}
-.profile-btn-alt {
-  background: #4370f7;
-}
-.profile-btn-alt:hover {
-  background: #2948c6;
-}
-
 /* Рейтинг и отзывы */
 .profile-reviews-summary {
+
+  /* border: rgb(0, 255, 98) solid; */
+
   margin: 21px 0 0 0;
   text-align: left;
 }
 .profile-stars {
+  /* border: rgb(251, 0, 255) solid; */
+
   color: #fdcd3b;
   letter-spacing: 2px;
   font-size: 1.13rem;
 }
 .profile-avg {
+  /* border: rgb(234, 255, 0) solid; */
+
   color: #232b36;
   margin-top: 3px;
   font-size: 1.04rem;
@@ -98,32 +87,56 @@
 
 /* Основной контент профиля */
 .profile-mainArea {
+  /* border: rgb(194, 128, 199) solid; */
   display: flex;
-  flex-wrap: wrap;
-  gap: 44px;
-  margin-top: 38px;
-  justify-content: center;
-  
+  gap: 2rem;
 }
 
 .profile-col {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 1rem;
   min-width: 330px;
   max-width: 440px;
-  flex: 1 1 350px;
 }
 
+.profile-about {
+  background: aliceblue;
+  border-radius: 1.5rem;
+  box-shadow: 0 1.5px 10px rgba(6, 7, 11, 0.357);
+  /* border: #0c45f1 solid 10px; */
+  height: auto; /* Ensure height adjusts to content */
+  padding: 1rem; /* Consistent padding */
+  max-width: 440px; /* Set maximum width to prevent overstretching */
+  width: 100%; /* Allow it to take available width up to max-width */
+  box-sizing: border-box; /* Ensure padding and border are included in width */
+  overflow-wrap: break-word; /* Ensure text wraps, even for long words */
+  white-space: normal; /* Allow normal text wrapping behavior */
+}
+
+.profile-second-column{
+  /* border: #22c47c solid; */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-third-column{
+  /* border: #22c47c solid; */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 .profile-section {
-  background: #fff;
-  border-radius: 18px;
+  background: aliceblue;
+  border-radius: 1.5rem;
   box-shadow: 0 1.5px 10px rgba(6, 7, 11, 0.357);
   padding: 28px 22px 24px 22px;
+  /* border: #18191c solid 10px; */
 }
 
 .profile-section h3 {
-  font-size: 1.11rem;
+  font-size: 1rem;
   margin-bottom: 8px;
   color: #222;
   font-weight: 600;
@@ -174,11 +187,12 @@
 
 /* Reviews */
 .profile-reviews-section {
-  margin-top: 36px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 10px rgba(70, 90, 140, 0.09);
-  padding: 24px 18px 12px 19px;
+  /* border: rgb(200, 255, 0) solid; */
+
+  background: aliceblue;
+  border-radius: 1.5rem;
+  box-shadow: 0 1.5px 10px rgba(6, 7, 11, 0.357);
+  padding: 24px 1.5rem 12px 19px;
   max-width: 540px;
 }
 .profile-review-item {
@@ -203,6 +217,33 @@
   font-size: 1.33rem;
 }
 
+.profile-btns {
+  margin-top: 17px;
+  display: flex;
+  gap: 11px;
+}
+.profile-btn,
+.profile-btn-alt {
+  font-size: 0.97rem;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-weight: 500;
+  border: none;
+  background: #18191c;
+  color: aliceblue;
+  transition: background 0.13s;
+  cursor: pointer;
+}
+.profile-btn:hover,
+.profile-btn-alt:hover {
+  background: #29292e;
+}
+.profile-btn-alt {
+  background: #4370f7;
+}
+.profile-btn-alt:hover {
+  background: #2948c6;
+}
 @media (max-width: 950px) {
   .profile-content,
   .profile-mainArea {
