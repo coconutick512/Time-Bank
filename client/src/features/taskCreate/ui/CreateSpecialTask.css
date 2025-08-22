@@ -50,7 +50,6 @@
   border-radius: 12px;
   padding: 10px 14px;
   font-size: 1rem;
-  font-family: inherit;
   color: #1e293b;
   resize: vertical; /* Позволяет менять размер textarea по вертикали */
   transition: border-color 0.15s ease;
@@ -80,7 +79,6 @@
   cursor: pointer;
   border: none;
   transition: background-color 0.2s ease;
-  font-family: inherit;
 }
 
 .modal-btn-cancel {

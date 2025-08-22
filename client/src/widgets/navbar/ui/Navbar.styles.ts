@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 
 // StyledAppBar remains fixed but we’ll account for its height in the content
 export const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: 'lightgrey',
+  backgroundColor: 'cyan',
   color: '#111827',
   borderBottom: '1px solid #e5e7eb',
   paddingTop: '8px',

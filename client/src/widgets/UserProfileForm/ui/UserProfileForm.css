@@ -114,7 +114,6 @@
 .form-textarea {
   resize: vertical;
   min-height: 100px;
-  font-family: inherit;
   color: #000; /* Черный текст в textarea */
 }
 

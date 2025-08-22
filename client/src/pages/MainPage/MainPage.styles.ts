@@ -1,6 +1,5 @@
 import { Box, Button, Card, Container, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
 // Root container for the MainPage
 export const MainRoot = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -37,35 +36,19 @@ export const MainHeaderLeft = styled(Box)(({ theme }) => ({
 
 // Header title
 export const MainHeaderTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '3.15rem',
+  fontSize: '3rem',
+  textAlign: 'center',
   fontWeight: 600,
   margin: '10px 0 16px 0',
-  lineHeight: 1.12,
-  letterSpacing: '-0.5px',
   color: '#18191c',
-  [theme.breakpoints.down(600)]: {
-    fontSize: '1.73rem',
-  },
 }));
-
-// Blue text
-export const BlueText = styled('span')({
-  color: '#4061ef',
-});
-
-// Green-blue text
-export const GreenBlueText = styled('span')({
-  color: '#22c47c',
-});
 
 // Header description
 export const MainDesc = styled(Typography)(({ theme }) => ({
   color: '#555e6c',
-  fontSize: '1.18rem',
+  textAlign: 'center',
+  fontSize: '1rem',
   marginBottom: '42px',
-  [theme.breakpoints.down(600)]: {
-    fontSize: '1rem',
-  },
 }));
 
 // Button group
@@ -74,22 +57,16 @@ export const MainButtons = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   gap: '18px',
   marginBottom: '38px',
-  [theme.breakpoints.down(600)]: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '12px',
-  },
 }));
 
 // Primary button
 export const PrimaryButton = styled(Button)(({ theme }) => ({
   fontWeight: 500,
-  fontSize: '1.08rem',
+  fontSize: '1rem',
   borderRadius: '9px',
   padding: '14px 33px',
   cursor: 'pointer',
   outline: 'none',
-  border: 'none',
   transition: 'box-shadow 0.13s, background 0.13s',
   margin: '0 3px',
   boxShadow: '0 1.5px 9px rgba(35, 40, 66, 0.88)',
@@ -106,7 +83,7 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
 // Secondary button
 export const SecondaryButton = styled(Button)(({ theme }) => ({
   fontWeight: 500,
-  fontSize: '1.08rem',
+  fontSize: '1rem',
   borderRadius: '9px',
   padding: '14px 33px',
   cursor: 'pointer',
@@ -120,9 +97,6 @@ export const SecondaryButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     background: '#ebefff',
   },
-  [theme.breakpoints.down(600)]: {
-    width: '100%',
-  },
 }));
 
 // Stats section
@@ -131,7 +105,7 @@ export const MainStats = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   gap: '40px',
   marginTop: '22px',
-  fontSize: '1.07rem',
+  fontSize: '1rem',
   color: '#565d65',
   [theme.breakpoints.down(600)]: {
     flexDirection: 'column',
@@ -162,20 +136,18 @@ export const MainHeaderRight = styled(Grid)(({ theme }) => ({
 
 // How it works section
 export const MainHow = styled(Container)(({ theme }) => ({
-  background: 'none',
+  background: 'aliceblue',
+  marginBottom:'2rem',
+  borderRadius: '2rem',
   padding: '36px 0 44px 0',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  [theme.breakpoints.down(600)]: {
-    padding: '24px 0',
-  },
 }));
 
 // How it works description
 export const MainHowDesc = styled(Typography)(({ theme }) => ({
-  color: '#626f81',
-  fontSize: '1.11rem',
+  fontSize: '1rem',
   margin: '11px 0 22px 0',
   [theme.breakpoints.down(600)]: {
     fontSize: '1rem',
@@ -205,6 +177,7 @@ export const MainCard = styled(Card)(({ theme }) => ({
   padding: '32px 19px 27px 19px',
   minWidth: '220px',
   maxWidth: '270px',
+  height: '250px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -220,7 +193,7 @@ export const MainCard = styled(Card)(({ theme }) => ({
 
 // Card icon
 export const MainCardIcon = styled(Box)(({ theme }) => ({
-  fontSize: '2.65rem',
+  fontSize: '2.5rem',
   marginBottom: '13px',
 }));
 
@@ -232,6 +205,8 @@ export const MainWhy = styled(Container)(({ theme }) => ({
   justifyContent: 'center',
   gap: '90px',
   padding: '52px 0 44px 0',
+  borderRadius:'2rem',
+  backgroundColor:'aliceblue',
   [theme.breakpoints.down(1050)]: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -250,8 +225,7 @@ export const MainWhyLeft = styled(Box)(({ theme }) => ({
 
 // Why description
 export const WhyDesc = styled(Typography)(({ theme }) => ({
-  color: '#527',
-  fontSize: '1.08rem',
+  fontSize: '1rem',
   margin: '13px 0 20px 0',
   [theme.breakpoints.down(600)]: {
     fontSize: '1rem',
@@ -263,7 +237,7 @@ export const WhyList = styled('ul')(({ theme }) => ({
   margin: '0 0 30px 19px',
   padding: 0,
   color: '#2b3136',
-  fontSize: '1.07rem',
+  fontSize: '1rem',
   lineHeight: 1.7,
   '& li': {
     marginBottom: '9px',
@@ -276,7 +250,7 @@ export const WhyButton = styled(Button)(({ theme }) => ({
   color: '#fff',
   borderRadius: '8px',
   padding: '14px 34px',
-  fontSize: '1.07rem',
+  fontSize: '1rem',
   fontWeight: 500,
   border: 'none',
   marginTop: '19px',
@@ -315,7 +289,7 @@ export const SafetyCard = styled(Card)(({ theme }) => ({
 
 // Safety icon (unused but included)
 export const SafetyIcon = styled(Box)({
-  fontSize: '2.14rem',
+  fontSize: '2rem',
   color: '#4061ef',
   alignSelf: 'flex-start',
 });
