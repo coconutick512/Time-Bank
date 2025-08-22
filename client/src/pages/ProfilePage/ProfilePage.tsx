@@ -87,11 +87,11 @@ export default function ProfilePage(): React.JSX.Element {
       <div className="profile-header">
         <div className="profile-header-content">
           <div className="profile-avatar-section">
-            <Avatar
-                  src={`http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`}
-                  className="executor-avatar"
-                  alt={profileUser.name}
-                />
+            <img
+              src={`http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`}
+              className="profile-avatar"
+              alt={profileUser.name}
+            />
             <div className="profile-info">
               <h2>{profileUser.name}</h2>
               <p>Баланс: {profileUser.balance} TD</p>
@@ -117,10 +117,14 @@ export default function ProfilePage(): React.JSX.Element {
               {avgRating.toFixed(1)}/5 ({mockReviews.length} отзывов)
             </p>
           </div>
+          <div className="profile-about">
+            <h3>О себе</h3>
+            <p>{profileUser.about ?? 'Нет информации'}</p>
+          </div>
         </div>
       </div>
 
-      <main className="profile-mainArea">
+      <div className="profile-mainArea">
         {isEditing && isOwner ? (
           <ProfileEditForm
             user={profileUser}
@@ -130,81 +134,79 @@ export default function ProfilePage(): React.JSX.Element {
           />
         ) : (
           <>
-            <section className="profile-col">
-              <div className="profile-section">
-                <h3>О себе</h3>
-                <p>{profileUser.about ?? 'Нет информации'}</p>
-              </div>
+            <div className="profile-second-column">
+              <div className="profile-col">
+                <div className="profile-section">
+                  <h3>Навыки</h3>
+                  <div className="profile-skills-list">
+                    {profileSkills?.skills.map((skill) => (
+                      <span className="profile-skill-badge" key={skill.id}>
+                        {skill.name}
+                      </span>
+                    ))}
+                    {(!profileSkills?.skills || profileSkills.skills.length === 0) && (
+                      <p>Навыки не указаны</p>
+                    )}
+                  </div>
+                </div>
 
-              <div className="profile-section">
-                <h3>Навыки</h3>
-                <div className="profile-skills-list">
-                  {profileSkills?.skills.map((skill) => (
-                    <span className="profile-skill-badge" key={skill.id}>
-                      {skill.name}
-                    </span>
-                  ))}
-                  {(!profileSkills?.skills || profileSkills.skills.length === 0) && (
-                    <p>Навыки не указаны</p>
-                  )}
+                <div className="profile-section">
+                  <h3>Информация</h3>
+                  <p>
+                    Участник с{' '}
+                    {profileUser.created_at
+                      ? new Date(profileUser.created_at).toLocaleDateString()
+                      : 'Дата регистрации неизвестна'}
+                  </p>
                 </div>
               </div>
-
-              <div className="profile-section">
-                <h3>Информация</h3>
-                <p>
-                  Участник с{' '}
-                  {profileUser.created_at
-                    ? new Date(profileUser.created_at).toLocaleDateString()
-                    : 'Дата регистрации неизвестна'}
-                </p>
-              </div>
-            </section>
-
-            <section className="profile-col">
-              <div className="profile-section">
-                <h3>{isOwner ? 'Управление расписанием' : 'Доступные даты'}</h3>
-                <UserCalendar
-                  userId={currentUser?.id ?? 0}
-                  profileOwnerId={profileUser.id}
-                  bookedDates={executedTasks.flatMap((t) => {
-                    if (!t.bookedDates) return [];
-                    if (Array.isArray(t.bookedDates)) {
-                      return t.bookedDates.map((date) => new Date(date));
-                    }
-                    return [new Date(t.bookedDates)];
-                  })}
-                  availableDates={getAvailableDates(profileUser.availableDates)}
-                  onChangeAvailableDates={(dates) => {
-                    const isoStrings = dates.map((d) => d.toISOString());
-                    console.log('Selected dates:', isoStrings);
-                    // TODO: Save available dates if owner
-                  }}
-                  isOwnerView={isOwner}
-                />
-              </div>
-
-              <div className="profile-section">
-                <h3>Мои задания</h3>
-                <div>
-                  {tasks.map((task) => (
-                    <div className="profile-task-item" key={task.id}>
-                      <h4>{task.title}</h4>
-                      <p>{task.description}</p>
-                      <p className="profile-task-status">Статус: {task.status}</p>
-                    </div>
-                  ))}
-                  {tasks.length === 0 && <p>Задания не найдены</p>}
-                </div>
-              </div>
-            </section>
+            </div>
           </>
         )}
-      </main>
+      </div>
+      <div className="profile-third-column">
+        <div className="profile-col">
+          <div className="profile-section">
+            <h3>{isOwner ? 'Управление расписанием' : 'Доступные даты'}</h3>
+            <UserCalendar
+              userId={currentUser?.id ?? 0}
+              profileOwnerId={profileUser.id}
+              bookedDates={executedTasks.flatMap((t) => {
+                if (!t.bookedDates) return [];
+                if (Array.isArray(t.bookedDates)) {
+                  return t.bookedDates.map((date) => new Date(date));
+                }
+                return [new Date(t.bookedDates)];
+              })}
+              availableDates={getAvailableDates(profileUser.availableDates)}
+              onChangeAvailableDates={(dates) => {
+                const isoStrings = dates.map((d) => d.toISOString());
+                console.log('Selected dates:', isoStrings);
+                // TODO: Save available dates if owner
+              }}
+              isOwnerView={isOwner}
+            />
+          </div>
+
+          <div className="profile-section">
+            <h3>Мои задания</h3>
+            <div>
+              {tasks.map((task) => (
+                <div className="profile-task-item" key={task.id}>
+                  <h4>{task.title}</h4>
+                  <p>{task.description}</p>
+                  <p className="profile-task-status">Статус: {task.status}</p>
+                </div>
+              ))}
+              {tasks.length === 0 && <p>Задания не найдены</p>}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Reviews Section for non-owners */}
       {!isOwner && (
-        <section className="profile-reviews-section">
+        <div className="profile-reviews-section">
           <h3>Отзывы</h3>
           <div className="profile-reviews-list">
             {mockReviews.slice(-3).map((review) => (
@@ -216,7 +218,7 @@ export default function ProfilePage(): React.JSX.Element {
               </article>
             ))}
           </div>
-        </section>
+        </div>
       )}
     </div>
   );
