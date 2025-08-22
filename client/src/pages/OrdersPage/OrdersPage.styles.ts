@@ -6,7 +6,6 @@ export const OrdersRoot = styled(Box)(({ theme }) => ({
   maxWidth: '1200px',
   margin: '36px auto',
   padding: '24px 20px',
-  fontFamily: '"Inter", "Segoe UI", Arial, sans-serif',
   color: '#18191c',
   backgroundColor: 'transparent',
   [theme.breakpoints.down(600)]: {

@@ -44,7 +44,7 @@ export default function MainPage(): React.JSX.Element {
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
               <MainHeaderTitle variant="h3">
-                Обменивайтесь навыками за время, а не деньги
+                Обменивайтесь навыками за время, а не деньгами
               </MainHeaderTitle>
               <MainDesc variant="body1">
                 Твоя гавань для бартера навыками — без оплаты, только обучение.

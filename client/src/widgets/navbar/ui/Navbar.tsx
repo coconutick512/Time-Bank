@@ -27,8 +27,9 @@ import {
 import { logoutUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { RootState } from '@/app/store';
-;
-
+import './Navbar.styles';
+import mail from '@/public/mail.png';
+import ship from '@/public/ship.png';
 type NavbarProps = {
   userBalance?: number;
   currentLanguage: string;
@@ -75,7 +76,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 mr: 2,
               }}
             >
-              <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+              <img
+                src={
+                  user.avatar
+                    ? `http://localhost:3000/api/uploads/avatars/${user.avatar}`
+                    : '/default-avatar.png'
+                }
+                alt="avatar"
+                style={{ width: '100%', height: '100%', borderRadius: '50%' }}
+              />
             </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight="bold">
@@ -217,9 +226,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         position="sticky"
         elevation={0}
         sx={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'rgba(109, 109, 109, 0)', // Slightly more transparent for a glass-like look
+          backdropFilter: 'blur(10px)', // Blur effect for the frosted glass
+          webkitBackdropFilter: 'blur(10px)', // For Safari compatibility,
           color: '#111827',
-          borderBottom: '1px solid #e5e7eb',
           py: 1,
         }}
       >
@@ -243,22 +253,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               '&:hover': { opacity: 0.8 },
             }}
           >
-            <Box
-              sx={{
-                width: 36,
-                height: 36,
-                bgcolor: '#3b82f6',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 1.5,
-              }}
-            >
-              <Clock color="#ffffff" size={20} />
-            </Box>
+            <img style={{ width: '45px', paddingRight: '1rem' }} src={ship}></img>
+
             <Typography variant="h6" fontWeight="bold" noWrap>
-              Банк Времени
+              Skill Harbour
             </Typography>
           </Box>
 
@@ -268,7 +266,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             </IconButton>
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-             
+              {/* Поиск */}
+              <Button
+                variant="text"
+                onClick={() => navigate('/tasks')}
+                sx={{
+                  color: '#111827',
+                  '&:hover': { backgroundColor: '#f3f4f6' },
+                }}
+              >
+                <img style={{ width: '25px' }} src={mail}></img>
+              </Button>
 
               {user ? (
                 <>
@@ -318,7 +326,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                         mr: 1.5,
                       }}
                     >
-                      <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
+                      <img
+                        src={
+                          user.avatar
+                            ? `http://localhost:3000/api/uploads/avatars/${user.avatar}`
+                            : '/default-avatar.png'
+                        }
+                        alt="avatar"
+                        style={{ width: '100%', height: '100%', borderRadius: '50%' }}
+                      />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />
@@ -380,8 +396,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </Button>
                 </>
               )}
-
-              
             </Box>
           )}
         </Toolbar>

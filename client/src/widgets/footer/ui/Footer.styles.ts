@@ -2,17 +2,13 @@ import { Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const FooterContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: 'lightgrey',
-  fontFamily: '"Inter", "Segoe UI", Arial, sans-serif',
+  backgroundColor: 'rgba(109, 109, 109, 0.12)',
+  backdropFilter: 'blur(10px)', 
+  webkitBackdropFilter: 'blur(10px)',
   color: '#18191c',
   width: '100vw',
   margin: 0,
-  position: 'relative',
-  left: '50%',
-  right: '50%',
-  marginLeft: '-50vw',
-  marginRight: '-50vw',
-  paddingTop: '20px'
+  paddingTop: '50px',  
 }));
 
 export const FooterContent = styled(Box)(({ theme }) => ({
@@ -29,15 +25,12 @@ export const FooterContent = styled(Box)(({ theme }) => ({
 }));
 
 export const FooterSection = styled(Box)({
-  flex: '1 1 200px',
   minWidth: '180px',
 });
 
 export const FooterTitle = styled(Typography)({
-  fontSize: '2.4rem',
   fontWeight: 700,
   marginBottom: '14px',
-  lineHeight: 1.1,
 });
 
 export const BlueSpan = styled('span')({
@@ -45,9 +38,7 @@ export const BlueSpan = styled('span')({
 });
 
 export const FooterDesc = styled(Typography)({
-  fontSize: '1.1rem',
   color: '#555f6d',
-  lineHeight: 1.45,
   maxWidth: '300px',
   marginBottom: '16px',
 });
@@ -110,7 +101,6 @@ export const StatGreen = styled('b')({
 
 export const FooterBottom = styled(Box)({
   paddingTop: '20px',
-  backgroundColor: 'lightgrey',
   width: '100vw',
   margin: 0,
   position: 'relative',
@@ -122,7 +112,7 @@ export const FooterBottom = styled(Box)({
 
 export const FooterBottomContent = styled(Box)(({ theme }) => ({
   maxWidth: '1200px',
-  paddingBottom:"2rem",
+  paddingBottom: '2rem',
   margin: '0 auto',
   display: 'flex',
   justifyContent: 'space-between',
