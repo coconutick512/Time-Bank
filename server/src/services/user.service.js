@@ -93,9 +93,10 @@ class AuthService {
   static async updateProfile(userId, data) {
     const user = await User.update(
       {
+        name: data.name,
         avatar: data.avatar,
         city: data.city,
-        timezone: data.time,
+        timezone: data.timezone,
         about: data.about,
       },
       { where: { id: userId } }

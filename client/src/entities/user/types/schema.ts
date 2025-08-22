@@ -62,6 +62,8 @@ export type UserState = {
   viewingUserSkills: UserSkillsResponse | null;
 };
 export const UserAncetaSchema = z.object({
+  name: z.string().min(1, 'Имя обязательно'),
+  timezone: z.string().optional(),
   avatar: z.string().optional(),
   time: z.any().optional(),
   about: z.string().optional(),
@@ -76,7 +78,7 @@ export const UserAncetaResponseSchema = z.object({
 export const UserSkillsResponseSchema = z.object({
   skills: z.array(z.object({ id: z.number(), name: z.string() })),
 });
-export type UserSkillsResponse = z.infer<typeof UserSkillsResponseSchema>;
+export type UserSkillsResponse = z.infer<typeof UserAncetaSchema>;
 export type AncetaResponse = z.infer<typeof UserAncetaResponseSchema>;
 
 export type UserAncetaResponse = z.infer<typeof UserAncetaResponseSchema>;

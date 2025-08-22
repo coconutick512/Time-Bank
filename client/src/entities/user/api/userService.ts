@@ -1,4 +1,4 @@
-import type { AncetaResponse, UserLogin, ProfileUpdateResponse } from '../types/schema';
+import type { AncetaResponse, UserLogin, ProfileUpdateResponse, UserAnceta } from '../types/schema';
 import {
   UserSchema,
   UserAncetaResponseSchema,
@@ -105,9 +105,9 @@ export const UserService = {
     }
   },
 
-  submitAnceta: async (formData: FormData): Promise<AncetaResponse> => {
+  submitAnceta: async (formData: FormData): Promise<UserAnceta> => {
     try {
-      const response = await axiosInstance.post<AncetaResponse>('/auth/submitForm', formData, {
+      const response = await axiosInstance.post<UserAnceta>('/auth/submitForm', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

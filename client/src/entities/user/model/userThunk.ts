@@ -7,6 +7,7 @@ import type {
   UserResponse,
   AncetaResponse,
   ProfileUpdateResponse,
+  UserAnceta,
 } from '../types/schema';
 import type { UserOnlyResponse } from '../api/userService';
 
@@ -44,7 +45,7 @@ export const scoreUser = createAsyncThunk(
 );
 export const submitAnceta = createAsyncThunk(
   'user/submitAnceta',
-  async (formData: FormData): Promise<AncetaResponse> => {
+  async (formData: FormData): Promise<UserAnceta> => {
     const res = await UserService.submitAnceta(formData);
     return res;
   },

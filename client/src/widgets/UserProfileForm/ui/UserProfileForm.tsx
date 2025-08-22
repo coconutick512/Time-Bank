@@ -22,11 +22,13 @@ export const UserProfileForm = ({ onClose }: { onClose: () => void }): React.JSX
     error: skillsError,
   } = useAppSelector((state) => state.skills);
 
+  const {user} = useAppSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     city: '',
     timezone: '',
     teachingCategories: [] as number[],
-    avatarFile: null as File | null,
+    avatarFile: user.avatar ? user.avatar : null,
     bio: '',
   });
 
