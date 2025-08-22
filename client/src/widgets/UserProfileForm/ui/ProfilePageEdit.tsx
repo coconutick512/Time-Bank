@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { fetchUser, updateProfile } from '@/entities/user/model/userThunk';
+import { fetchAllSkills } from '@/entities/skills/model/skillsThunk';
 import type { User } from '@/entities/user/types/schema';
 import type { Skill } from '@/entities/skills/types/schema';
 import {
@@ -45,14 +46,20 @@ export default function ProfileEditForm({
     availableDates: user.availableDates ?? [],
   });
   const [selectedSkills, setSelectedSkills] = useState<number[]>(
-    skills?.map((skill) => skill.id) || [],
+    user.skills?.map((skill) => skill.id) || [],
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : null,
   );
-  const currentUser = useAppSelector((state) => state.user.user);
+
+  useEffect(() => {
+    // обновлять selectedSkills если skills или user меняются
+    if (user.skills) {
+      setSelectedSkills(user.skills.map((skill) => skill.id));
+    }
+  }, [user.skills]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -69,14 +76,12 @@ export default function ProfileEditForm({
 
       if (selectedFile) {
         formDataToSend.append('avatar', selectedFile);
+      } else if (formData.avatar) {
+        formDataToSend.append('avatar', formData.avatar);
       }
 
-      console.log('Sending skillIds:', selectedSkills);
-      console.log('Sending skillIds JSON:', JSON.stringify(selectedSkills || []));
-
-      await dispatch(updateProfile(formDataToSend))
-      await dispatch(fetchUser())
-
+      await dispatch(updateProfile(formDataToSend));
+      await dispatch(fetchUser());
       onSuccess();
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -107,27 +112,24 @@ export default function ProfileEditForm({
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+    setFormData((prev) => ({ ...prev, avatar: '' }));
   };
-
-  // const handleDateChange = (date: Date, isSelected: boolean): void => {
-  //   const dateStr = date.toISOString();
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     availableDates: isSelected
-  //       ? [...prev.availableDates, dateStr]
-  //       : prev.availableDates.filter((d) => d !== dateStr),
-  //   }));
-  // };
 
   const handleSkillToggle = (skillId: number): void => {
     setSelectedSkills((prev) =>
       prev.includes(skillId) ? prev.filter((id) => id !== skillId) : [...prev, skillId],
     );
   };
+
+  const handleChange = (field: string, value: string): void => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
   const status = useAppSelector((state) => state.user.status);
   if (status === 'loading') {
     return <div>Loading...</div>;
   }
+
   return (
     <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, bgcolor: 'white' }}>
       <Typography variant="h5" component="h3" gutterBottom sx={{ color: 'text.primary' }}>
@@ -141,9 +143,7 @@ export default function ProfileEditForm({
       >
         {/* Avatar Section */}
         <Box>
-          <InputLabel sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>
-            Фото профиля
-          </InputLabel>
+          <InputLabel sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Фото профиля</InputLabel>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar
               src={previewUrl || undefined}
@@ -198,7 +198,7 @@ export default function ProfileEditForm({
         <TextField
           label="Имя"
           value={formData.name}
-          onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+          onChange={(e) => handleChange('name', e.target.value)}
           variant="outlined"
           fullWidth
           required
@@ -209,7 +209,7 @@ export default function ProfileEditForm({
         <TextField
           label="Город"
           value={formData.city}
-          onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
+          onChange={(e) => handleChange('city', e.target.value)}
           variant="outlined"
           fullWidth
           sx={{ bgcolor: 'white' }}
@@ -220,14 +220,14 @@ export default function ProfileEditForm({
           <InputLabel>Часовой пояс</InputLabel>
           <Select
             value={formData.timezone}
-            onChange={(e) => setFormData((prev) => ({ ...prev, timezone: e.target.value }))}
+            onChange={(e) => handleChange('timezone', e.target.value)}
             label="Часовой пояс"
           >
             <MenuItem value="">Выберите часовой пояс</MenuItem>
             <MenuItem value="UTC">UTC</MenuItem>
             <MenuItem value="Europe/Moscow">Europe/Moscow</MenuItem>
-            <MenuItem value="America/New_York">America/NewYork</MenuItem>
-            <MenuItem value="America/LosAngeles">America/LosAngeles</MenuItem>
+            <MenuItem value="America/New_York">America/New York</MenuItem>
+            <MenuItem value="America/Los_Angeles">America/Los Angeles</MenuItem>
             <MenuItem value="Asia/Tokyo">Asia/Tokyo</MenuItem>
             <MenuItem value="Australia/Sydney">Australia/Sydney</MenuItem>
           </Select>
@@ -237,7 +237,7 @@ export default function ProfileEditForm({
         <TextField
           label="О себе"
           value={formData.about}
-          onChange={(e) => setFormData((prev) => ({ ...prev, about: e.target.value }))}
+          onChange={(e) => handleChange('about', e.target.value)}
           variant="outlined"
           fullWidth
           multiline
@@ -249,7 +249,7 @@ export default function ProfileEditForm({
         {/* Skills Section */}
         <Box>
           <InputLabel sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Навыки</InputLabel>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, maxHeight: 200, overflowY: 'auto' }}>
             {skills.map((skill) => (
               <FormControlLabel
                 key={skill.id}
@@ -266,9 +266,7 @@ export default function ProfileEditForm({
           </Box>
         </Box>
 
-       
-
-        {/* Action Buttons */}
+        {/* Submit Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pt: 3 }}>
           <Button
             variant="outlined"
