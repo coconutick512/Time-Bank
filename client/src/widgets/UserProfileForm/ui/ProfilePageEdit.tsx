@@ -123,9 +123,9 @@ export default function ProfileEditForm({
   };
 
   const status = useAppSelector((state) => state.user.status);
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
+  // if (status === 'loading') {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <Paper elevation={3} sx={{ maxWidth: 600, mx: 'auto', p: 4, bgcolor: 'white' }}>

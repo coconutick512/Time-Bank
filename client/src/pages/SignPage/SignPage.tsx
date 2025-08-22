@@ -160,9 +160,9 @@ function SignPage(): React.JSX.Element {
     reset();
   };
 
-  if (userLoading === 'loading' ) {
-    return <div>Загрузка...</div>;
-  }
+  // if (userLoading === 'loading' ) {
+  //   return <div>Загрузка...</div>;
+  // }
 
   return (
     <div className="sign-root">

@@ -29,12 +29,15 @@ export const TaskSchema = z.object({
       }
       return val;
     }),
-  categories: z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-    }),
-  ).nullable().optional()
+  categories: z
+    .array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+    )
+    .nullable()
+    .optional(),
 });
 
 export type CreateTaskData = {
@@ -105,6 +108,7 @@ export const TasksStateSchema = z.object({
       name: z.string(),
     }),
   ),
+  autoSelectTaskId: z.number().nullable(), // Add this new field
 });
 
 export type TasksState = z.infer<typeof TasksStateSchema>;

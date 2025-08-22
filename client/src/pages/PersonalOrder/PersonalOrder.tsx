@@ -65,7 +65,7 @@ export default function PersonalOrder(): React.JSX.Element {
 
   const handleExecutorSave = (data: TaskUpdate): void => {
     void dispatch(editTask(data));
-    window.location.reload();
+    void dispatch(fetchTask(personalTask.id));
   };
 
   if (status === 'loading' || !personalTask) {
@@ -89,16 +89,16 @@ export default function PersonalOrder(): React.JSX.Element {
           </Typography>
           <Chip
             label={
-                    personalTask.status === 'open'
-                      ? 'Открыто'
-                      : personalTask.status === 'assigned'
-                      ? 'Назначено'
-                      : personalTask.status === 'running'
-                      ? 'В процессе'
-                      : personalTask.status === 'completed'
-                      ? 'Завершено'
-                      : 'Проверка'
-                  }
+              personalTask.status === 'open'
+                ? 'Открыто'
+                : personalTask.status === 'assigned'
+                ? 'Назначено'
+                : personalTask.status === 'running'
+                ? 'В процессе'
+                : personalTask.status === 'completed'
+                ? 'Завершено'
+                : 'Проверка'
+            }
             color={
               personalTask.status === 'completed'
                 ? 'success'
@@ -127,7 +127,7 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         </Box>
 
-        {personalTask.categories.length > 0 && (
+        {/* {personalTask.categories.length > 0 && (
           <Box className="po-categories-section">
             <Typography variant="subtitle2" className="po-categories-title">
               <Category fontSize="small" />
@@ -209,9 +209,9 @@ export default function PersonalOrder(): React.JSX.Element {
               </Box>
             )}
           </Box>
-        )}
+        )} */}
 
-        {personalTask.creatorId === user?.id && personalTask.status === 'open' && (
+        {/* {personalTask.creatorId === user?.id && personalTask.status === 'open' && (
           <>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
               <Button onClick={() => setIsEditOpen(true)}>Редактировать</Button>
@@ -229,7 +229,7 @@ export default function PersonalOrder(): React.JSX.Element {
               </Button>
             </Box>
           </>
-        )}
+        )} */}
 
         {personalTask.status === 'open' && personalTask.creatorId !== user?.id && (
           <Box className="po-btns-row">
@@ -244,11 +244,11 @@ export default function PersonalOrder(): React.JSX.Element {
           </Box>
         )}
       </Box>
-      {personalTask.status !== 'open' &&
+      {/* {personalTask.status !== 'open' &&
         chatId &&
         (personalTask.creatorId === user?.id || personalTask.executorId === user?.id) && (
           <ChatWindow chatId={chatId} userId={user?.id ?? 0} />
-        )}
+        )} */}
       <EditTaskModal
         open={isEditOpen}
         onClose={() => setIsEditOpen(false)}

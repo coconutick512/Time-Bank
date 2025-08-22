@@ -47,7 +47,7 @@ export default function MainPage(): React.JSX.Element {
                 Обменивайтесь навыками за время, а не деньгами
               </MainHeaderTitle>
               <MainDesc variant="body1">
-                Твоя гавань для бартера навыками — без оплаты, только обучение.
+                Первый в России сервис для бартера навыками — без денежной оплаты, только время.
               </MainDesc>
               <MainButtons>
                 <PrimaryButton variant="contained" onClick={() => navigate('/executors')}>

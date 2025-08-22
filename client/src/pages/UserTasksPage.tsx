@@ -12,22 +12,33 @@ import {
   Avatar,
   CircularProgress,
   Alert,
+  Button,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
-import { fetchUserTasks, fetchUserExecutedTasks } from '@/entities/tasks/model/tasksThunk';
+import {
+  fetchUserTasks,
+  fetchUserExecutedTasks,
+  editTask,
+} from '@/entities/tasks/model/tasksThunk';
 import { fetchChat } from '@/entities/chat/model/chatThunk';
+import { createReview } from '@/entities/reviews/model/reviewThunk';
 import { ChatWindow } from '@/widgets/chat/taskChat';
+import { ReviewModal } from '@/features/reviewModal/ui/ReviewModal';
 import type { Task } from '@/entities/tasks/types/schema';
 import type { RootState } from '@/app/store';
+import { clearAutoSelectTaskId } from '@/entities/tasks/model/tasksSlice';
 
 const UserTasksPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state: RootState) => state.user);
-  const { tasks, executedTasks, status, error } = useAppSelector((state: RootState) => state.tasks);
-  const { chat } = useAppSelector((state: RootState) => state.chat);
+  const { tasks, executedTasks, status, error, autoSelectTaskId } = useAppSelector(
+    (state: RootState) => state.tasks,
+  );
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [completedTaskForReview, setCompletedTaskForReview] = useState<Task | null>(null);
 
   useEffect(() => {
     if (user?.id) {
@@ -36,26 +47,119 @@ const UserTasksPage: React.FC = () => {
     }
   }, [dispatch, user?.id]);
 
-  const handleTaskSelect = async (task: Task) => {
+  // Auto-select task when autoSelectTaskId is set
+  useEffect(() => {
+    if (autoSelectTaskId && tasks.length > 0) {
+      const taskToSelect = tasks.find((task) => task.id === autoSelectTaskId);
+      if (taskToSelect) {
+        void handleTaskSelect(taskToSelect);
+        dispatch(clearAutoSelectTaskId()); // Clear the auto-select state
+      }
+    }
+  }, [autoSelectTaskId, tasks, dispatch]);
+
+  const handleTaskSelect = async (task: Task): Promise<void> => {
     setSelectedTask(task);
     try {
-      // Fetch chat for the selected task
-      const chat = await dispatch(fetchChat(task.id)).unwrap();
-      setSelectedChatId(chat.id);
+      const chatData = await dispatch(fetchChat(task.id)).unwrap();
+      setSelectedChatId(chatData.id);
     } catch (error) {
       console.error('Failed to fetch chat:', error);
       setSelectedChatId(null);
     }
   };
 
+  const handleStartTask = async (task: Task): Promise<void> => {
+    try {
+      await dispatch(
+        editTask({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          status: 'running',
+          executorId: task.executorId,
+        }),
+      ).unwrap();
+
+      if (user?.id) {
+        void dispatch(fetchUserTasks(user.id));
+        void dispatch(fetchUserExecutedTasks(user.id));
+      }
+
+      setSelectedTask({ ...task, status: 'running' });
+    } catch (error) {
+      console.error('Failed to start task:', error);
+    }
+  };
+
+  const handleCompleteTask = async (task: Task): Promise<void> => {
+    try {
+      await dispatch(
+        editTask({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          status: 'completed',
+          executorId: task.executorId,
+        }),
+      ).unwrap();
+
+      if (user?.id) {
+        void dispatch(fetchUserTasks(user.id));
+        void dispatch(fetchUserExecutedTasks(user.id));
+      }
+
+      setSelectedTask({ ...task, status: 'completed' });
+
+      // Show review modal for the executor
+      if (task.executorId && task.executorId !== user?.id) {
+        setCompletedTaskForReview(task);
+        setShowReviewModal(true);
+      }
+    } catch (error) {
+      console.error('Failed to complete task:', error);
+    }
+  };
+
+  const handleCancelTask = async (task: Task): Promise<void> => {
+    try {
+      await dispatch(
+        editTask({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          status: 'open',
+          executorId: task.executorId,
+        }),
+      ).unwrap();
+
+      if (user?.id) {
+        void dispatch(fetchUserTasks(user.id));
+        void dispatch(fetchUserExecutedTasks(user.id));
+      }
+
+      setSelectedTask({ ...task, status: 'open' });
+    } catch (error) {
+      console.error('Failed to cancel task:', error);
+    }
+  };
+
+  const handleReviewSuccess = (): void => {
+    setShowReviewModal(false);
+    setCompletedTaskForReview(null);
+    console.log('Review submitted successfully!');
+  };
+
   const getStatusColor = (
-    status: string,
+    taskStatus: string,
   ): 'primary' | 'warning' | 'success' | 'error' | 'default' => {
-    switch (status) {
+    switch (taskStatus) {
       case 'open':
         return 'primary';
       case 'assigned':
         return 'warning';
+      case 'running':
+        return 'info';
       case 'completed':
         return 'success';
       case 'canceled':
@@ -65,22 +169,24 @@ const UserTasksPage: React.FC = () => {
     }
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
+  const getStatusText = (taskStatus: string): string => {
+    switch (taskStatus) {
       case 'open':
         return 'Открыта';
       case 'assigned':
         return 'Назначена';
+      case 'running':
+        return 'В процессе';
       case 'completed':
         return 'Завершена';
       case 'canceled':
         return 'Отменена';
       default:
-        return status;
+        return taskStatus;
     }
   };
 
-  const formatDate = (dateString: string) =>
+  const formatDate = (dateString: string): string =>
     new Date(dateString).toLocaleDateString('ru-RU', {
       year: 'numeric',
       month: 'long',
@@ -105,7 +211,6 @@ const UserTasksPage: React.FC = () => {
     );
   }
 
-  // Combine user tasks and executed tasks, removing duplicates
   const allUserTasks = [
     ...tasks,
     ...executedTasks.filter((executedTask) => !tasks.some((task) => task.id === executedTask.id)),
@@ -134,10 +239,10 @@ const UserTasksPage: React.FC = () => {
                 {allUserTasks.map((task, index) => (
                   <React.Fragment key={task.id}>
                     <ListItem
-                      button
                       onClick={() => handleTaskSelect(task)}
                       selected={selectedTask?.id === task.id}
                       sx={{
+                        cursor: 'pointer',
                         '&:hover': {
                           backgroundColor: 'action.hover',
                         },
@@ -217,7 +322,7 @@ const UserTasksPage: React.FC = () => {
                     <Typography variant="subtitle2" color="textSecondary">
                       Описание
                     </Typography>
-                    <Typography variant="body1" paragraph>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
                       {selectedTask.description}
                     </Typography>
                   </Grid>
@@ -249,18 +354,74 @@ const UserTasksPage: React.FC = () => {
                         Категории
                       </Typography>
                       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {selectedTask.categories.map((category) => (
+                        {selectedTask.categories?.map((category) => (
                           <Chip
                             key={category.id}
                             label={category.name}
                             size="small"
                             variant="outlined"
                           />
-                        ))}
+                        )) ?? <Typography variant="body2">Нет категорий</Typography>}
                       </Box>
                     </Box>
                   </Grid>
                 </Grid>
+
+                {/* Task Management Buttons */}
+                {user && (
+                  <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                    {/* Start Task Button - Only for assigned tasks where user is creator */}
+                    {selectedTask.status === 'assigned' && selectedTask.creatorId === user.id && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleStartTask(selectedTask)}
+                      >
+                        Начать работу
+                      </Button>
+                    )}
+
+                    {/* Complete Task Button - Only for running tasks where user is creator */}
+                    {selectedTask.status === 'running' && selectedTask.creatorId === user.id && (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => handleCompleteTask(selectedTask)}
+                      >
+                        Завершить
+                      </Button>
+                    )}
+
+                    {/* Cancel Task Button - Only for assigned/running tasks where user is creator */}
+                    {(selectedTask.status === 'assigned' || selectedTask.status === 'running') &&
+                      selectedTask.creatorId === user.id && (
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => handleCancelTask(selectedTask)}
+                        >
+                          Отменить
+                        </Button>
+                      )}
+
+                    {/* Review Button - Only for completed tasks where user is creator and there's an executor */}
+                    {selectedTask.status === 'completed' &&
+                      selectedTask.creatorId === user.id &&
+                      selectedTask.executorId &&
+                      selectedTask.executorId !== user.id && (
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => {
+                            setCompletedTaskForReview(selectedTask);
+                            setShowReviewModal(true);
+                          }}
+                        >
+                          Оставить отзыв
+                        </Button>
+                      )}
+                  </Box>
+                )}
               </Paper>
 
               {/* Chat Section */}
@@ -292,6 +453,21 @@ const UserTasksPage: React.FC = () => {
           )}
         </Grid>
       </Grid>
+
+      {/* Review Modal */}
+      {completedTaskForReview && user && (
+        <ReviewModal
+          open={showReviewModal}
+          onClose={() => {
+            setShowReviewModal(false);
+            setCompletedTaskForReview(null);
+          }}
+          taskId={completedTaskForReview.id}
+          targetUserId={completedTaskForReview.executorId!}
+          targetUserName={`исполнителя задачи "${completedTaskForReview.title}"`}
+          onSuccess={handleReviewSuccess}
+        />
+      )}
     </Box>
   );
 };
