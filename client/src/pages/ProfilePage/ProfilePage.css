@@ -28,6 +28,7 @@
 .profile-avatar {
   /* border: rgb(81, 0, 255) solid; */
   position: absolute;
+  top:1%;
   right: 5%;
   width: 140px;
   height: 140px;
