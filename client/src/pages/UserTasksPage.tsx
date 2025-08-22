@@ -26,11 +26,14 @@ import { ChatWindow } from '@/widgets/chat/taskChat';
 import { ReviewModal } from '@/features/reviewModal/ui/ReviewModal';
 import type { Task } from '@/entities/tasks/types/schema';
 import type { RootState } from '@/app/store';
+import { clearAutoSelectTaskId } from '@/entities/tasks/model/tasksSlice';
 
 const UserTasksPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state: RootState) => state.user);
-  const { tasks, executedTasks, status, error } = useAppSelector((state: RootState) => state.tasks);
+  const { tasks, executedTasks, status, error, autoSelectTaskId } = useAppSelector(
+    (state: RootState) => state.tasks,
+  );
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
@@ -43,6 +46,17 @@ const UserTasksPage: React.FC = () => {
       void dispatch(fetchUserExecutedTasks(user.id));
     }
   }, [dispatch, user?.id]);
+
+  // Auto-select task when autoSelectTaskId is set
+  useEffect(() => {
+    if (autoSelectTaskId && tasks.length > 0) {
+      const taskToSelect = tasks.find((task) => task.id === autoSelectTaskId);
+      if (taskToSelect) {
+        void handleTaskSelect(taskToSelect);
+        dispatch(clearAutoSelectTaskId()); // Clear the auto-select state
+      }
+    }
+  }, [autoSelectTaskId, tasks, dispatch]);
 
   const handleTaskSelect = async (task: Task): Promise<void> => {
     setSelectedTask(task);
@@ -450,7 +464,7 @@ const UserTasksPage: React.FC = () => {
           }}
           taskId={completedTaskForReview.id}
           targetUserId={completedTaskForReview.executorId!}
-          targetUserName={`исполнителя задачи "${completedTaskForReview.title}"`}
+          targetUserName={`Исполнитель задачи "${completedTaskForReview.title}"`}
           onSuccess={handleReviewSuccess}
         />
       )}

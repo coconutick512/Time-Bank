@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
-import { createTask, deleteTask, editTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
+import {
+  createTask,
+  deleteTask,
+  editTask,
+  fetchAllTasks,
+  fetchCategories,
+  fetchTask,
+} from './tasksThunk';
 import { createSpecialTask, fetchUserTasks, fetchUserExecutedTasks } from './tasksThunk';
 
 const initialState: TasksState = {
@@ -10,12 +17,20 @@ const initialState: TasksState = {
   error: null,
   personalTask: null,
   categories: [],
+  autoSelectTaskId: null, // Add this new field
 };
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    setAutoSelectTaskId: (state, action) => {
+      state.autoSelectTaskId = action.payload;
+    },
+    clearAutoSelectTaskId: (state) => {
+      state.autoSelectTaskId = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllTasks.pending, (state) => {
@@ -81,6 +96,7 @@ const tasksSlice = createSlice({
       .addCase(createSpecialTask.fulfilled, (state, action) => {
         state.status = 'done';
         state.tasks = state.tasks.concat(action.payload);
+        state.autoSelectTaskId = action.payload.id; // Set the newly created task ID
       })
       .addCase(createSpecialTask.rejected, (state, action) => {
         state.status = 'reject';
@@ -138,6 +154,8 @@ const tasksSlice = createSlice({
     // });
   },
 });
+
+export const { setAutoSelectTaskId, clearAutoSelectTaskId } = tasksSlice.actions;
 
 export default tasksSlice.reducer;
 

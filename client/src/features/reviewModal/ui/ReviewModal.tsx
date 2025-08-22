@@ -12,14 +12,14 @@ import {
 import { Close } from '@mui/icons-material';
 import { CreateReviewForm } from '@/features/reviewCreate/ui/CreateReviewForm';
 
-interface ReviewModalProps {
+type ReviewModalProps = {
   open: boolean;
   onClose: () => void;
   taskId: number;
   targetUserId: number;
   targetUserName: string;
   onSuccess?: () => void;
-}
+};
 
 export const ReviewModal: React.FC<ReviewModalProps> = ({
   open,
@@ -46,7 +46,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     >
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Напишите отзыв:</Typography>
+          <Typography variant="h6">Write a Review</Typography>
           <IconButton onClick={onClose} size="small">
             <Close />
           </IconButton>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/hooks';
 import { createSpecialTask, fetchCategories } from '@/entities/tasks/model/tasksThunk';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   FormControl,
@@ -35,6 +36,7 @@ export default function CreateTaskModal({
   bookedDate,
 }: Props): React.JSX.Element | null {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
   const { categories, status } = useAppSelector((state) => state.tasks);
 
@@ -80,6 +82,9 @@ export default function CreateTaskModal({
           setDeadline('');
           setHours('');
           setSelectedCategories([]);
+
+          // Navigate to UserTasksPage after successful creation
+          navigate('/tasks');
         }
       })
       .then(() => void dispatch(fetchUser()));

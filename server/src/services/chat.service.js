@@ -5,14 +5,21 @@ class ChatService {
     const chat = await Chat.create({ taskId: taskId });
     return chat;
   }
+  
   static async getChats(taskId) {
     console.log("_________________", taskId);
-    const chats = await Chat.findOne({
+    let chat = await Chat.findOne({
       where: {
         taskId,
       },
     });
-    return chats;
+    
+    // If chat doesn't exist, create it
+    if (!chat) {
+      chat = await Chat.create({ taskId: taskId });
+    }
+    
+    return chat;
   }
 }
 

@@ -89,16 +89,16 @@ export default function PersonalOrder(): React.JSX.Element {
           </Typography>
           <Chip
             label={
-                    personalTask.status === 'open'
-                      ? 'Открыто'
-                      : personalTask.status === 'assigned'
-                      ? 'Назначено'
-                      : personalTask.status === 'running'
-                      ? 'В процессе'
-                      : personalTask.status === 'completed'
-                      ? 'Завершено'
-                      : 'Проверка'
-                  }
+              personalTask.status === 'open'
+                ? 'Открыто'
+                : personalTask.status === 'assigned'
+                ? 'Назначено'
+                : personalTask.status === 'running'
+                ? 'В процессе'
+                : personalTask.status === 'completed'
+                ? 'Завершено'
+                : 'Проверка'
+            }
             color={
               personalTask.status === 'completed'
                 ? 'success'

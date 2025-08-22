@@ -53,7 +53,7 @@ export default function ProfilePage(): React.JSX.Element {
 
     void dispatch(fetchUserExecutedTasks(targetUserId));
     void dispatch(fetchUserTasks(targetUserId));
-
+    
     // Fetch reviews for the profile user
     void dispatch(fetchReviewsByUserId(targetUserId));
     void dispatch(fetchAverageRating(targetUserId));
@@ -66,15 +66,15 @@ export default function ProfilePage(): React.JSX.Element {
     }
   }, [dispatch, userId, currentUser?.id]);
 
-  // if (status === 'loading' || (!profileUser && userId)) {
-  //   return <div className="profile-loader">Loading...</div>;
-  // }
+  if (status === 'loading' || (!profileUser && userId)) {
+    return <div className="profile-loader">Loading...</div>;
+  }
 
   if (!profileUser) {
     return <div className="profile-notfound">User not found</div>;
   }
 
-  // Calculate average rating from real data with null checks
+  // Calculate average rating from real data with proper null checks
   const avgRating = averageRating?.averageRating ?? 0;
   const totalReviews = averageRating?.totalReviews ?? 0;
   const stars = Array.from({ length: 5 }, (_, i) => (i < Math.floor(avgRating) ? '★' : '☆'));
@@ -86,11 +86,7 @@ export default function ProfilePage(): React.JSX.Element {
         <div className="profile-header-content">
           <div className="profile-avatar-section">
             <Avatar
-              src={
-                profileUser.avatar
-                  ? `http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`
-                  : undefined
-              }
+              src={profileUser.avatar ? `http://localhost:3000/api/uploads/avatars/${profileUser.avatar}` : undefined}
               className="executor-avatar"
               alt={profileUser.name}
             />
@@ -216,7 +212,9 @@ export default function ProfilePage(): React.JSX.Element {
                 </div>
                 <p className="profile-review-text">{review.comment ?? 'Без комментария'}</p>
                 <p className="profile-review-author">— {review.author.name}</p>
-                {review.Task && <p className="profile-review-task">Задание: {review.Task.title}</p>}
+                {review.Task && (
+                  <p className="profile-review-task">Задание: {review.Task.title}</p>
+                )}
               </article>
             ))}
             {reviews.length === 0 && <p>Отзывов пока нет</p>}
