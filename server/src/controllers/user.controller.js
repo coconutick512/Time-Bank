@@ -111,10 +111,16 @@ class AuthController {
   static async updateProfile(req, res) {
     try {
       const avatar = req.file ? req.file.filename : null;
+      if (avatar) {
       const user = await UserService.updateProfile(res.locals.user.id, {
         ...req.body,
         avatar,
       });
+    }else{
+      const user = await UserService.updateProfile(res.locals.user.id, {
+        ...req.body,
+      });
+    }
       const skill = await UserService.updateSkills(res.locals.user.id, req.body.skillIds);
       res.status(200).json({ user, skill });
     } catch (error) {

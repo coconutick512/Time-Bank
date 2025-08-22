@@ -104,7 +104,7 @@ export const ProfileUpdateResponseSchema = z.object({
     timezone: z.string().nullable(),
     about: z.string().nullable(),
     availableDates: z.array(z.string()).nullable(),
-    avatar: z.string().nullable(),
+    avatar: z.string().optional(),
     balance: z.number().optional(),
     created_at: z.string().optional(),
   }),

@@ -42,7 +42,6 @@ export default function ProfileEditForm({
     city: user.city ?? '',
     timezone: user.timezone ?? '',
     about: user.about ?? '',
-    avatar: user.avatar ?? '',
     availableDates: user.availableDates ?? [],
   });
   const [selectedSkills, setSelectedSkills] = useState<number[]>(
@@ -74,11 +73,9 @@ export default function ProfileEditForm({
       formDataToSend.append('availableDates', JSON.stringify(formData.availableDates || []));
       formDataToSend.append('skillIds', JSON.stringify(selectedSkills || []));
 
-      if (selectedFile) {
+      if (selectedFile !== null) {
         formDataToSend.append('avatar', selectedFile);
-      } else if (formData.avatar) {
-        formDataToSend.append('avatar', formData.avatar);
-      }
+      } 
 
       await dispatch(updateProfile(formDataToSend));
       await dispatch(fetchUser());
@@ -169,7 +166,7 @@ export default function ProfileEditForm({
               >
                 Выбрать фото
               </Button>
-              {previewUrl && (
+              {/* {previewUrl && (
                 <Button
                   variant="contained"
                   color="error"
@@ -179,7 +176,7 @@ export default function ProfileEditForm({
                 >
                   Удалить
                 </Button>
-              )}
+              )} в будущих релизах*/}
             </Box>
             <input
               ref={fileInputRef}
@@ -245,26 +242,6 @@ export default function ProfileEditForm({
           placeholder="Расскажите о себе..."
           sx={{ bgcolor: 'white' }}
         />
-
-        {/* Skills Section */}
-        <Box>
-          <InputLabel sx={{ mb: 1, fontSize: '0.875rem', fontWeight: 500 }}>Навыки</InputLabel>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, maxHeight: 200, overflowY: 'auto' }}>
-            {skills.map((skill) => (
-              <FormControlLabel
-                key={skill.id}
-                control={
-                  <Checkbox
-                    checked={selectedSkills.includes(skill.id)}
-                    onChange={() => handleSkillToggle(skill.id)}
-                    color="primary"
-                  />
-                }
-                label={skill.name}
-              />
-            ))}
-          </Box>
-        </Box>
 
         {/* Submit Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, pt: 3 }}>
