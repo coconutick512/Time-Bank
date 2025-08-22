@@ -88,7 +88,7 @@ const reviewSlice = createSlice({
       })
       .addCase(updateReview.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const index = state.reviews.findIndex(review => review.id === action.payload.review.id);
+        const index = state.reviews.findIndex((review) => review.id === action.payload.review.id);
         if (index !== -1) {
           state.reviews[index] = action.payload.review;
         }
@@ -106,7 +106,7 @@ const reviewSlice = createSlice({
       })
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.reviews = state.reviews.filter(review => review.id !== action.payload);
+        state.reviews = state.reviews.filter((review) => review.id !== action.payload);
         state.error = null;
       })
       .addCase(deleteReview.rejected, (state, action) => {
@@ -132,4 +132,4 @@ const reviewSlice = createSlice({
 });
 
 export const { clearReviews, setCurrentReview, clearCurrentReview } = reviewSlice.actions;
-export default reviewSlice.reducer; 
+export default reviewSlice.reducer;
