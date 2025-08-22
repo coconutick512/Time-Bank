@@ -450,7 +450,7 @@ const UserTasksPage: React.FC = () => {
           }}
           taskId={completedTaskForReview.id}
           targetUserId={completedTaskForReview.executorId!}
-          targetUserName={`Исполнитель задачи "${completedTaskForReview.title}"`}
+          targetUserName={`исполнителя задачи "${completedTaskForReview.title}"`}
           onSuccess={handleReviewSuccess}
         />
       )}

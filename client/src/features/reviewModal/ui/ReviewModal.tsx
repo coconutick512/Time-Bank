@@ -46,7 +46,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     >
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Write a Review</Typography>
+          <Typography variant="h6">Напишите отзыв:</Typography>
           <IconButton onClick={onClose} size="small">
             <Close />
           </IconButton>

@@ -66,9 +66,9 @@ export default function ProfilePage(): React.JSX.Element {
     }
   }, [dispatch, userId, currentUser?.id]);
 
-  if (status === 'loading' || (!profileUser && userId)) {
-    return <div className="profile-loader">Loading...</div>;
-  }
+  // if (status === 'loading' || (!profileUser && userId)) {
+  //   return <div className="profile-loader">Loading...</div>;
+  // }
 
   if (!profileUser) {
     return <div className="profile-notfound">User not found</div>;
