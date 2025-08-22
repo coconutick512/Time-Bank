@@ -18,6 +18,7 @@ module.exports = {
       { name: 'Садоводство', created_at: new Date(), updated_at: new Date() },
       { name: 'Путешествия', created_at: new Date(), updated_at: new Date() },
       { name: 'Публичные выступления', created_at: new Date(), updated_at: new Date() }
+      { name: 'Программирование', created_at: new Date(), updated_at: new Date() },
     ]);
   },
 
