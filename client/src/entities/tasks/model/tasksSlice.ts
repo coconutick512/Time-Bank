@@ -1,11 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { TasksState } from '../types/schema';
-import { createTask, deleteTask,  fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
-import {
-  createSpecialTask,
-  fetchUserTasks,
-  fetchUserExecutedTasks,
-} from './tasksThunk';
+import { createTask, deleteTask, editTask, fetchAllTasks, fetchCategories, fetchTask } from './tasksThunk';
+import { createSpecialTask, fetchUserTasks, fetchUserExecutedTasks } from './tasksThunk';
 
 const initialState: TasksState = {
   status: 'loading',
@@ -140,7 +136,6 @@ const tasksSlice = createSlice({
     //   state.status = 'done';
     //   state.error = null;
     // });
-    
   },
 });
 
