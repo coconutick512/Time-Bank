@@ -44,6 +44,7 @@ export default function ExecutorsPage(): React.JSX.Element {
   const [executorsWithRatings, setExecutorsWithRatings] = React.useState<ExecutorWithRating[]>([]);
 
   React.useEffect(() => {
+    document.title = 'Исполнители'
     void dispatch(fetchAllExecutors());
     void dispatch(fetchUser());
   }, [dispatch]);
@@ -125,9 +126,9 @@ export default function ExecutorsPage(): React.JSX.Element {
             >
               <Box className="executor-header">
                 <Avatar
-                  src={executor.avatar ? `/api/uploads/avatars/${executor.avatar}` : undefined}
+                  src={`http://localhost:3000/api/uploads/avatars/${executor.avatar}`}
                   className="executor-avatar"
-                  alt={executor.name}
+                  // alt={executor.name}
                 />
                 <Box>
                   <Typography className="executor-name" variant="h5" component="h3">

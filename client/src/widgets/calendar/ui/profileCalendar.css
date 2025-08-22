@@ -8,6 +8,7 @@
   border: none;
   font-family: 'Inter', sans-serif;
   user-select: none;
+  background-color: #c6c4c4;
 }
 
 .react-calendar__tile {
@@ -16,6 +17,7 @@
   text-align: center;
   font-weight: 500;
   transition: background-color 0.25s ease;
+  color: black;
 }
 
 .react-calendar__tile--active {

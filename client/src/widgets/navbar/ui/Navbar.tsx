@@ -43,7 +43,6 @@ type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({
-  userBalance = 0,
   currentLanguage,
   searchQuery,
   onSearch,
@@ -76,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 mr: 2,
               }}
             >
-              <User size={20} color="#0369a1" />
+              <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
             </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight="bold">
@@ -85,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Clock size={16} color="#10b981" style={{ marginRight: 4 }} />
                 <Typography variant="body2" color="text.secondary">
-                  {userBalance} TD
+                  {user.balance} TD
                 </Typography>
               </Box>
             </Box>
@@ -269,34 +268,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </IconButton>
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              {/* Поиск */}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#f3f4f6',
-                  borderRadius: 2,
-                  px: 2,
-                  py: 0.5,
-                  width: 300,
-                  '&:focus-within': {
-                    boxShadow: '0 0 0 2px #bfdbfe',
-                  },
-                }}
-              >
-                <SearchIcon size={18} color="#6b7280" style={{ marginRight: 8 }} />
-                <InputBase
-                  placeholder="Поиск услуг..."
-                  value={searchQuery}
-                  onChange={(e) => onSearch(e.target.value)}
-                  sx={{
-                    width: '100%',
-                    '& input': {
-                      py: 1,
-                    },
-                  }}
-                />
-              </Box>
+             
 
               {user ? (
                 <>
@@ -346,12 +318,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                         mr: 1.5,
                       }}
                     >
-                      <User size={16} color="#0369a1" />
+                      <img src={user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : `http://localhost:3000/api/uploads/avatars/1755528537721.jpg`} alt="avatar" style={{ width: '100%', height: '100%' , borderRadius: '50%' }} />
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Clock size={14} color="#10b981" style={{ marginRight: 4 }} />
                       <Typography variant="body2" fontWeight="medium">
-                        {userBalance} TD
+                        {user.balance} TD
                       </Typography>
                     </Box>
                   </Box>

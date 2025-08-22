@@ -1,18 +1,5 @@
 /* Общий фон и корень */
 .profile-root,
-body {
-  min-height: 100vh;
-  background: linear-gradient(to right, #f3f4f6 1px, transparent 1px) 0 0,
-    linear-gradient(to bottom, #f3f4f6 1px, transparent 1px) 0 0;
-  background-size: 40px 40px;
-  background-color: #fcfcfd;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  color: #18191c;
-  margin: 0;
-  padding: 0;
-}
-
-/* Контейнер профиля */
 .profile-content {
   max-width: 1200px;
   margin: 48px auto;
@@ -21,6 +8,7 @@ body {
   gap: 40px;
   flex-wrap: wrap;
   justify-content: center;
+  color: #18191c;
 }
 
 /* Header пользователя */
@@ -29,9 +17,8 @@ body {
   flex-direction: row;
   gap: 28px;
   align-items: flex-start;
-  background: #fff;
   border-radius: 22px;
-  box-shadow: 0 2px 14px rgba(60, 72, 120, 0.08);
+  box-shadow: 0 2px 14px rgba(9, 11, 20, 0.485);
   padding: 36px 38px;
   min-width: 370px;
 }
@@ -116,6 +103,7 @@ body {
   gap: 44px;
   margin-top: 38px;
   justify-content: center;
+  
 }
 
 .profile-col {
@@ -130,7 +118,7 @@ body {
 .profile-section {
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 1.5px 10px rgba(70, 90, 140, 0.09);
+  box-shadow: 0 1.5px 10px rgba(6, 7, 11, 0.357);
   padding: 28px 22px 24px 22px;
 }
 

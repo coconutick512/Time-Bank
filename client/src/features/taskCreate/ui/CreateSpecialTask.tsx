@@ -37,7 +37,7 @@ export default function CreateTaskModal({
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   const { categories, status } = useAppSelector((state) => state.tasks);
-  
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
@@ -64,24 +64,29 @@ export default function CreateTaskModal({
         creatorId,
         status: 'open',
         id: 0,
-        hours:Number(hours),
+        hours: Number(hours),
         created_at: Date.now().toString(),
-        categories: selectedCategories.map(id => ({ id, name: categories.find(cat => cat.id === id)?.name || '' }))
+        categories: selectedCategories.map((id) => ({
+          id,
+          name: categories.find((cat) => cat.id === id)?.name || '',
+        })),
+      }),
+    )
+      .then((res) => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          onClose();
+          setTitle('');
+          setDescription('');
+          setDeadline('');
+          setHours('');
+          setSelectedCategories([]);
+        }
       })
-    ).then((res) => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        onClose();
-        setTitle('');
-        setDescription('');
-        setDeadline('');
-        setHours('');
-        setSelectedCategories([]);
-      }
-    }).then(() => void dispatch(fetchUser())) 
+      .then(() => void dispatch(fetchUser()));
   };
 
   const handleCategoryChange = (event: any) => {
-    const value = event.target.value;
+    const { value } = event.target;
     setSelectedCategories(typeof value === 'string' ? value.split(',').map(Number) : value);
   };
 
@@ -169,22 +174,20 @@ export default function CreateTaskModal({
               )}
               size="small"
             >
-              {
-                categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    <Checkbox checked={selectedCategories.includes(category.id)} />
-                    <Typography>{category.name}</Typography>
-                  </MenuItem>
-                ))
-              }
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  <Checkbox checked={selectedCategories.includes(category.id)} />
+                  <Typography>{category.name}</Typography>
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Отмена</Button>
-        <Button 
-          onClick={handleSubmit} 
+        <Button
+          onClick={handleSubmit}
           variant="contained"
           disabled={!title || !description || !deadline || !hours}
         >

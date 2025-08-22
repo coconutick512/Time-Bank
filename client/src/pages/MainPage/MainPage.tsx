@@ -1,69 +1,89 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Container, Grid, Typography, Card, CardContent, Box } from '@mui/material';
-import './MainPage.css';
+import { Container, Grid, Typography, CardContent } from '@mui/material';
 import { fetchUser } from '@/entities/user/model/userThunk';
 import { useAppDispatch } from '@/shared/hooks/hooks';
+import {
+  MainRoot,
+  MainHeader,
+  MainHeaderTitle,
+  MainDesc,
+  MainButtons,
+  PrimaryButton,
+  SecondaryButton,
+  MainStats,
+  StatGreen,
+  MainHeaderRight,
+  MainHow,
+  MainHowDesc,
+  MainCards,
+  MainCard,
+  MainCardIcon,
+  MainWhy,
+  WhyDesc,
+  WhyList,
+  WhyButton,
+  SafetyCard,
+  MainCta,
+} from './MainPage.styles.ts';
 
 export default function MainPage(): React.JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    document.title = 'Банк'
     void dispatch(fetchUser());
   }, [dispatch]);
 
   return (
-    <Box className="main-root">
+    <MainRoot>
       {/* Header Section */}
       <Container maxWidth="lg">
-        <Box className="main-header">
+        <MainHeader>
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Typography variant="h3" className="main-header-title">
+              <MainHeaderTitle variant="h3">
                 Обменивайтесь навыками за время, а не деньги
-              </Typography>
-              <Typography variant="body1" className="main-desc">
+              </MainHeaderTitle>
+              <MainDesc variant="body1">
                 Твоя гавань для бартера навыками — без оплаты, только обучение.
-              </Typography>
-              <Box className="main-btns">
-                <Button
-                  variant="contained"
-                  className="primary"
-                  onClick={() => navigate('/executors')}
-                >
+              </MainDesc>
+              <MainButtons>
+                <PrimaryButton variant="contained" onClick={() => navigate('/executors')}>
                   Присоединиться
-                </Button>
-                <Button variant="outlined" className="secondary">
-                  Больше о нас
-                </Button>
-              </Box>
-              <Box className="main-stats">
+                </PrimaryButton>
+                <SecondaryButton variant="outlined">Больше о нас</SecondaryButton>
+              </MainButtons>
+              <MainStats>
                 <Typography>
                   <b>500+</b> Участников
                 </Typography>
                 <Typography>
-                  <b className="stat-green">1000+</b> Услуг оказано
+                  <b>
+                    <StatGreen>1000+</StatGreen>
+                  </b>{' '}
+                  Услуг оказано
                 </Typography>
-              </Box>
+              </MainStats>
             </Grid>
-            <Grid item xs={12} md={6} className="main-header-right">
+            <Grid item xs={12} md={6} component={MainHeaderRight}>
               {/* Uncomment if image is needed */}
-              {/* <img src="/clock-handshake.png" alt="clock" className="main-image" /> */}
+              {/* <img src="/clock-handshake.png" alt="clock" style={{ width: '100%' }} /> */}
             </Grid>
           </Grid>
-        </Box>
+        </MainHeader>
       </Container>
 
       {/* How It Works Section */}
-      <Container maxWidth="lg" className="main-how">
+      <MainHow maxWidth="lg">
         <Typography variant="h4" align="center">
           Как работает?
         </Typography>
-        <Typography variant="body1" align="center" className="main-how-desc">
+        <MainHowDesc variant="body1" align="center">
           Простая система обмена услугами на основе времени
-        </Typography>
-        <Grid container spacing={3} className="main-cards">
+        </MainHowDesc>
+        <MainCards container spacing={3}>
           {[
             {
               icon: '👤',
@@ -82,27 +102,25 @@ export default function MainPage(): React.JSX.Element {
             },
           ].map((card, index) => (
             <Grid item xs={12} sm={4} key={index}>
-              <Card className="main-card">
+              <MainCard>
                 <CardContent>
-                  <Box className="main-card-icon">{card.icon}</Box>
+                  <MainCardIcon>{card.icon}</MainCardIcon>
                   <Typography variant="h6">{card.title}</Typography>
                   <Typography variant="body2">{card.desc}</Typography>
                 </CardContent>
-              </Card>
+              </MainCard>
             </Grid>
           ))}
-        </Grid>
-      </Container>
+        </MainCards>
+      </MainHow>
 
       {/* Why Time Bank Section */}
-      <Container maxWidth="lg" className="main-why">
+      <MainWhy maxWidth="lg">
         <Grid container spacing={4} alignItems="flex-start">
           <Grid item xs={12} md={6}>
             <Typography variant="h4">Почему?</Typography>
-            <Typography className="why-desc">
-              Справедливая система обмена, где ценится время, а не статус услуги
-            </Typography>
-            <ul className="why-list">
+            <WhyDesc>Справедливая система обмена, где ценится время, а не статус услуги</WhyDesc>
+            <WhyList>
               {[
                 'Час юриста = час художника = час программиста',
                 'Без комиссий и скрытых платежей',
@@ -111,56 +129,45 @@ export default function MainPage(): React.JSX.Element {
               ].map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
-            </ul>
-            <Button
-              variant="contained"
-              className="why-btn"
-              onClick={() => navigate('/login')}
-            >
+            </WhyList>
+            <WhyButton variant="contained" onClick={() => navigate('/login')}>
               Начать сейчас
-            </Button>
+            </WhyButton>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card className="safety-card">
+            <SafetyCard>
               <CardContent>
                 <Typography variant="h6">
                   <b>Безопасно и надёжно</b>
                 </Typography>
                 <Typography variant="body2">
-                  Система рейтингов, отзывов и модерации обеспечивает безопасность всех участников банка времени.
+                  Система рейтингов, отзывов и модерации обеспечивает безопасность всех участников
+                  банка времени.
                 </Typography>
                 <Typography variant="body2">
                   Каждый пользователь может пройти проверку личности и компетенций.
                 </Typography>
               </CardContent>
-            </Card>
+            </SafetyCard>
           </Grid>
         </Grid>
-      </Container>
+      </MainWhy>
 
       {/* Call to Action Section */}
-      <Box className="main-cta">
+      <MainCta>
         <Container maxWidth="lg" style={{ textAlign: 'center' }}>
-          <Typography variant="h4">
-            Присоединяйтесь к революции времени
-          </Typography>
+          <Typography variant="h4">Присоединяйтесь к революции времени</Typography>
           <Typography variant="body1">
             Станьте частью нового экономического сообщества, где время — это деньги в прямом смысле
           </Typography>
-          <Box className="main-btns">
-            <Button
-              variant="contained"
-              className="primary"
-              onClick={() => navigate('/login')}
-            >
+          <MainButtons>
+            <PrimaryButton variant="contained" onClick={() => navigate('/login')}>
               Зарегистрироваться
-            </Button>
-            <Button variant="outlined" className="secondary">
-              Узнать больше
-            </Button>
-          </Box>
+            </PrimaryButton>
+            <SecondaryButton variant="outlined">Узнать больше</SecondaryButton>
+          </MainButtons>
         </Container>
-      </Box>
-    </Box>
+      </MainCta>
+    </MainRoot>
   );
 }

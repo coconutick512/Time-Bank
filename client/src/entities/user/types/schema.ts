@@ -14,6 +14,7 @@ export const UserSchema = z.object({
   timezone: z.string().optional().nullable(),
   about: z.string().optional().nullable(),
   city: z.string().optional().nullable(),
+  role: z.string(),
   skills: z
     .array(z.object({ id: z.number(), name: z.string() }))
     .optional()
@@ -54,7 +55,6 @@ export type UserState = {
   status: 'loading' | 'guest' | 'logged' | 'done' | 'reject';
   user: User | null;
   error: string | null;
-  score: UserScore | null;
   profileCompleted: boolean;
   profileData: UserAnceta | null;
   skills: UserSkillsResponse | null;
@@ -97,6 +97,7 @@ export const ProfileUpdateResponseSchema = z.object({
     id: z.number(),
     name: z.string(),
     email: z.string(),
+    role: z.string(),
     city: z.string().nullable(),
     timezone: z.string().nullable(),
     about: z.string().nullable(),

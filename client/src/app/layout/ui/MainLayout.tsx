@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from '@/shared/hooks/hooks';
 import { logoutUser, fetchUser } from '@/entities/user/model/userThunk';
 import { Navbar } from '@/widgets/navbar/ui/Navbar';
 import { Footer } from '@/widgets/footer/ui/Footer';
+import { Box } from '@mui/material';
 
 export const MainLayout = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
@@ -41,7 +42,6 @@ export const MainLayout = (): React.JSX.Element => {
   });
 
   const handleLogout = async (): Promise<void> => {
-    
     console.log(' Logout clicked - current status:', userStatus);
     try {
       justLoggedOut.current = true;
@@ -75,8 +75,10 @@ export const MainLayout = (): React.JSX.Element => {
         onRegister={handleRegister}
         onLogout={handleLogout}
       />
-      <Outlet />
-      <Footer />
+      <Box sx={{ paddingTop: '64px', minHeight: '100vh', boxSizing: 'border-box' }}>
+        <Outlet />
+        <Footer />
+      </Box>
     </>
   );
 };

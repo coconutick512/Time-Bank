@@ -48,7 +48,7 @@ class AuthService {
   }
 
   static async findOne(id) {
-    console.log("____________ID USERl", id);
+    // console.log("____________ID USERl", id);
     const user = await User.findByPk(id);
     if (!user) {
       throw new Error("Пользователь не найден");
