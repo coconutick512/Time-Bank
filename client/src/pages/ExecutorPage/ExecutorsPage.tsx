@@ -6,6 +6,7 @@ import { Box, Typography, Avatar, Chip, Skeleton, Divider, Rating } from '@mui/m
 import { Schedule as TimeIcon, Work as SkillsIcon, Star } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { fetchAverageRating } from '@/entities/reviews/model/reviewThunk';
+import './ExecutorsPage.css';
 
 type Skill = {
   id: number;
@@ -44,7 +45,7 @@ export default function ExecutorsPage(): React.JSX.Element {
   const [executorsWithRatings, setExecutorsWithRatings] = React.useState<ExecutorWithRating[]>([]);
 
   React.useEffect(() => {
-    document.title = 'Исполнители'
+    document.title = 'Исполнители';
     void dispatch(fetchAllExecutors());
     void dispatch(fetchUser());
   }, [dispatch]);

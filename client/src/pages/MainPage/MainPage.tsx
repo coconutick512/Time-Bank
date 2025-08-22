@@ -32,7 +32,7 @@ export default function MainPage(): React.JSX.Element {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    document.title = 'Банк'
+    document.title = 'Банк';
     void dispatch(fetchUser());
   }, [dispatch]);
 
@@ -53,19 +53,7 @@ export default function MainPage(): React.JSX.Element {
                 <PrimaryButton variant="contained" onClick={() => navigate('/executors')}>
                   Присоединиться
                 </PrimaryButton>
-                <SecondaryButton variant="outlined">Больше о нас</SecondaryButton>
               </MainButtons>
-              <MainStats>
-                <Typography>
-                  <b>500+</b> Участников
-                </Typography>
-                <Typography>
-                  <b>
-                    <StatGreen>1000+</StatGreen>
-                  </b>{' '}
-                  Услуг оказано
-                </Typography>
-              </MainStats>
             </Grid>
             <Grid item xs={12} md={6} component={MainHeaderRight}>
               {/* Uncomment if image is needed */}
@@ -160,14 +148,13 @@ export default function MainPage(): React.JSX.Element {
           <Typography variant="body1">
             Станьте частью нового экономического сообщества, где время — это деньги в прямом смысле
           </Typography>
-          <MainButtons>
-            <PrimaryButton variant="contained" onClick={() => navigate('/login')}>
-              Зарегистрироваться
-            </PrimaryButton>
-            <SecondaryButton variant="outlined">Узнать больше</SecondaryButton>
-          </MainButtons>
         </Container>
       </MainCta>
+      <MainButtons>
+        <PrimaryButton variant="contained" onClick={() => navigate('/login')}>
+          Зарегистрироваться
+        </PrimaryButton>
+      </MainButtons>
     </MainRoot>
   );
 }

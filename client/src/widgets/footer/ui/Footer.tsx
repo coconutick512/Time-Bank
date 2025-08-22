@@ -95,10 +95,10 @@ export const Footer = (): React.JSX.Element => {
           </FooterContacts>
           <FooterStats>
             <Box component="span" className="footer-stat">
-              <FooterStatBold>500+</FooterStatBold> Участников
+              <FooterStatBold>2+</FooterStatBold> Участников
             </Box>
             <Box component="span" className="footer-stat">
-              <StatGreen>1000+</StatGreen> Услуг
+              <StatGreen>3+</StatGreen> Услуг
             </Box>
           </FooterStats>
         </FooterSection>
