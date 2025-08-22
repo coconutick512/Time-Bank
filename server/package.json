@@ -27,6 +27,7 @@
     "db:migrate": "NODE_ENV=development sequelize db:migrate",
     "db:seed": "NODE_ENV=development sequelize db:seed:all",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db": "npx sequelize db:drop && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all"
+    "db": "npx sequelize db:drop && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "db:setup": "NODE_ENV=production sequelize db:create && NODE_ENV=production sequelize db:migrate && NODE_ENV=production sequelize db:seed:all"
   }
 }

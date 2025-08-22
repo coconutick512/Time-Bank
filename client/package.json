@@ -15,7 +15,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmitOnError false && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

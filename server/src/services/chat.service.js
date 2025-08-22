@@ -2,17 +2,28 @@ const { Chat } = require("../../db/models");
 
 class ChatService {
   static async createChat(taskId) {
-    const chat = await Chat.create({ taskId: taskId });
-    return chat;
+    try {
+      
+      const chat = await Chat.create({ taskId: taskId });
+      return chat;
+    } catch (error) {
+      console.error("Error creating chat:", error);
+      throw error;
+    }
   }
   static async getChats(taskId) {
-    console.log("_________________", taskId);
-    const chats = await Chat.findOne({
-      where: {
-        taskId,
-      },
-    });
-    return chats;
+    try {
+      
+      const chats = await Chat.findOne({
+        where: {
+          taskId,
+        },
+      });
+      return chats;
+    } catch (error) {
+      console.error("Error fetching chats:", error);  
+      throw error;
+    }
   }
 }
 

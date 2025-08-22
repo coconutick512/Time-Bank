@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+uploads
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -34,3 +34,4 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 .sass-cache
+ZCKb6MlwLi36

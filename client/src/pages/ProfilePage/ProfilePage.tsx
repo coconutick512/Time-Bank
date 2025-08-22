@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { fetchUserSkills } from '@/entities/user/model/userThunk';
 import { fetchUserTasks, fetchUserExecutedTasks } from '@/entities/tasks/model/tasksThunk';
 import UserCalendar from '@/widgets/calendar/ui/profileCalendar';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchUserById } from '@/entities/user/model/userThunk';
 import './ProfilePage.css';
 import { Avatar } from '@mui/material';
@@ -12,7 +12,7 @@ import ProfileEditForm, { UserProfileForm } from '@/widgets/UserProfileForm/ui/P
 export default function ProfilePage(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { userId } = useParams<{ userId: string }>();
-
+  const navigate = useNavigate();
   const currentUser = useAppSelector((state) => state.user.user);
   const { skills, status, viewingUser, viewingUserSkills } = useAppSelector((state) => state.user);
   const tasks = useAppSelector((state) => state.tasks.tasks);
@@ -88,7 +88,7 @@ export default function ProfilePage(): React.JSX.Element {
         <div className="profile-header-content">
           <div className="profile-avatar-section">
             <Avatar
-                  src={`http://localhost:3000/api/uploads/avatars/${profileUser.avatar}`}
+                  src={`/api/uploads/avatars/${profileUser.avatar}`}
                   className="executor-avatar"
                   alt={profileUser.name}
                 />
@@ -194,6 +194,7 @@ export default function ProfilePage(): React.JSX.Element {
                       <p className="profile-task-status">Статус: {task.status}</p>
                     </div>
                   ))}
+                  { !userId && <button className="profile-btn-alt" onClick={()=>{ navigate('/tasks')}}>Перейти к заданиям</button>}
                   {tasks.length === 0 && <p>Задания не найдены</p>}
                 </div>
               </div>
