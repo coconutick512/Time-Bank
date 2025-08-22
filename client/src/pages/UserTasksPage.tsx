@@ -47,13 +47,12 @@ const UserTasksPage: React.FC = () => {
     }
   }, [dispatch, user?.id]);
 
-  // Auto-select task when autoSelectTaskId is set
   useEffect(() => {
     if (autoSelectTaskId && tasks.length > 0) {
       const taskToSelect = tasks.find((task) => task.id === autoSelectTaskId);
       if (taskToSelect) {
         void handleTaskSelect(taskToSelect);
-        dispatch(clearAutoSelectTaskId()); // Clear the auto-select state
+        dispatch(clearAutoSelectTaskId());
       }
     }
   }, [autoSelectTaskId, tasks, dispatch]);
@@ -111,7 +110,6 @@ const UserTasksPage: React.FC = () => {
 
       setSelectedTask({ ...task, status: 'completed' });
 
-      // Show review modal for the executor
       if (task.executorId && task.executorId !== user?.id) {
         setCompletedTaskForReview(task);
         setShowReviewModal(true);
@@ -197,7 +195,16 @@ const UserTasksPage: React.FC = () => {
 
   if (status === 'loading') {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          maxWidth: '800px',
+          mx: 'auto',
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -205,7 +212,17 @@ const UserTasksPage: React.FC = () => {
 
   if (error) {
     return (
-      <Box p={3}>
+      <Box
+        sx={{
+          maxWidth: '800px',
+          mx: 'auto',
+          mt: 4,
+          p: 2,
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 2,
+        }}
+      >
         <Alert severity="error">{error}</Alert>
       </Box>
     );
@@ -217,22 +234,47 @@ const UserTasksPage: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ p: 3, height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Typography variant="h4" gutterBottom>
+    <Box
+      sx={{
+        maxWidth: '800px',
+        mx: 'auto',
+        mt: 4,
+        p: 2,
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '80vh',
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{ mb: 3, textAlign: 'center', fontWeight: 'bold', color: 'text.primary' }}
+      >
         Мои задачи
       </Typography>
 
-      <Grid container spacing={3} sx={{ flex: 1, minHeight: 0 }}>
+      <Grid container spacing={2}>
         {/* Left Column - Task List */}
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ height: '100%', overflow: 'auto' }}>
-            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-              <Typography variant="h6">Список задач ({allUserTasks.length})</Typography>
+        <Grid item xs={12} md={5}>
+          <Paper
+            sx={{
+              bgcolor: 'grey.100',
+              borderRadius: 2,
+              overflow: 'auto',
+              boxShadow: 1,
+            }}
+          >
+            <Box sx={{ p: 2, textAlign: 'center' }}>
+              <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                Список задач ({allUserTasks.length})
+              </Typography>
             </Box>
 
             {allUserTasks.length === 0 ? (
               <Box sx={{ p: 3, textAlign: 'center' }}>
-                <Typography color="textSecondary">У вас пока нет задач</Typography>
+                <Typography color="text.secondary">У вас пока нет задач</Typography>
               </Box>
             ) : (
               <List sx={{ p: 0 }}>
@@ -240,47 +282,52 @@ const UserTasksPage: React.FC = () => {
                   <React.Fragment key={task.id}>
                     <ListItem
                       onClick={() => handleTaskSelect(task)}
-                      selected={selectedTask?.id === task.id}
                       sx={{
                         cursor: 'pointer',
+                        borderRadius: 1,
+                        mx: 1,
+                        mb: 1,
+                        bgcolor:
+                          selectedTask?.id === task.id ? 'primary.light' : 'background.paper',
                         '&:hover': {
-                          backgroundColor: 'action.hover',
+                          bgcolor: selectedTask?.id === task.id ? 'primary.light' : 'grey.200',
                         },
-                        '&.Mui-selected': {
-                          backgroundColor: 'primary.light',
-                          '&:hover': {
-                            backgroundColor: 'primary.light',
-                          },
-                        },
+                        transition: 'background-color 0.2s',
                       }}
                     >
                       <ListItemText
                         primary={
                           <Box>
-                            <Typography variant="subtitle1" noWrap>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontWeight: 'medium', color: 'text.primary' }}
+                              noWrap
+                            >
                               {task.title}
                             </Typography>
                             <Chip
                               label={getStatusText(task.status)}
                               color={getStatusColor(task.status)}
                               size="small"
-                              sx={{ mt: 0.5 }}
+                              sx={{ mt: 1, fontWeight: 'medium' }}
                             />
                           </Box>
                         }
                         secondary={
                           <Box>
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography variant="body2" color="text.secondary">
                               {task.creator.name}
                             </Typography>
-                            <Typography variant="caption" color="textSecondary">
+                            <Typography variant="caption" color="text.secondary">
                               {formatDate(task.created_at)}
                             </Typography>
                           </Box>
                         }
                       />
                     </ListItem>
-                    {index < allUserTasks.length - 1 && <Divider />}
+                    {index < allUserTasks.length - 1 && (
+                      <Divider sx={{ mx: 2, bgcolor: 'grey.300' }} />
+                    )}
                   </React.Fragment>
                 ))}
               </List>
@@ -289,79 +336,85 @@ const UserTasksPage: React.FC = () => {
         </Grid>
 
         {/* Right Column - Task Details and Chat */}
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={7}>
           {selectedTask ? (
-            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               {/* Task Details */}
-              <Paper sx={{ mb: 2, p: 3 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    mb: 2,
-                  }}
-                >
-                  <Box>
-                    <Typography variant="h5" gutterBottom>
-                      {selectedTask.title}
-                    </Typography>
-                    <Chip
-                      label={getStatusText(selectedTask.status)}
-                      color={getStatusColor(selectedTask.status)}
-                      sx={{ mb: 1 }}
-                    />
-                  </Box>
-                  <Avatar sx={{ bgcolor: 'primary.main' }}>
+              <Paper
+                sx={{
+                  p: 2,
+                  mb: 2,
+                  borderRadius: 2,
+                  bgcolor: 'background.paper',
+                  boxShadow: 1,
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 'bold', color: 'text.primary', flexGrow: 1 }}
+                  >
+                    {selectedTask.title}
+                  </Typography>
+                  <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
                     {selectedTask.creator.name.charAt(0).toUpperCase()}
                   </Avatar>
                 </Box>
+                <Chip
+                  label={getStatusText(selectedTask.status)}
+                  color={getStatusColor(selectedTask.status)}
+                  size="small"
+                  sx={{ mb: 2, fontWeight: 'medium' }}
+                />
 
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle2" color="textSecondary">
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
                       Описание
                     </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
+                    <Typography variant="body1" sx={{ bgcolor: 'grey.100', p: 2, borderRadius: 1 }}>
                       {selectedTask.description}
                     </Typography>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Часы
-                      </Typography>
-                      <Typography variant="body1">{selectedTask.hours}</Typography>
-                    </Box>
+                  <Grid item xs={12}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <Box>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          Часы
+                        </Typography>
+                        <Typography variant="body1">{selectedTask.hours}</Typography>
+                      </Box>
 
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Дедлайн
-                      </Typography>
-                      <Typography variant="body1">{formatDate(selectedTask.deadline)}</Typography>
-                    </Box>
+                      <Box>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          Дедлайн
+                        </Typography>
+                        <Typography variant="body1">{formatDate(selectedTask.deadline)}</Typography>
+                      </Box>
 
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Создатель
-                      </Typography>
-                      <Typography variant="body1">{selectedTask.creator.name}</Typography>
-                    </Box>
+                      <Box>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          Создатель
+                        </Typography>
+                        <Typography variant="body1">{selectedTask.creator.name}</Typography>
+                      </Box>
 
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Категории
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {selectedTask.categories?.map((category) => (
-                          <Chip
-                            key={category.id}
-                            label={category.name}
-                            size="small"
-                            variant="outlined"
-                          />
-                        )) ?? <Typography variant="body2">Нет категорий</Typography>}
+                      <Box>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          Категории
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                          {selectedTask.categories?.map((category) => (
+                            <Chip
+                              key={category.id}
+                              label={category.name}
+                              size="small"
+                              variant="outlined"
+                              sx={{ borderColor: 'grey.400' }}
+                            />
+                          )) ?? <Typography variant="body2">Нет категорий</Typography>}
+                        </Box>
                       </Box>
                     </Box>
                   </Grid>
@@ -369,42 +422,41 @@ const UserTasksPage: React.FC = () => {
 
                 {/* Task Management Buttons */}
                 {user && (
-                  <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-                    {/* Start Task Button - Only for assigned tasks where user is creator */}
+                  <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
                     {selectedTask.status === 'assigned' && selectedTask.creatorId === user.id && (
                       <Button
                         variant="contained"
                         color="primary"
                         onClick={() => handleStartTask(selectedTask)}
+                        sx={{ borderRadius: 10, px: 3, textTransform: 'none' }}
                       >
                         Начать работу
                       </Button>
                     )}
 
-                    {/* Complete Task Button - Only for running tasks where user is creator */}
                     {selectedTask.status === 'running' && selectedTask.creatorId === user.id && (
                       <Button
                         variant="contained"
                         color="success"
                         onClick={() => handleCompleteTask(selectedTask)}
+                        sx={{ borderRadius: 10, px: 3, textTransform: 'none' }}
                       >
                         Завершить
                       </Button>
                     )}
 
-                    {/* Cancel Task Button - Only for assigned/running tasks where user is creator */}
                     {(selectedTask.status === 'assigned' || selectedTask.status === 'running') &&
                       selectedTask.creatorId === user.id && (
                         <Button
                           variant="outlined"
                           color="error"
                           onClick={() => handleCancelTask(selectedTask)}
+                          sx={{ borderRadius: 10, px: 3, textTransform: 'none' }}
                         >
                           Отменить
                         </Button>
                       )}
 
-                    {/* Review Button - Only for completed tasks where user is creator and there's an executor */}
                     {selectedTask.status === 'completed' &&
                       selectedTask.creatorId === user.id &&
                       selectedTask.executorId &&
@@ -416,6 +468,7 @@ const UserTasksPage: React.FC = () => {
                             setCompletedTaskForReview(selectedTask);
                             setShowReviewModal(true);
                           }}
+                          sx={{ borderRadius: 10, px: 3, textTransform: 'none' }}
                         >
                           Оставить отзыв
                         </Button>
@@ -426,7 +479,16 @@ const UserTasksPage: React.FC = () => {
 
               {/* Chat Section */}
               {selectedChatId && user && (
-                <Paper sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <Paper
+                  sx={{
+                    flex: 1,
+                    borderRadius: 2,
+                    bgcolor: 'grey.100',
+                    boxShadow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
                   <ChatWindow chatId={selectedChatId} userId={user.id} />
                 </Paper>
               )}
@@ -438,14 +500,16 @@ const UserTasksPage: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                p: 3,
+                borderRadius: 2,
+                bgcolor: 'background.paper',
+                boxShadow: 1,
               }}
             >
               <Box textAlign="center">
-                <Typography variant="h6" color="textSecondary" gutterBottom>
+                <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
                   Выберите задачу для просмотра
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
+                <Typography variant="body2" color="text.secondary">
                   Нажмите на задачу в левой колонке, чтобы увидеть детали и чат
                 </Typography>
               </Box>
