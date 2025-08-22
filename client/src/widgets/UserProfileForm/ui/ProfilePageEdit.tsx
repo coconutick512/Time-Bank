@@ -166,7 +166,7 @@ export default function ProfileEditForm({
               >
                 Выбрать фото
               </Button>
-              {previewUrl && (
+              {/* {previewUrl && (
                 <Button
                   variant="contained"
                   color="error"
@@ -176,7 +176,7 @@ export default function ProfileEditForm({
                 >
                   Удалить
                 </Button>
-              )}
+              )} в будущих релизах*/}
             </Box>
             <input
               ref={fileInputRef}
