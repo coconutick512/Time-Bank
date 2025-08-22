@@ -17,7 +17,7 @@ module.exports = {
       { name: 'Игра в шахматы', created_at: new Date(), updated_at: new Date() },
       { name: 'Садоводство', created_at: new Date(), updated_at: new Date() },
       { name: 'Путешествия', created_at: new Date(), updated_at: new Date() },
-      { name: 'Публичные выступления', created_at: new Date(), updated_at: new Date() }
+      { name: 'Публичные выступления', created_at: new Date(), updated_at: new Date() },
       { name: 'Программирование', created_at: new Date(), updated_at: new Date() },
     ]);
   },
