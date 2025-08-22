@@ -91,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img
                 src={
                   user.avatar
-                    ? `http://localhost:3000/api/uploads/avatars/${user.avatar}`
+                    ? `/api/uploads/avatars/${user.avatar}`
                     : '/default-avatar.png'
                 }
                 alt="avatar"
@@ -404,7 +404,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <img
                         src={
                           user.avatar
-                            ? `http://localhost:3000/api/uploads/avatars/${user.avatar}`
+                            ? `/api/uploads/avatars/${user.avatar}`
                             : '/default-avatar.png'
                         }
                         alt="avatar"

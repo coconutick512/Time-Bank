@@ -11,7 +11,7 @@ type ChatWindowProps = {
 };
 
 // Один экземпляр сокета вне компонента
-const socket = io('http://localhost:3001', {
+const socket = io('/', {
   withCredentials: true,
 });
 
@@ -31,7 +31,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ chatId, userId }) => {
     socket.emit('joinChat', chatId);
 
     return () => {
-      socket.emit('leaveChat', chatId); 
+      socket.emit('leaveChat', chatId);
       socket.off('newMessage');
     };
   }, [chatId, dispatch]);

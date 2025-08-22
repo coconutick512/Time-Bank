@@ -6,6 +6,7 @@ const {
   Category,
   TaskCategory,
 } = require("../../db/models");
+const { Op } = require("sequelize");
 
 class TaskService {
   static async getTask(id) {
@@ -61,22 +62,18 @@ class TaskService {
 
   static async updateTask(id, data) {
     try {
-      const taskforStat= await Task.findByPk(id);
+      const taskforStat = await Task.findByPk(id);
 
       const task = await Task.update(data, {
         where: { id },
       });
 
-    
-
       const completedTask = await Task.findByPk(id);
-      if (data.status === 'completed' && taskforStat.status === 'running') {
+      if (data.status === "completed" && taskforStat.status === "running") {
         const user = await User.findByPk(completedTask.executorId);
-        await user.update(
-          {
-           balance: Number(user.balance) + Number(completedTask.hours),
-          },
-        );
+        await user.update({
+          balance: Number(user.balance) + Number(completedTask.hours),
+        });
       }
 
       return task;
@@ -96,7 +93,16 @@ class TaskService {
     creatorId
   ) {
     try {
-      console.log('createNewTask data:', title, description, hours, deadline, categories, creatorId,'----------------------------------');
+      console.log(
+        "createNewTask data:",
+        title,
+        description,
+        hours,
+        deadline,
+        categories,
+        creatorId,
+        "----------------------------------"
+      );
       const task = await Task.create({
         title,
         description,
@@ -131,14 +137,10 @@ class TaskService {
         ],
       });
 
-      
-
       const user = await User.findByPk(res.creatorId);
-      await user.update(
-        {
-          balance: user.balance - res.hours,
-        }
-      );
+      await user.update({
+        balance: user.balance - res.hours,
+      });
 
       return res;
     } catch (error) {
@@ -160,7 +162,9 @@ class TaskService {
 
   static async getUserTasks(userId) {
     const tasks = await Task.findAll({
-      where: { creatorId: userId },
+      where: {
+        [Op.or]: [{ creatorId: userId }, { executorId: userId }],
+      },
       include: [
         {
           model: User,
@@ -253,24 +257,19 @@ class TaskService {
 
   static async deleteTask(id) {
     try {
-
-      const delTask= await Task.findByPk(id);
-      console.log(delTask)
+      const delTask = await Task.findByPk(id);
+      console.log(delTask);
       const task = await Task.destroy({ where: { id } });
       const user = await User.findByPk(delTask.creatorId);
-      await user.update(
-        {
-          balance: Number(user.balance) + Number(delTask.hours),
-        }
-      );
+      await user.update({
+        balance: Number(user.balance) + Number(delTask.hours),
+      });
       return task;
     } catch (error) {
       console.error("Error deleting task:", error);
       throw error;
     }
   }
-
-
 
   static async createSpecialTask({
     title,
@@ -282,24 +281,26 @@ class TaskService {
     hours,
     bookedDate,
   }) {
-    const newTask = await Task.create({
-      title,
-      description,
-      deadline,
-      hours,
-      status: "assigned",
-      creatorId,
-      executorId,
-      bookedDates: JSON.stringify([bookedDate]),
-    });
-
-    for (const category of categories) {
+    try {
+      
+      const newTask = await Task.create({
+        title,
+        description,
+        deadline,
+        hours,
+        status: "assigned",
+        creatorId,
+        executorId,
+        bookedDates: JSON.stringify([bookedDate]),
+      });
+  
+      for (const category of categories) {
         await TaskCategory.create({
           taskId: newTask.id,
           categoryId: category.id,
         });
       }
-
+  
       const result = await Task.findByPk(newTask.id, {
         include: [
           {
@@ -316,15 +317,17 @@ class TaskService {
           },
         ],
       });
-
+  
       const user = await User.findByPk(result.creatorId);
-      await user.update(
-        {
-          balance: user.balance - result.hours,
-        }
-      );
-
+      await user.update({
+        balance: user.balance - result.hours,
+      });
+  
       return result;
+    } catch (error) {
+      console.error("Error creating task:", error);
+      throw error;
+    }
   }
 }
 

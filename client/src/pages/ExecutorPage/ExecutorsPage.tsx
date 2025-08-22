@@ -127,7 +127,7 @@ export default function ExecutorsPage(): React.JSX.Element {
             >
               <Box className="executor-header">
                 <Avatar
-                  src={`http://localhost:3000/api/uploads/avatars/${executor.avatar}`}
+                  src={`/api/uploads/avatars/${executor.avatar}`}
                   className="executor-avatar"
                   // alt={executor.name}
                 />

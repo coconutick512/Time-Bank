@@ -2,17 +2,28 @@ const { Message } = require("../../db/models");
 
 class MessagesService {
   static async createMessage(data) {
-    console.log({ data });
-    const message = await Message.create(data);
-    return message;
+    try{
+
+      const message = await Message.create(data);
+      return message;
+    }catch (error) {
+      console.error("Error creating message:", error);
+      throw error;
+    }
   }
   static async getMessages(chatId) {
-    const messages = await Message.findAll({
-      where: {
-        chatId,
-      },
-    });
-    return messages;
+    try {
+      const messages = await Message.findAll({
+        where: {
+          chatId,
+        },
+      });
+      return messages;
+      
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      throw error;
+    }
   }
 }
 

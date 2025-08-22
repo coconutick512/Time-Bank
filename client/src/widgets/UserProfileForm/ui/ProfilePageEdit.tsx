@@ -50,7 +50,7 @@ export default function ProfileEditForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
-    user.avatar ? `http://localhost:3000/api/uploads/avatars/${user.avatar}` : null,
+    user.avatar ? `/api/uploads/avatars/${user.avatar}` : null,
   );
 
   useEffect(() => {

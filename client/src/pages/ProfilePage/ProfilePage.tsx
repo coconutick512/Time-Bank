@@ -4,7 +4,7 @@ import { fetchUserSkills } from '@/entities/user/model/userThunk';
 import { fetchUserTasks, fetchUserExecutedTasks } from '@/entities/tasks/model/tasksThunk';
 import { fetchReviewsByUserId, fetchAverageRating } from '@/entities/reviews/model/reviewThunk';
 import UserCalendar from '@/widgets/calendar/ui/profileCalendar';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchUserById } from '@/entities/user/model/userThunk';
 import ProfileEditForm from '@/widgets/UserProfileForm/ui/ProfilePageEdit';
 import './ProfilePage.css';
@@ -12,7 +12,7 @@ import './ProfilePage.css';
 export default function ProfilePage(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { userId } = useParams<{ userId: string }>();
-
+  const navigate = useNavigate();
   const currentUser = useAppSelector((state) => state.user.user);
   const { skills, status, viewingUser, viewingUserSkills } = useAppSelector((state) => state.user);
   const tasks = useAppSelector((state) => state.tasks.tasks);
@@ -212,6 +212,8 @@ export default function ProfilePage(): React.JSX.Element {
                       )}
                     </article>
                   ))}
+                  { !userId && <button className="profile-btn-alt" onClick={()=>{ navigate('/tasks')}}>Перейти к заданиям</button>}
+                  {tasks.length === 0 && <p>Задания не найдены</p>}
                   {reviews.length === 0 && <p>Отзывов пока нет</p>}
                 </div>
               </div>
